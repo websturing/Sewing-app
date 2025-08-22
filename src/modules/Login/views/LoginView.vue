@@ -26,6 +26,14 @@
 
 <script setup lang="ts">
 import LoginForm from '@/modules/Login/components/LoginForm.vue';
+import { useHead } from '@unhead/vue';
+
+useHead({
+    title: `Login`,
+    meta: [
+        { name: 'description', content: 'Page Login' }
+    ]
+})
 </script>
 
 <style scoped>

@@ -14,7 +14,7 @@
             </div>
         </n-card>
         <n-space class="mt-2">
-            <n-button type="default" block size="large">
+            <n-button type="default" block size="large" @click="handleChangePassword">
                 <template #icon>
                     <n-icon>
                         <DocumentLockOutline />
@@ -22,7 +22,7 @@
                 </template>
                 Change Password
             </n-button>
-            <n-button type="error" block size="large">
+            <n-button type="error" block size="large" @click="toggleModal">
                 <template #icon>
                     <n-icon>
                         <LogOut />
@@ -35,8 +35,18 @@
 </template>
 <script setup lang="ts">
 import defaultAvatar from '@/assets/img/profile-circle.png';
+import { useLogout } from '@/modules/Login/composables/useLogout';
 import { useProfile } from '@module/Profile/composables/useProfile';
 import { DocumentLockOutline, LogOut } from '@vicons/ionicons5';
 
+const emit = defineEmits<{
+    (e: 'change-password'): void
+}>()
+
+
+const handleChangePassword = () => {
+    emit('change-password')
+}
+const { toggleModal } = useLogout()
 const { email, role: roles } = useProfile()
 </script>
