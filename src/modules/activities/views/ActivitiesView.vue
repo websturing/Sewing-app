@@ -18,13 +18,24 @@
                 </n-breadcrumb>
             </div>
         </div>
-
+        <pre>{{ data }}</pre>
     </div>
 </template>
 
 <script setup lang="ts">
+import { useActivitiesStore } from '@module/activities/stores/activities';
 import { useHead } from '@unhead/vue';
 import { AnalyticsOutline, HomeOutline } from '@vicons/ionicons5';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const storeActivity = useActivitiesStore()
+
+const { data } = storeToRefs(storeActivity)
+
+onMounted(async () => {
+    await storeActivity.fetchActivities()
+})
 
 useHead({
     title: `Audit Trail`,
