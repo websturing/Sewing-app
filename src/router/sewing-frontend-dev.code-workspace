@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../sewing-backend-dev"
+		}
+	],
+	"settings": {
+		"conventionalCommits.scopes": [
+			"Activities"
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"vivaxy.vscode-conventional-commits"
+		]
+	}
+}

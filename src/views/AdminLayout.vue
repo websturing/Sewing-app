@@ -11,8 +11,8 @@
             <!-- Wrapper untuk content+footer -->
             <div class="flex-1 flex flex-col">
                 <!-- Content (scrollable) -->
-                <n-layout-content class="flex-1 overflow-y-auto p-4 bg-gray-50">
-                    <div class="space-y-4">
+                <n-layout-content class="flex-1 overflow-y-auto p-4 pt-6 bg-gray-50">
+                    <div class="space-y-40">
                         <RouterView />
                         <LogOutForm />
                     </div>

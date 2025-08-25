@@ -44,6 +44,12 @@ const routes = [
         component: () => import('@module/Role/components/RoleForm.vue'),
         // meta: { permission: 'dashboard.read' },
       },
+       {
+        path: 'activities',
+        name: 'activities',
+        component: () => import('@module/activities/views/ActivitiesView.vue'),
+        // meta: { permission: 'dashboard.read' },
+      },
       {
         path: 'profile',
         name: 'profile',

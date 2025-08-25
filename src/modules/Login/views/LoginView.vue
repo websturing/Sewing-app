@@ -11,7 +11,7 @@
 
         <!-- Kolom Gambar -->
         <div class="flex-1 p-4 lg:p-3">
-            <div class="login-container h-full rounded-lg overflow-hidden">
+            <div class="login-container h-full rounded-lg overflow-hiden">d
                 <div class="login-overlay flex flex-col items-center justify-center h-full">
                     <h1 class="text-white text-2xl font-bold drop-shadow-md text-center">
                         "Stitch Your Imagination"
