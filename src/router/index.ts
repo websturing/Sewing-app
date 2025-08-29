@@ -4,94 +4,22 @@ import api from '@/lib/api'
 import { useAuthStore } from '@/stores/auth'
 import { createRouter, createWebHistory } from 'vue-router'
 
+import { adminRoutes } from './routes/route.admin'
+import { errorRoutes } from './routes/route.error'
+import { loginRoutes } from './routes/route.login'
 
+// Gabungkan semua
 const routes = [
-  {
-    path: '/login',
-    children: [
-      {
-        path: '',
-        name: 'Login',
-        component: () => import('@module/Login/views/LoginView.vue'),
-        meta: {
-          requiresAuth: false,
-        },
-      }
-    ]
-  },
-  {
-    path: '/',
-    component: () => import('@/views/AdminLayout.vue'),
-    redirect: {
-      name: 'dashboard'
-    },
-    children: [
-      {
-        path: 'dashboard',
-        name: 'dashboard',
-        component: () => import('@/test.vue'),
-        meta: { permission: 'dashboard.read' },
-      },
-      {
-        path: 'permission',
-        name: 'permission',
-        component: () => import('@module/permission/views/PermissionView.vue'),
-        // meta: { permission: 'dashboard.read' },
-      },
-      {
-        path: 'role',
-        name: 'role',
-        component: () => import('@module/Role/components/RoleForm.vue'),
-        // meta: { permission: 'dashboard.read' },
-      },
-       {
-        path: 'activities',
-        name: 'activities',
-        component: () => import('@module/activities/views/ActivitiesView.vue'),
-        // meta: { permission: 'dashboard.read' },
-      },
-      {
-        path: 'profile',
-        name: 'profile',
-        component: () => import('@module/Profile/views/ProfileView.vue'),
-        // meta: { permission: 'dashboard.read' },
-      },
-
-    ]
-  },
-  {
-    path: '/unauthorized',
-    name: 'unauthorized',
-    component: () => import('@/views/UnauthorizedView.vue'),
-    meta: {
-      requiresAuth: false,
-    }
-  },
-  {
-    path: '/404',
-    name: 'not-found',
-    component: () => import('@/views/404.vue'),
-    meta: {
-      requiresAuth: false,
-    }
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    redirect: '/404', // atau ke halaman 404
-  }
+  ...loginRoutes,
+  ...adminRoutes,
+  ...errorRoutes
 ]
+
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
-
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`
-  const parts = value.split(`; ${name}=`)
-  if (parts.length === 2) return parts.pop()?.split(';').shift() ?? null
-  return null
-}
 
 router.beforeEach(async (to) => {
   const auth = useAuthStore()

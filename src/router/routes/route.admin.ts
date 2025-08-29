@@ -1,0 +1,37 @@
+import type { RouteRecordRaw } from 'vue-router'
+
+export const adminRoutes: RouteRecordRaw[] = [
+    {
+        path: '/',
+        component: () => import('@/views/AdminLayout.vue'),
+        redirect: { name: 'dashboard' },
+        children: [
+            {
+                path: 'dashboard',
+                name: 'dashboard',
+                component: () => import('@/test.vue'),
+                meta: { permission: 'dashboard.read' },
+            },
+            {
+                path: 'permission',
+                name: 'permissions',
+                component: () => import('@module/permission/views/PermissionView.vue'),
+            },
+            {
+                path: 'role',
+                name: 'role',
+                component: () => import('@module/Role/components/RoleForm.vue'),
+            },
+            {
+                path: 'activities',
+                name: 'activities',
+                component: () => import('@module/activities/views/ActivitiesView.vue'),
+            },
+            {
+                path: 'profile',
+                name: 'profile',
+                component: () => import('@module/Profile/views/ProfileView.vue'),
+            },
+        ]
+    }
+]
