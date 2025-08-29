@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="flex justify-between">
-            <div>
+        <div class="flex justify-between gap-2">
+            <div class="flex-2">
                 <BaseInput :icon="SearchOutline" placeholder="Search Activity" :model-value="props.modelValue"
                     @update:modelValue="(val) => emit('update:modelValue', val)" />
 
@@ -9,8 +9,8 @@
             <div class="flex gap-2">
                 <n-date-picker :value="props.dateRange" type="daterange" clearable
                     @update:value="(val: any) => emit('update:dateRange', val)" />
-                <n-select placeholder="Select Year" :value="props.year" :options="optionsYear"
-                    :style="{ width: '150px' }" @update:value="(val: any) => emit('update:year', val)" />
+                <!-- <n-select placeholder="Select Year" :value="props.year" :options="optionsYear"
+                    :style="{ width: '150px' }" @update:value="(val: any) => emit('update:year', val)" /> -->
                 <BaseButton label="Export" :icon="DocumentExport" @click="emit('click:export')" :tertiary="true"
                     type="primary" />
 

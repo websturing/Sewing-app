@@ -19,12 +19,14 @@
             </div>
         </div>
 
-        <ActivitiesSearchAdvanced @refresh="handleRefresh" />
-        <BaseSearch v-model="search" v-model:dateRange="dateRange" v-model:year="selectedYear"
-            @click:export="handleExportModal" />
+        <!-- Toolbar Filter -->
+        <div class="flex justify-between bg-gray-100 border border-gray-200 rounded-lg p-2">
+            <BaseSearch v-model="search" v-model:dateRange="dateRange" v-model:year="selectedYear"
+                @click:export="handleExportModal" />
+            <div></div>
+        </div>
         <ActivitiesTimeLine />
 
-        {{ dateRange }} /{{ selectedYear }}
 
     </div>
 </template>
@@ -32,7 +34,6 @@
 <script setup lang="ts">
 import BaseSearch from '@/components/BaseAdvanceFilter.vue';
 import { currentActualYear } from "@/lib/date-helpers";
-import ActivitiesSearchAdvanced from '@module/activities/components/ActivitiesSearchAdvanced.vue';
 import ActivitiesTimeLine from '@module/activities/components/ActivitiesTimeLine.vue';
 import { useHead } from '@unhead/vue';
 import { AnalyticsOutline, HomeOutline } from '@vicons/ionicons5';
@@ -48,7 +49,7 @@ const dateFrom = ref<string | null>(null)
 const dateTo = ref<string | null>(null)
 
 const handleExportModal = () => {
-    alert()
+    alert('this feature coming soon')
 }
 
 const handleRefresh = async () => {
@@ -74,6 +75,12 @@ watch(dateRange, (val) => {
         dateFrom.value = null;
         dateTo.value = null;
     }
+});
+
+watch(selectedYear, (val) => {
+    handleFetchActivity({
+        year: val
+    })
 });
 
 

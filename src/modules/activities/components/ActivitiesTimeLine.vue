@@ -35,7 +35,7 @@
                     <template v-else>
                         <template v-for="(item) in data" :key="item.date">
                             <n-timeline-item :title="item.date">
-                                <div v-for="p in item.items" :key="p.id" class="mb-3">
+                                <div v-for="p in item.items" :key="p.id" class="mb-10">
                                     <div class="flex gap-2 item-center">
                                         <div class="flex-1">
                                             <p>{{ p.causer }}</p>
