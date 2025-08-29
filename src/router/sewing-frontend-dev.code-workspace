@@ -10,7 +10,8 @@
 	"settings": {
 		"conventionalCommits.scopes": [
 			"Activities",
-			"utils"
+			"utils",
+			"employee"
 		]
 	},
 	"extensions": {
