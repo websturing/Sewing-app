@@ -9,7 +9,8 @@
 	],
 	"settings": {
 		"conventionalCommits.scopes": [
-			"Activities"
+			"Activities",
+			"utils"
 		]
 	},
 	"extensions": {

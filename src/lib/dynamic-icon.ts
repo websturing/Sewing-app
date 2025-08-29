@@ -1,15 +1,42 @@
 // utils/dynamic-icon.ts
-import * as IonIcons from "@vicons/ionicons5"
+import * as Antd from "@vicons/antd"
+import * as Carbon from "@vicons/carbon"
+import * as FA from "@vicons/fa"
+import * as Fluent from "@vicons/fluent"
+import * as IonIcons4 from "@vicons/ionicons4"
+import * as IonIcons5 from "@vicons/ionicons5"
+import * as Material from "@vicons/material"
+import * as Tabler from "@vicons/tabler"
+
 import { NIcon } from "naive-ui"
 import { h } from "vue"
 
-export const getDynamicIcon = (name: string) => {
-    const iconComp = (IonIcons as any)[name]
+// urutan prioritas pencarian icon
+const iconSets: Record<string, any>[] = [
+    IonIcons5,
+    IonIcons4,
+    Fluent,
+    Antd,
+    Material,
+    FA,
+    Tabler,
+    Carbon,
+]
 
-    // fallback kalau nggak ketemu
+export const getDynamicIcon = (name: string) => {
+    let iconComp: any = null
+
+    for (const set of iconSets) {
+        if (set[name]) {
+            iconComp = set[name]
+            break
+        }
+    }
+
+    // fallback default
     if (!iconComp) {
-        console.warn(`Icon not found: ${name}, fallback ke SettingsOutline`)
-        return () => h(NIcon, null, { default: () => h(IonIcons.SettingsOutline) })
+        console.warn(`Icon not found in any set: ${name}, fallback ke SettingsOutline`)
+        iconComp = IonIcons5.SettingsOutline
     }
 
     return () => h(NIcon, null, { default: () => h(iconComp) })
