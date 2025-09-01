@@ -1,3 +1,4 @@
+import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
 import { useEmployeeStore } from '@module/employee/stores/employee.store';
 import { type DataTableColumns } from "naive-ui";
 import { storeToRefs } from "pinia";
@@ -42,17 +43,17 @@ export function useEmployeeTable() {
     })
     watch(dateRange, async (val) => {
 
-        alert('Coming Soon')
-
-        // if (val) {
-        //     const formatted = formatDateRangeYMD(val);
-        //     if (formatted) {
-        //         fetchEmployee({
-        //             dateFrom: formatted[0],
-        //             dateTo: formatted[1],
-        //         })
-        //     } 
-        // }
+        if (val) {
+            const formatted = formatDateRangeYMD(val);
+            if (formatted) {
+                alert()
+                store.fetchEmployee({
+                    page: 2,
+                    dateFrom: formatted[0],
+                    dateTo: formatted[1],
+                })
+            }
+        }
     })
 
     /**

@@ -25,11 +25,9 @@
 <script setup lang="ts">
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
-import { yearDynamicList } from "@/lib/date-helpers";
 import { DocumentExport } from "@vicons/carbon";
 import { SearchOutline } from "@vicons/ionicons5";
 import { RefreshRound } from "@vicons/material";
-import { ref } from "vue";
 
 const props = defineProps<{
     modelValue: string
@@ -44,9 +42,6 @@ const emit = defineEmits<{
     (e: 'click:refresh'): void
 }>()
 
-
-const optionsYear = yearDynamicList(5);
-const dateRange = ref<[number, number] | null>(null);
 
 
 </script>

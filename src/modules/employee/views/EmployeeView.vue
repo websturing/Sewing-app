@@ -22,7 +22,8 @@
                     @click:refresh="handleRefresh" />
             </div>
             <div class="">
-                <BaseButton label="Create Employee" :icon="Create" type="primary" />
+                <BaseButton label="Create Employee" :icon="Create" type="primary"
+                    @click="router.push({ name: 'employee-form' })" />
             </div>
         </div>
 
@@ -47,7 +48,10 @@ import { ContactCardGroup16Regular } from '@vicons/fluent';
 import { Create } from '@vicons/ionicons5';
 import { SmartHome } from '@vicons/tabler';
 import { onMounted } from 'vue';
+import { useRouter } from "vue-router";
 
+
+const router = useRouter()
 const { meta } = useEmployee()
 
 const handleExportModal = () => {
@@ -79,9 +83,9 @@ onMounted(() => {
 })
 
 useHead({
-    title: meta.title,
+    title: meta.value.title,
     meta: [
-        { name: 'description', content: meta.description }
+        { name: 'description', content: meta.value.description }
     ]
 })
 

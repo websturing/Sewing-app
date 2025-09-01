@@ -1,7 +1,7 @@
 import api from '@/lib/api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
-import { EmployeeResponseSchema, type Employee, type EmployeeQuery, type Employees } from '@module/employee/schemas/employeeSchema';
+import { EmployeeResponseLastCodeSchema, EmployeeResponseSchema, type Employee, type EmployeeQuery, type Employees } from '@module/employee/schemas/employeeSchema';
 import { defineStore } from 'pinia';
 
 export const useEmployeeStore = defineStore('employee', {
@@ -16,10 +16,10 @@ export const useEmployeeStore = defineStore('employee', {
         currentPage: 1 as number,
         lastPage: 1 as number,
         search: "",
+        employeeLastCode: "" as string
     }),
     actions: {
         async fetchEmployee(query: EmployeeQuery = {}) {
-            console.log('fetching employee')
             this.loading = true;
             this.error = null;
 
@@ -29,6 +29,8 @@ export const useEmployeeStore = defineStore('employee', {
                     page: query.page ?? 1,
                     perPage: query.perPage ?? 10,
                     q: query.q ?? undefined,
+                    dateFrom: query.dateFrom,
+                    dateTo: query.dateTo,
                 }
 
 
@@ -100,6 +102,50 @@ export const useEmployeeStore = defineStore('employee', {
                 q: term
             });
             return res.success ? this.searchResult : [];
+        },
+
+        async fetchEmployeeLastCode() {
+            this.loading = true;
+            this.error = null;
+
+            try {
+
+                const res = await api.get(`/api/employee/code`);
+                const validatedData = EmployeeResponseLastCodeSchema.parse(res.data);
+
+                this.employeeLastCode = validatedData.data;
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: validatedData.message ?? "Employees loaded"
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
+        async createEmployee(moduleData: Employee) {
+            this.loading = true;
+            this.error = null;
+            try {
+                const res = await api.post('/api/employee', moduleData)
+                this.data.push(res.data.data)
+                this.error = null
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: res.data.message ?? "Employees loaded"
+                });
+            } catch (error: any) {
+                const message =
+                    error?.response?.data?.message || "Terjadi kesalahan"
+                this.error = message
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false
+            }
         },
 
     },

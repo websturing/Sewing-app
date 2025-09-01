@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { AlertOutline, EyeOffOutline, EyeOutline } from "@vicons/ionicons5";
 import { NButton, NIcon, NInput, NTooltip, type FormValidationStatus } from "naive-ui";
-import { computed, ref } from "vue";
+import { computed, ref, type Component } from "vue";
 
 interface Props {
     modelValue: string | null;
     name: string;
     label?: string;
+    icon?: Component;
+    placeholder?: string;
     errors?: Record<string, string | undefined>;
     type?: "text" | "textarea" | "password";
+    readonly?: boolean
+    classContent?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -34,8 +38,14 @@ const showPassword = ref(false);
         </label>
 
         <!-- Input -->
-        <n-input :id="props.name" :status="status" :value="modelValue" @update:value="emit('update:modelValue', $event)"
-            :type="props.type === 'password' && showPassword ? 'text' : props.type" class="w-full">
+        <n-input :id="props.name" :status="status" :placeholder="props.placeholder" :value="modelValue"
+            :readonly="props.readonly" @update:value="emit('update:modelValue', $event)"
+            :type="props.type === 'password' && showPassword ? 'text' : props.type"
+            :class="[props.classContent, 'w-full']">
+
+            <template v-if="props.icon" #prefix>
+                <n-icon :component="props.icon" />
+            </template>
 
             <template #suffix>
                 <!-- Password Toggle Button (hanya untuk type password) -->
