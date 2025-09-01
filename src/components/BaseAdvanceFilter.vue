@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="flex justify-between gap-2">
-            <div class="flex-2">
+            <div class="">
                 <BaseInput :icon="SearchOutline" placeholder="Search Activity" :model-value="props.modelValue"
                     @update:modelValue="(val) => emit('update:modelValue', val)" />
 
@@ -14,7 +14,9 @@
                 <BaseButton label="Export" :icon="DocumentExport" @click="emit('click:export')" :tertiary="true"
                     type="primary" />
 
-                {{ dateRange }}
+                <BaseButton label="Refresh" :icon="RefreshRound" @click="emit('click:refresh')" :tertiary="true"
+                    type="warning" />
+
             </div>
         </div>
     </div>
@@ -26,11 +28,11 @@ import BaseInput from "@/components/BaseInput.vue";
 import { yearDynamicList } from "@/lib/date-helpers";
 import { DocumentExport } from "@vicons/carbon";
 import { SearchOutline } from "@vicons/ionicons5";
+import { RefreshRound } from "@vicons/material";
 import { ref } from "vue";
 
 const props = defineProps<{
     modelValue: string
-    year: number | null
     dateRange: [number, number] | null
 }>()
 
@@ -39,6 +41,7 @@ const emit = defineEmits<{
     (e: 'update:year', value: number | null): void
     (e: 'update:dateRange', value: [number, number] | null): void
     (e: 'click:export'): void
+    (e: 'click:refresh'): void
 }>()
 
 

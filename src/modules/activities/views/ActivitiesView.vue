@@ -21,8 +21,7 @@
 
         <!-- Toolbar Filter -->
         <div class="flex justify-between bg-gray-100 border border-gray-200 rounded-lg p-2">
-            <BaseSearch v-model="search" v-model:dateRange="dateRange" v-model:year="selectedYear"
-                @click:export="handleExportModal" />
+            <BaseSearch v-model="search" v-model:dateRange="dateRange" @click:export="handleExportModal" />
             <div></div>
         </div>
         <ActivitiesTimeLine />

@@ -32,6 +32,11 @@ export const adminRoutes: RouteRecordRaw[] = [
                 name: 'profile',
                 component: () => import('@module/Profile/views/ProfileView.vue'),
             },
+            {
+                path: 'empolyee',
+                name: 'employee',
+                component: () => import('@module/employee/views/EmployeeView.vue'),
+            },
         ]
     }
 ]
