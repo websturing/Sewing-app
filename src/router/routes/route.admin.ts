@@ -42,6 +42,11 @@ export const adminRoutes: RouteRecordRaw[] = [
                 name: 'employee-form',
                 component: () => import('@module/employee/views/EmployeeFormView.vue'),
             },
+            {
+                path: 'users',
+                name: 'users',
+                component: () => import('@module/user/views/UserView.vue'),
+            },
         ]
     }
 ]
