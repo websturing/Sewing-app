@@ -3,6 +3,9 @@ import { useEmployeeStore } from '@module/employee/stores/employee.store';
 import { useMessage } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import type { Employee } from "../schemas/employeeSchema";
+import { useEmployeeForm } from "./employee.form";
 
 
 export function useEmployee() {
@@ -13,8 +16,9 @@ export function useEmployee() {
 
     const store = useEmployeeStore()
     const toast = useMessage()
+    const router = useRouter()
     const { data } = storeToRefs(store)
-
+    const { resetForm } = useEmployeeForm()
 
 
 
@@ -28,9 +32,19 @@ export function useEmployee() {
             toast.error(message)
         }
     }
+
+    const handleCreateEmployee = async (values: Employee) => {
+        const { message } = await store.createEmployee(values)
+        toast.success(message)
+        resetForm()
+
+        router.push({ name: 'employee' })
+    }
+
     return {
         meta,
         data,
-        handleFetchEmployee
+        handleFetchEmployee,
+        handleCreateEmployee
     }
 }

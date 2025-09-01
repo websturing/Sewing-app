@@ -10,7 +10,8 @@ interface Props {
     block?: boolean
     disabled?: boolean
     loading?: boolean
-    tertiary?: boolean
+    tertiary?: boolean,
+    iconPlacement?: "left" | "right" | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -19,7 +20,8 @@ const props = withDefaults(defineProps<Props>(), {
     block: false,
     disabled: false,
     loading: false,
-    tertiary: false
+    tertiary: false,
+    iconPlacement: "left"
 })
 
 const emit = defineEmits<{
@@ -29,7 +31,8 @@ const emit = defineEmits<{
 
 <template>
     <NButton :type="props.type" :size="props.size" :block="props.block" :disabled="props.disabled"
-        :tertiary="props.tertiary" :loading="props.loading" @click="emit('click', $event)">
+        :icon-placement="props.iconPlacement" :tertiary="props.tertiary" :loading="props.loading"
+        @click="emit('click', $event)">
         <template v-if="props.icon" #icon>
             <component :is="props.icon" />
         </template>

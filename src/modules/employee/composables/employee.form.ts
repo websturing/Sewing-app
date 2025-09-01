@@ -3,7 +3,6 @@ import { useFields } from "@/composables/useFieldWrapper";
 import { EmployeeSchema } from "@module/employee/schemas/employeeSchema";
 import { toTypedSchema } from '@vee-validate/zod';
 import dayjs from 'dayjs';
-import { useMessage } from "naive-ui";
 import { storeToRefs } from 'pinia';
 import { useForm } from 'vee-validate';
 import { onMounted, ref } from "vue";
@@ -11,8 +10,6 @@ import { z } from "zod";
 import { useEmployeeStore } from '../stores/employee.store';
 
 export function useEmployeeForm(initialData: any = null) {
-
-    const toast = useMessage()
 
     const store = useEmployeeStore()
     const { data } = storeToRefs(store)
@@ -58,22 +55,9 @@ export function useEmployeeForm(initialData: any = null) {
         active: boolean
     }>(["employeeCode", "name", "gender", "dateBirth", "position", "department", "active", "joinDate"])
 
-    const onSubmit = handleSubmit(async (values) => {
-        alert();
-        try {
-            if (initialData?.id) {
-                // const res = await store.updateEmployee(initialData.id, values)
-                // toast.success(res)
-            } else {
-                const { message } = await store.createEmployee(values)
-                toast.success(message)
-                resetForm()
-            }
-        } catch (error) {
-            console.error('Error submitting form:', error)
-            toast.error('Failed to save employee data')
-        }
-    })
+    const onSubmit = (fn: (values: any) => void | Promise<void>) => {
+        return handleSubmit(fn)
+    }
 
     onMounted(async () => {
         if (!initialData?.employeeCode) {

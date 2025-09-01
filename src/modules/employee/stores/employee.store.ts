@@ -147,6 +147,27 @@ export const useEmployeeStore = defineStore('employee', {
                 this.loading = false
             }
         },
+        async deleteEmployee(id: number) {
+            this.loading = true;
+            this.error = null;
+            try {
+                const res = await api.delete(`/api/employee/${id}`)
+
+                this.data = this.data.filter(module => module.id !== id)
+                this.error = null
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: res.data.message ?? "Employees loaded"
+                });
+            } catch (error: any) {
+                const message =
+                    error?.response?.data?.message || "Terjadi kesalahan"
+                this.error = message
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false
+            }
+        },
 
     },
     getters: {

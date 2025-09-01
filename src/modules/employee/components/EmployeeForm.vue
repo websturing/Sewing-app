@@ -43,27 +43,16 @@
 
                 </div>
 
-                <div class="flex gap-2">
-                    <div> <n-button type="success" icon-placement="right" attr-type="submit" block>
+                <div class="flex gap-2 mt-10">
+                    <div> <n-button :type="props.submitType" icon-placement="right" attr-type="submit" block>
                             <template #icon>
                                 <n-icon>
-                                    <SaveAnnotation />
+                                    <component :is="props.icon" />
                                 </n-icon>
+
                             </template>
-                            <!-- {{ isEdit ? 'Apply Changes' : 'Create New' }} -->
-                            Create Employee
+                            {{ props.submitLabel }}
                         </n-button></div>
-                    <div>
-                        <n-button type="success" icon-placement="right" attr-type="submit" block>
-                            <template #icon>
-                                <n-icon>
-                                    <SaveAnnotation />
-                                </n-icon>
-                            </template>
-                            <!-- {{ isEdit ? 'Apply Changes' : 'Create New' }} -->
-                            Create Employee
-                        </n-button>
-                    </div>
                 </div>
             </div>
         </form>
@@ -72,15 +61,24 @@
 <script setup lang="ts">
 import InputLabelWithError from '@/components/InputLabelWithError.vue';
 import { useEmployeeForm } from '@module/employee/composables/employee.form';
-import { QrCode20Filled } from '@vicons/fluent';
 import { SaveAnnotation } from "@vicons/carbon";
+import { QrCode20Filled } from '@vicons/fluent';
+import type { Component } from 'vue';
 
-
-const handleSubmit = async () => {
-    onSubmit()
-    // emit('submitted')
-
+interface Props {
+    submitLabel?: string,
+    submitType?: string,
+    icon?: Component
 }
+
+const props = withDefaults(defineProps<Props>(), {
+    submitLabel: "Create Employee",
+    submitType: "default",
+    icon: SaveAnnotation
+})
+
+
+const emit = defineEmits(['click:submitted'])
 
 const {
     employeeCode,
@@ -91,5 +89,12 @@ const {
     position,
     department,
     errors,
-    onSubmit } = useEmployeeForm()
+    onSubmit
+} = useEmployeeForm()
+
+
+
+const handleSubmit = onSubmit((values) => {
+    emit('click:submitted', values)
+})
 </script>
