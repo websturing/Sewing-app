@@ -27,14 +27,22 @@ import { Delete } from '@vicons/carbon';
 import { DocumentEdit16Filled } from '@vicons/fluent';
 import BaseButton from './BaseButton.vue';
 
+const emit = defineEmits<{
+    (e: 'click:edit', value: any): void
+    (e: 'click:delete', value: any): void
+}>();
+
+
+/**
+ * Props
+ */
+
 interface Props {
     row?: any,
     labelTooltipEdit?: string,
     labelButtonEdit?: string,
     labelButtonDelete?: string,
 }
-
-
 const props = withDefaults(defineProps<Props>(), {
     labelTooltipEdit: "Edit Item",
     labelButtonEdit: "",
@@ -42,11 +50,11 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const handleEditItem = (row: any) => {
-    alert(JSON.stringify(row))
+    emit("click:edit", row)
 }
 
 const handleDeleteItem = (row: any) => {
-    alert(JSON.stringify(row))
+    emit("click:delete", row)
 }
 
 

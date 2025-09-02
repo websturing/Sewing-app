@@ -1,10 +1,13 @@
+
+
 import api from '@/lib/api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
-import { EmployeeResponseLastCodeSchema, EmployeeResponseSchema, type Employee, type EmployeeQuery, type Employees } from '@module/employee/schemas/employeeSchema';
+import { EmployeeResponseSchema, type Employee, type EmployeeQuery, type Employees } from '@module/employee/schemas/employeeSchema';
 import { defineStore } from 'pinia';
+import type { User } from '../schemas/user.schema';
 
-export const useEmployeeStore = defineStore('employee', {
+export const useUserStore = defineStore('users', {
     state: () => ({
         data: [] as Employees,
         searchResult: [] as Employees,
@@ -19,7 +22,7 @@ export const useEmployeeStore = defineStore('employee', {
         employeeLastCode: "" as string
     }),
     actions: {
-        async fetchEmployee(query: EmployeeQuery = {}) {
+        async fetch(query: EmployeeQuery = {}) {
             this.loading = true;
             this.error = null;
 
@@ -78,7 +81,7 @@ export const useEmployeeStore = defineStore('employee', {
 
             // kalau kosong → fallback load awal
             if (!term) {
-                await this.fetchEmployee();
+                await this.fetch();
                 return this.data;
             }
 
@@ -97,61 +100,37 @@ export const useEmployeeStore = defineStore('employee', {
             }
 
             // kalau ga ada di local → remote fetch
-            const res = await this.fetchEmployee({
+            const res = await this.fetch({
                 page: 1,
                 q: term
             });
             return res.success ? this.searchResult : [];
         },
-
-        async fetchEmployeeLastCode() {
-            this.loading = true;
-            this.error = null;
-
-            try {
-
-                const res = await api.get(`/api/employee/code`);
-                const validatedData = EmployeeResponseLastCodeSchema.parse(res.data);
-
-                this.employeeLastCode = validatedData.data;
-
-                return ApiResponseSchema.parse({
-                    success: true,
-                    message: validatedData.message ?? "Employees loaded"
-                });
-            } catch (error: any) {
-                const message = error?.response?.data?.message || "Something went wrong";
-                this.error = message;
-                return ApiResponseSchema.parse({ success: false, message });
-            } finally {
-                this.loading = false;
-            }
-        },
-        async createEmployee(moduleData: Employee) {
+        async create(moduleData: User) {
             this.loading = true;
             this.error = null;
             try {
-                const res = await api.post('/api/employee', moduleData)
+                const res = await api.post('/api/users', moduleData)
                 this.data.push(res.data.data)
                 this.error = null
                 return ApiResponseSchema.parse({
                     success: true,
-                    message: res.data.message ?? "Employees loaded"
+                    message: res.data.message ?? "Data Created Succesfully"
                 });
             } catch (error: any) {
                 const message =
-                    error?.response?.data?.message || "Terjadi kesalahan"
+                    error?.response?.data?.message || "Someting Wrong"
                 this.error = message
                 return ApiResponseSchema.parse({ success: false, message });
             } finally {
                 this.loading = false
             }
         },
-        async updateEmployee(id: number, moduleData: Employee) {
+        async update(id: number, moduleData: User) {
             this.loading = true;
             this.error = null;
             try {
-                const res = await api.post(`/api/employee/${id}`, moduleData)
+                const res = await api.post(`/api/users/${id}`, moduleData)
 
                 const index = this.data.findIndex(e => e.id === id)
                 if (index !== -1) {
@@ -162,32 +141,32 @@ export const useEmployeeStore = defineStore('employee', {
                 this.error = null
                 return ApiResponseSchema.parse({
                     success: true,
-                    message: res.data.message ?? "Employee Update Successfully"
+                    message: res.data.message ?? "Data Update Successfully"
                 });
             } catch (error: any) {
                 const message =
-                    error?.response?.data?.message || "Terjadi kesalahan"
+                    error?.response?.data?.message || "Something Wrong"
                 this.error = message
                 return ApiResponseSchema.parse({ success: false, message });
             } finally {
                 this.loading = false
             }
         },
-        async deleteEmployee(id: number) {
+        async delete(id: number) {
             this.loading = true;
             this.error = null;
             try {
-                const res = await api.delete(`/api/employee/${id}`)
+                const res = await api.delete(`/api/users/${id}`)
 
                 this.data = this.data.filter(module => module.id !== id)
                 this.error = null
                 return ApiResponseSchema.parse({
                     success: true,
-                    message: res.data.message ?? "Employees loaded"
+                    message: res.data.message ?? "Data Delete Successfully"
                 });
             } catch (error: any) {
                 const message =
-                    error?.response?.data?.message || "Terjadi kesalahan"
+                    error?.response?.data?.message || "Something Wrong"
                 this.error = message
                 return ApiResponseSchema.parse({ success: false, message });
             } finally {

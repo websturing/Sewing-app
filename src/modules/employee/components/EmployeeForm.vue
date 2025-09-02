@@ -43,7 +43,7 @@
 
                 </div>
 
-                <div class="flex gap-2 mt-10">
+                <div :class="[props.placmentEnd ? 'justify-end' : '', 'flex gap-2 mt-10']" v-if="props.visible">
                     <div> <n-button :type="props.submitType" icon-placement="right" attr-type="submit" block>
                             <template #icon>
                                 <n-icon>
@@ -56,21 +56,22 @@
                 </div>
             </div>
         </form>
-        {{ props.initialData }}
     </div>
 </template>
 <script setup lang="ts">
 import InputLabelWithError from '@/components/InputLabelWithError.vue';
 import { useEmployeeForm } from '@module/employee/composables/employee.form';
+import type { Employee } from '@module/employee/schemas/employeeSchema';
 import { SaveAnnotation } from "@vicons/carbon";
 import { QrCode20Filled } from '@vicons/fluent';
 import type { Component } from 'vue';
-import type { Employee } from '../schemas/employeeSchema';
 
 interface Props {
     initialData?: Employee,
     submitLabel?: string,
     submitType?: string,
+    placmentEnd?: boolean,
+    visible?: boolean,
     icon?: Component
 }
 
@@ -79,6 +80,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     submitLabel: "Create Employee",
     submitType: "default",
+    visible: true,
+    placmentEnd: false,
     icon: SaveAnnotation
 })
 
@@ -94,6 +97,7 @@ const {
     position,
     department,
     errors,
+    validateForm,
     onSubmit
 } = useEmployeeForm(props.initialData)
 
@@ -101,5 +105,11 @@ const {
 
 const handleSubmit = onSubmit((values) => {
     emit('click:submitted', values)
+})
+
+defineExpose({
+    name,
+    validateForm,
+    submit: handleSubmit
 })
 </script>

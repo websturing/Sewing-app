@@ -1,10 +1,10 @@
 import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
 import { useEmployeeStore } from '@module/employee/stores/employee.store';
-import { type DataTableColumns } from "naive-ui";
+import { Female, Help, Male } from '@vicons/ionicons5';
+import { NIcon, NTag, type DataTableColumns } from "naive-ui";
 import { storeToRefs } from "pinia";
-import { computed, ref, watch } from "vue";
+import { computed, h, ref, watch } from "vue";
 import type { Employee } from '../schemas/employeeSchema';
-
 export function useEmployeeTable() {
     const store = useEmployeeStore()
     const { meta, links, search, loading } = storeToRefs(store)
@@ -19,6 +19,40 @@ export function useEmployeeTable() {
             width: 60,
             render: (_row: any, index: number) => {
                 return (meta.value.currentPage - 1) * meta.value.perPage + index + 1
+            }
+        },
+        {
+            title: 'Name',
+            key: 'name',
+        },
+        {
+            title: 'Gender',
+            key: 'gender',
+            render: (row: any) => {
+                const config = getGenderConfig(row.gender)
+                const displayText = capitalizeFirstLetter(row.gender)
+
+                return h(NTag, {
+                    color: {
+                        color: config.bgColor,
+                        borderColor: config.borderColor,
+                        textColor: config.textColor
+                    },
+                    size: 'medium',
+                    style: {
+                        display: 'inline-flex',
+                        alignItems: 'top',
+                        gap: '4px',
+                        padding: '0px 8px'
+                    }
+                }, () => [
+                    h(NIcon, {
+                        component: config.icon,
+                        size: 14,
+                        style: { marginRight: '2px' }
+                    }),
+                    displayText
+                ])
             }
         },
         {
@@ -42,6 +76,43 @@ export function useEmployeeTable() {
         }
     ]
 
+
+
+
+    function getGenderConfig(gender: string) {
+        const lowerGender = gender?.toLowerCase()
+
+        const maleConfig = {
+            icon: Male,
+            bgColor: '#e6f7ff',
+            textColor: '#1890ff',
+            borderColor: '#91d5ff'
+        }
+        const femaleConfig = {
+            icon: Female,
+            bgColor: '#f3e8fd',
+            textColor: '#9b59b6',
+            borderColor: '#d8bfd8'
+        }
+
+        // Default untuk other/unknown
+        const otherConfig = {
+            icon: Help,
+            bgColor: '#fff2e8',
+            textColor: '#fa8c16',
+            borderColor: '#ffd591'
+        }
+
+        switch (lowerGender) {
+            case 'male': return maleConfig
+            case 'female': return femaleConfig
+            default: return otherConfig
+        }
+    }
+    function capitalizeFirstLetter(text: string): string {
+        if (!text) return 'Unknown'
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+    }
 
     /**
     * WATCH SEARCH
