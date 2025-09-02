@@ -27,13 +27,21 @@
             </div>
         </div>
 
-        <BaseDatable :columns="columns" :data="rows" :loading="loading" />
+        <BaseDatable :columns="columns" :data="rows" :loading="loading">
+            <template #actions="{ row }">
+                <BaseDatatableButton :row="row" label-button-delete="Delete" />
+            </template>
+        </BaseDatable>
 
         <div class="flex justify-end mt-4">
             <n-pagination :page="tableMeta.currentPage" :page-size="tableMeta.perPage" :page-count="tableMeta.lastPage"
                 show-size-picker :page-sizes="[5, 10, 20, 50]" @update:page="handlePageChange"
                 @update:page-size="handlePageSizeChange" />
         </div>
+
+        {{ editRow }}
+
+        <EmployeeForm :initialData="editRow" />
     </div>
 </template>
 
@@ -41,6 +49,8 @@
 import BaseAdvanceFilter from '@/components/BaseAdvanceFilter.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseDatable from '@/components/BaseDatable.vue';
+import BaseDatatableButton from '@/components/BaseDataTableButton.vue';
+import EmployeeForm from '@module/employee/components/EmployeeForm.vue';
 import { useEmployeeTable } from '@module/employee/composables/employee.table';
 import { useEmployee } from "@module/employee/composables/useEmployee";
 import { useHead } from '@unhead/vue';
@@ -70,6 +80,7 @@ const {
     loading,
     columns,
     rows,
+    editRow,
     meta: tableMeta,
     handleRefresh,
     handlePageChange,

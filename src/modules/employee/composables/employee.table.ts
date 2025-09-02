@@ -1,16 +1,16 @@
 import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
 import { useEmployeeStore } from '@module/employee/stores/employee.store';
-import { DocumentEdit16Filled } from '@vicons/fluent';
-import { Trash } from '@vicons/ionicons5';
-import { NButton, NIcon, NPopconfirm, NTooltip, type DataTableColumns } from "naive-ui";
+import { type DataTableColumns } from "naive-ui";
 import { storeToRefs } from "pinia";
-import { computed, h, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
+import type { Employee } from '../schemas/employeeSchema';
 
 export function useEmployeeTable() {
     const store = useEmployeeStore()
     const { meta, links, search, loading } = storeToRefs(store)
     const rows = computed(() => store.searchedItems)
 
+    const editRow = ref<Employee>();
     const dateRange = ref<[number, number] | null>(null);
     const columns: DataTableColumns<any> = [
         {
@@ -38,54 +38,6 @@ export function useEmployeeTable() {
             title: 'Actions',
             key: 'actions',
             width: 150,
-            render(row: any) {
-                return h('div', { class: 'flex items-center gap-2' }, [
-                    // Tooltip untuk Edit
-                    h(
-                        NTooltip,
-                        null,
-                        {
-                            trigger: () =>
-                                h(
-                                    NButton,
-                                    {
-                                        type: 'primary',
-                                        onClick: () => handleEdit(row),
-                                    },
-                                    {
-                                        default: () =>
-                                            h(NIcon, null, {
-                                                default: () => h(DocumentEdit16Filled),
-                                            }),
-                                    },
-                                ),
-                            default: () => 'Edit Employee',
-                        },
-                    ),
-
-                    // Popconfirm untuk Delete
-                    h(
-                        NPopconfirm,
-                        {
-                            onPositiveClick: () => handleDelete(row),
-                        },
-                        {
-                            trigger: () =>
-                                h(
-                                    NButton,
-                                    { type: 'error' },
-                                    {
-                                        default: () =>
-                                            h(NIcon, null, {
-                                                default: () => h(Trash),
-                                            }),
-                                    },
-                                ),
-                            default: () => 'Are you sure to delete this record?',
-                        },
-                    ),
-                ])
-            }
 
         }
     ]
@@ -128,8 +80,8 @@ export function useEmployeeTable() {
     }
 
     // contoh handler
-    function handleEdit(row: any) {
-        alert();
+    function handleEdit(row: Employee) {
+        editRow.value = row
     }
 
     function handleDelete(row: any) {
@@ -144,6 +96,7 @@ export function useEmployeeTable() {
         rows,
         meta,
         links,
+        editRow,
         handleRefresh,
         handlePageChange,
         handlePageSizeChange

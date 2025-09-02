@@ -5,7 +5,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import dayjs from 'dayjs';
 import { storeToRefs } from 'pinia';
 import { useForm } from 'vee-validate';
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { z } from "zod";
 import { useEmployeeStore } from '../stores/employee.store';
 
@@ -65,6 +65,14 @@ export function useEmployeeForm(initialData: any = null) {
             employeeCode.value = store.employeeLastCode
         }
     })
+
+    watch(
+        () => initialData,
+        () => {
+            resetForm()
+        },
+        { deep: true, immediate: true }
+    )
 
     return {
         employeeCode,

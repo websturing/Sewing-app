@@ -56,6 +56,7 @@
                 </div>
             </div>
         </form>
+        {{ props.initialData }}
     </div>
 </template>
 <script setup lang="ts">
@@ -64,12 +65,16 @@ import { useEmployeeForm } from '@module/employee/composables/employee.form';
 import { SaveAnnotation } from "@vicons/carbon";
 import { QrCode20Filled } from '@vicons/fluent';
 import type { Component } from 'vue';
+import type { Employee } from '../schemas/employeeSchema';
 
 interface Props {
+    initialData?: Employee,
     submitLabel?: string,
     submitType?: string,
     icon?: Component
 }
+
+
 
 const props = withDefaults(defineProps<Props>(), {
     submitLabel: "Create Employee",
@@ -90,7 +95,7 @@ const {
     department,
     errors,
     onSubmit
-} = useEmployeeForm()
+} = useEmployeeForm(props.initialData)
 
 
 
