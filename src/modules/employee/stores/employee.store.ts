@@ -136,7 +136,8 @@ export const useEmployeeStore = defineStore('employee', {
                 this.error = null
                 return ApiResponseSchema.parse({
                     success: true,
-                    message: res.data.message ?? "Employees loaded"
+                    message: res.data.message ?? "Employees loaded",
+                    id: res.data.data.id
                 });
             } catch (error: any) {
                 const message =

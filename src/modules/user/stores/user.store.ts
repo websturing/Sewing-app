@@ -115,7 +115,8 @@ export const useUserStore = defineStore('users', {
                 this.error = null
                 return ApiResponseSchema.parse({
                     success: true,
-                    message: res.data.message ?? "Data Created Succesfully"
+                    message: res.data.message ?? "Data Created Succesfully",
+                    id: res.data.data.id
                 });
             } catch (error: any) {
                 const message =

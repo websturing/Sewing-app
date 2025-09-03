@@ -13,6 +13,7 @@ export function useUserForm(initialData: any = null) {
     const getDefaults = () => ({
         email: initialData?.email ?? "",
         name: initialData?.name ?? "",
+        roleNames: initialData?.roleNames ?? null,
     })
 
     const { handleSubmit, errors, isSubmitting, resetForm: veeResetForm, validate: veeValidate } = useForm<z.infer<typeof UserSchema>>({
@@ -27,10 +28,11 @@ export function useUserForm(initialData: any = null) {
     }
 
     /** FIELD DATA */
-    const { email, name } = useFields<{
+    const { email, name, roleNames } = useFields<{
         email: string
-        name: string
-    }>(["email", "name"])
+        name: string,
+        roleNames: []
+    }>(["email", "name", "roleNames"])
 
 
     const validateForm = async (): Promise<{ valid: boolean; values?: User }> => {
@@ -76,6 +78,7 @@ export function useUserForm(initialData: any = null) {
     return {
         name,
         email,
+        roleNames,
         errors,
         isSubmitting,
         validateForm,
