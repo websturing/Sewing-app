@@ -2,13 +2,9 @@
     <div>
         <div class="flex gap-2">
             <div>
-                <n-tooltip trigger="hover">
-                    <template #trigger>
-                        <BaseButton :label="props.labelButtonEdit" :icon="DocumentEdit16Filled" :tertiary="true"
-                            @click="handleEditItem(props.row)" type="info" />
-                    </template>
-                    {{ props.labelTooltipEdit }}
-                </n-tooltip>
+                <BaseButton :label="props.labelButtonEdit" :icon="DocumentEdit16Filled" :tertiary="true"
+                    @click="handleEditItem(props.row)" type="info" :tooltip="props.labelTooltipEdit"
+                    :tooltipShow="true" />
             </div>
             <div>
                 <n-popconfirm @positive-click="handleDeleteItem(props.row)">

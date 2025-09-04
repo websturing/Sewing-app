@@ -3,14 +3,22 @@
 import api from '@/lib/api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
-import { EmployeeResponseSchema, type Employee, type EmployeeQuery, type Employees } from '@module/employee/schemas/employeeSchema';
 import { defineStore } from 'pinia';
-import type { User } from '../schemas/user.schema';
+import { type User, UserResponseSchema, type Users } from '../schemas/user.schema';
+
+type query = {
+    page?: number
+    q?: string
+    perPage?: number,
+    dateFrom?: string,
+    dateTo?: string
+}
+
 
 export const useUserStore = defineStore('users', {
     state: () => ({
-        data: [] as Employees,
-        searchResult: [] as Employees,
+        data: [] as Users,
+        searchResult: [] as Users,
         isSearching: false,
         meta: {} as Meta,
         links: {} as Links,
@@ -19,32 +27,31 @@ export const useUserStore = defineStore('users', {
         currentPage: 1 as number,
         lastPage: 1 as number,
         search: "",
-        employeeLastCode: "" as string
     }),
     actions: {
-        async fetch(query: EmployeeQuery = {}) {
+        async fetch(query: query = {}) {
             this.loading = true;
             this.error = null;
-
+            console.log('fetching user data')
             try {
 
-                const params: EmployeeQuery = {
+                const params: query = {
                     page: query.page ?? 1,
                     perPage: query.perPage ?? 10,
                     q: query.q ?? undefined,
                     dateFrom: query.dateFrom,
                     dateTo: query.dateTo,
                 }
-
+                console.log('fetching user data 1')
 
                 if (query.q) {
                     this.searchResult = [];
                     this.isSearching = true;
                 }
 
-                const res = await api.get(`/api/employee`, { params });
-                const validatedData = EmployeeResponseSchema.parse(res.data);
-
+                const res = await api.get(`/api/users`, { params }); console.log(res.data)
+                const validatedData = UserResponseSchema.parse(res.data);
+                console.log(validatedData)
                 this.meta = validatedData.meta;
                 this.links = validatedData.links;
                 this.currentPage = validatedData.meta.currentPage;
@@ -87,10 +94,9 @@ export const useUserStore = defineStore('users', {
 
             // cek local result dulu (langsung filter cache utama)
             const localResult = this.data
-                .filter((item: Employee) =>
-                    item.employeeCode?.toLowerCase().includes(term) ||
-                    item.department?.toLowerCase().includes(term) ||
-                    item.position?.toLowerCase().includes(term)
+                .filter((item: User) =>
+                    item.name?.toLowerCase().includes(term) ||
+                    item.email?.toLowerCase().includes(term)
                 )
 
             if (localResult.length > 0) {
@@ -190,10 +196,9 @@ export const useUserStore = defineStore('users', {
             // fallback → cari di data lokal sesuai search term
             const term = state.search.toLowerCase();
             return state.data
-                .filter((item: Employee) =>
-                    item.employeeCode?.toLowerCase().includes(term) ||
-                    item.department?.toLowerCase().includes(term) ||
-                    item.position?.toLowerCase().includes(term)
+                .filter((item: User) =>
+                    item.name?.toLowerCase().includes(term) ||
+                    item.email?.toLowerCase().includes(term)
                 )
         }
     }

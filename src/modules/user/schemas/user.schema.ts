@@ -1,4 +1,5 @@
-import { z } from "zod"
+import { LinksSchema, MetaSchema } from "@/types/metaPagination";
+import { z } from "zod";
 
 export const UserSchema = z.object({
     id: z.number().optional(),
@@ -7,4 +8,17 @@ export const UserSchema = z.object({
     roleNames: z.array(z.string()).nullable()
 })
 
+export const Users = z.array(UserSchema)
+
+export const UserResponseSchema = z.object({
+    message: z.string(),
+    data: z.array(UserSchema),
+    links: LinksSchema,
+    meta: MetaSchema,
+    status: z.boolean()
+})
+
+
 export type User = z.infer<typeof UserSchema>
+export type Users = z.infer<typeof Users>
+export type UserResponse = z.infer<typeof UserResponseSchema>

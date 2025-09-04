@@ -10,7 +10,10 @@ interface Props {
     block?: boolean
     disabled?: boolean
     loading?: boolean
-    tertiary?: boolean,
+    tertiary?: boolean
+    quaternary?: boolean
+    circle?: boolean
+    tooltip?: string
     iconPlacement?: "left" | "right" | undefined
 }
 
@@ -21,6 +24,8 @@ const props = withDefaults(defineProps<Props>(), {
     disabled: false,
     loading: false,
     tertiary: false,
+    quaternary: false,
+    circle: false,
     iconPlacement: "left"
 })
 
@@ -30,13 +35,29 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <NButton :type="props.type" :size="props.size" :block="props.block" :disabled="props.disabled"
-        :icon-placement="props.iconPlacement" :tertiary="props.tertiary" :loading="props.loading"
-        @click="emit('click', $event)">
+    <n-tooltip v-if="props.tooltip" trigger="hover">
+        <template #trigger>
+            <NButton :type="props.type" :size="props.size" :block="props.block" :disabled="props.disabled"
+                :icon-placement="props.iconPlacement" :tertiary="props.tertiary" :quaternary="props.quaternary"
+                :circle="props.circle" :loading="props.loading" @click="emit('click', $event)">
+                <template v-if="props.icon" #icon>
+                    <component :is="props.icon" />
+                </template>
+                {{ props.label }}
+                <slot />
+            </NButton>
+        </template>
+        {{ tooltip }}
+    </n-tooltip>
+    <NButton v-else :type="props.type" :size="props.size" :block="props.block" :disabled="props.disabled"
+        :icon-placement="props.iconPlacement" :tertiary="props.tertiary" :quaternary="props.quaternary"
+        :circle="props.circle" :loading="props.loading" @click="emit('click', $event)">
         <template v-if="props.icon" #icon>
             <component :is="props.icon" />
         </template>
         {{ props.label }}
         <slot />
     </NButton>
+
+
 </template>
