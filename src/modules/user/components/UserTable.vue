@@ -6,8 +6,7 @@
                     @click:refresh="handleFetch" />
             </div>
             <div class="">
-                <BaseButton label="Create User" :icon="Create" type="primary"
-                    @click="router.push({ name: 'employee-form' })" />
+                <BaseButton label="Create User" :icon="Create" type="primary" @click="handleCreate" />
             </div>
         </div>
         <BaseDatable :columns="columns" :data="rows" :loading="loading">
@@ -41,6 +40,30 @@ import { NIcon, type DropdownOption } from "naive-ui";
 import { h, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 
+const emit = defineEmits<{
+    (e: "created"): void;
+}>();
+
+interface Props {
+    createMode?: 'redirect' | 'emit'
+    redirectTo?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+    createMode: 'redirect',
+    redirectTo: undefined // change with modules name
+});
+
+const handleCreate = () => {
+    if (props.createMode === 'emit') {
+        emit('created')
+    } else if (props.redirectTo) {
+        router.push({ name: props.redirectTo })
+    } else {
+        // fallback default misalnya ke users
+        router.push({ name: 'users-form' })
+    }
+}
+
 const dropdownOptions: DropdownOption[] = [
     {
         label: "Change password",
@@ -53,6 +76,8 @@ const dropdownOptions: DropdownOption[] = [
         icon: () => h(NIcon, { size: 20 }, () => h(TreeView))
     },
 ]
+
+
 
 const handleDropdown = (key: string) => {
     console.log("Selected:", key)

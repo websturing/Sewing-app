@@ -6,14 +6,20 @@ import { useMessage } from "naive-ui";
 import { useForm } from 'vee-validate';
 import { z } from "zod";
 
+type OptionNotify = {
+    notify?: boolean  // default: false
+}
+
 export function useUserForm(initialData: any = null) {
+
+
     const toast = useMessage()
     const store = useUserStore()
 
     const getDefaults = () => ({
         email: initialData?.email ?? "",
         name: initialData?.name ?? "",
-        roleNames: initialData?.roleNames ?? null,
+        roleNames: initialData?.roleNames ?? [],
     })
 
     const { handleSubmit, errors, isSubmitting, resetForm: veeResetForm, validate: veeValidate } = useForm<z.infer<typeof UserSchema>>({
@@ -45,33 +51,32 @@ export function useUserForm(initialData: any = null) {
     }
 
 
-    const handleCreateStore = async (user: User) => {
+    const handleCreateStore = async (user: User, options: OptionNotify = { notify: true }) => {
         const { success, message } = await store.create(user)
-        if (success) {
-            toast.success(message)
-        } else {
-            toast.error(message)
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
         }
+
+        return { success, message }
     }
 
 
-    const handleUpdateStore = async (id: number, user: User) => {
+    const handleUpdateStore = async (id: number, user: User, options: OptionNotify = { notify: true }) => {
         const { success, message } = await store.update(id, user)
-        if (success) {
-            toast.success(message)
-        } else {
-            toast.error(message)
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
         }
+        return { success, message }
     }
 
 
-    const handleDeleteStore = async (id: number) => {
+    const handleDeleteStore = async (id: number, options: OptionNotify = { notify: true }) => {
         const { success, message } = await store.delete(id)
-        if (success) {
-            toast.success(message)
-        } else {
-            toast.error(message)
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
         }
+
+        return { success, message }
     }
 
 
