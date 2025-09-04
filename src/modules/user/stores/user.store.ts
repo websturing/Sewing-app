@@ -1,10 +1,11 @@
 
 
 import api from '@/lib/api';
+import type { UserAPI, UsersAPI } from '@/modules/user/schemas/user.api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
 import { defineStore } from 'pinia';
-import { type User, UserResponseSchema, type Users } from '../schemas/user.schema';
+import { type User, UserResponseSchema } from '../schemas/user.schema';
 
 type query = {
     page?: number
@@ -17,8 +18,8 @@ type query = {
 
 export const useUserStore = defineStore('users', {
     state: () => ({
-        data: [] as Users,
-        searchResult: [] as Users,
+        data: [] as UsersAPI,
+        searchResult: [] as UsersAPI,
         isSearching: false,
         meta: {} as Meta,
         links: {} as Links,
@@ -94,7 +95,7 @@ export const useUserStore = defineStore('users', {
 
             // cek local result dulu (langsung filter cache utama)
             const localResult = this.data
-                .filter((item: User) =>
+                .filter((item: UserAPI) =>
                     item.name?.toLowerCase().includes(term) ||
                     item.email?.toLowerCase().includes(term)
                 )
@@ -196,7 +197,7 @@ export const useUserStore = defineStore('users', {
             // fallback → cari di data lokal sesuai search term
             const term = state.search.toLowerCase();
             return state.data
-                .filter((item: User) =>
+                .filter((item: UserAPI) =>
                     item.name?.toLowerCase().includes(term) ||
                     item.email?.toLowerCase().includes(term)
                 )

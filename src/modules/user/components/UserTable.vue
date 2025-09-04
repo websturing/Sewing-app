@@ -24,6 +24,12 @@
                 show-size-picker :page-sizes="[5, 10, 20, 50]" @update:page="handlePageChange"
                 @update:page-size="handlePageSizeChange" />
         </div>
+
+        <n-modal v-model:show="isModalForm" :closable="false" preset="card" style="width: 900px"
+            :on-after-leave="handleCancelModal">
+            <UserForm @submitted="handleSubmitUserForm" after-submit="emit" :initialData="initialData" />
+        </n-modal>
+        {{ initialData }}
     </div>
 </template>
 <script setup lang="ts">
@@ -33,35 +39,25 @@ import BaseDatable from '@/components/BaseDatable.vue';
 import BaseDatatableButton from '@/components/BaseDataTableButton.vue';
 import BaseDropdown from '@/components/BaseDropdown.vue';
 import { useUserTable } from '@/modules/user/composables/user.table';
+import UserForm from '@/modules/user/views/UserFormView.vue';
 import { TreeView } from '@vicons/carbon';
 import { MoreVertical24Filled, Password16Regular } from '@vicons/fluent';
 import { Create } from '@vicons/ionicons5';
 import { NIcon, type DropdownOption } from "naive-ui";
-import { h, onMounted } from "vue";
+import { h, onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
 
-const emit = defineEmits<{
-    (e: "created"): void;
-}>();
+const isModalForm = ref<boolean>(false)
+const initialData = ref()
 
-interface Props {
-    createMode?: 'redirect' | 'emit'
-    redirectTo?: string
+const handleSubmitUserForm = () => {
+    isModalForm.value = false
+    handleFetch()
 }
-const props = withDefaults(defineProps<Props>(), {
-    createMode: 'redirect',
-    redirectTo: undefined // change with modules name
-});
+
 
 const handleCreate = () => {
-    if (props.createMode === 'emit') {
-        emit('created')
-    } else if (props.redirectTo) {
-        router.push({ name: props.redirectTo })
-    } else {
-        // fallback default misalnya ke users
-        router.push({ name: 'users-form' })
-    }
+    isModalForm.value = true
 }
 
 const dropdownOptions: DropdownOption[] = [
@@ -85,18 +81,24 @@ const handleDropdown = (key: string) => {
 
 const router = useRouter()
 
-const { columns, rows, loading, search, dateRange, meta, handleFetch, handlePageChange, handlePageSizeChange } = useUserTable()
+const { columns, rows, loading, search, dateRange, meta, handleFetch, handleDelete, handlePageChange, handlePageSizeChange } = useUserTable()
 
 const handleExportModal = () => {
     alert('this feature coming soon')
 }
 
 const handleEditModal = (row: any) => {
-    alert();
+    const roleNames = row.roleNames.map((r: any) => r.name.toLowerCase())
+    initialData.value = { ...row, roleNames }
+    isModalForm.value = true
+}
+
+const handleCancelModal = () => {
+    initialData.value = {}
 }
 
 const handleDeleteEmployee = (row: any) => {
-    alert();
+    handleDelete(row)
 }
 
 

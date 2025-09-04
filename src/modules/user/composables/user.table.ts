@@ -1,4 +1,5 @@
 import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
+import type { UserAPI } from '@/modules/user/schemas/user.api';
 import type { Roles, User } from '@/modules/user/schemas/user.schema';
 import { useUserStore } from '@/modules/user/stores/user.store';
 import { NTag, type DataTableColumns } from "naive-ui";
@@ -44,7 +45,7 @@ export function useUserTable() {
         {
             title: "Employee code",
             key: "employeeCode",
-            render: (row: User) => {
+            render: (row: UserAPI) => {
                 if (!row.employee) {
                     return h(NTag, { type: "warning", size: "small" }, { default: () => "Unassigned" })
                 }
@@ -54,7 +55,7 @@ export function useUserTable() {
         {
             title: "Department",
             key: "department",
-            render: (row: User) => {
+            render: (row: UserAPI) => {
                 if (!row.employee) {
                     return h(NTag, { type: "info", size: "small" }, { default: () => "Unassigned" })
                 }
@@ -64,7 +65,7 @@ export function useUserTable() {
         {
             title: "Roles",
             key: "roleNames",
-            render: (row: User) => {
+            render: (row: UserAPI) => {
                 if (!row.roleNames || row.roleNames.length === 0) {
                     return h(NTag, { type: "error", size: "small" }, { default: () => "No Access Role" })
                 }
@@ -131,7 +132,7 @@ export function useUserTable() {
     }
 
     function handleDelete(row: any) {
-        store.delete(row.id)
+        store.delete(row)
     }
 
     return {

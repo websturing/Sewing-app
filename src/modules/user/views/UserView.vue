@@ -14,29 +14,21 @@
                 </n-breadcrumb>
             </div>
         </div>
-        <user-table create-mode="emit" @created="handleSubmitUserForm" />
+        <user-table />
 
-        <n-modal v-model:show="isModalForm" :closable="true" preset="card" style="width: 900px">
-            <UserForm @submitted="handleSubmitUserForm" after-submit="emit" />
-        </n-modal>
 
     </div>
 </template>
 
 <script setup lang="ts">
 import UserTable from '@/modules/user/components/UserTable.vue';
-import UserForm from '@/modules/user/views/UserFormView.vue';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { UserMultiple } from '@vicons/carbon';
 import { SmartHome } from '@vicons/tabler';
 import { ref } from 'vue';
 
-const isModalForm = ref<boolean>(false)
 
-const handleSubmitUserForm = () => {
-    isModalForm.value = true
-}
 
 const meta = ref<MetaHead>({
     title: "Users",
