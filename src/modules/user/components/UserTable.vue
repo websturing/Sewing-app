@@ -34,16 +34,23 @@ import BaseDatable from '@/components/BaseDatable.vue';
 import BaseDatatableButton from '@/components/BaseDataTableButton.vue';
 import BaseDropdown from '@/components/BaseDropdown.vue';
 import { useUserTable } from '@/modules/user/composables/user.table';
-import { MoreVertical24Filled } from '@vicons/fluent';
+import { TreeView } from '@vicons/carbon';
+import { MoreVertical24Filled, Password16Regular } from '@vicons/fluent';
 import { Create } from '@vicons/ionicons5';
-import type { DropdownOption } from "naive-ui";
-import { onMounted } from "vue";
+import { NIcon, type DropdownOption } from "naive-ui";
+import { h, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 
 const dropdownOptions: DropdownOption[] = [
     {
         label: "Change password",
         key: "password",
+        icon: () => h(NIcon, { size: 20 }, () => h(Password16Regular))
+    },
+    {
+        label: "Change Roles",
+        key: "role",
+        icon: () => h(NIcon, { size: 20 }, () => h(TreeView))
     },
 ]
 

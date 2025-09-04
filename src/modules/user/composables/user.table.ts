@@ -1,5 +1,5 @@
 import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
-import type { User } from '@/modules/user/schemas/user.schema';
+import type { Roles, User } from '@/modules/user/schemas/user.schema';
 import { useUserStore } from '@/modules/user/stores/user.store';
 import { NTag, type DataTableColumns } from "naive-ui";
 import { storeToRefs } from "pinia";
@@ -23,18 +23,6 @@ export function useUserTable() {
         "error"
     ] as const
 
-    // bikin type dari isi array
-    type TagType = typeof availableColors[number]
-
-    const roleColorMap = new Map<string, TagType>()
-
-    function getRoleColor(role: string): TagType {
-        if (!roleColorMap.has(role)) {
-            const color = availableColors[Math.floor(Math.random() * availableColors.length)]
-            roleColorMap.set(role, color)
-        }
-        return roleColorMap.get(role)!
-    }
 
     const columns: DataTableColumns<any> = [
         {
@@ -54,17 +42,41 @@ export function useUserTable() {
             key: "email",
         },
         {
+            title: "Employee code",
+            key: "employeeCode",
+            render: (row: User) => {
+                if (!row.employee) {
+                    return h(NTag, { type: "warning", size: "small" }, { default: () => "Unassigned" })
+                }
+                return row.employee.employeeCode
+            },
+        },
+        {
+            title: "Department",
+            key: "department",
+            render: (row: User) => {
+                if (!row.employee) {
+                    return h(NTag, { type: "info", size: "small" }, { default: () => "Unassigned" })
+                }
+                return row.employee.department
+            },
+        },
+        {
             title: "Roles",
             key: "roleNames",
-            render: (row: any) => {
+            render: (row: User) => {
                 if (!row.roleNames || row.roleNames.length === 0) {
-                    return h(NTag, { type: "warning", size: "small" }, { default: () => "No Access Role" })
+                    return h(NTag, { type: "error", size: "small" }, { default: () => "No Access Role" })
                 }
-                return row.roleNames.map((role: string) =>
+                return row.roleNames.map((role: Roles) =>
                     h(
                         NTag,
-                        { type: getRoleColor(role), size: "small", class: "mr-1" },
-                        { default: () => role }
+                        {
+                            color: {
+                                color: role.color
+                            }, class: "mr-1"
+                        },
+                        { default: () => role.name }
                     )
                 )
             },
