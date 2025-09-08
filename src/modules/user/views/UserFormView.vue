@@ -67,7 +67,7 @@ const handleCreateStore = async (values: any) => {
     dialog.success({
         title: 'Confirmation Create User',
         content: 'Are you sure you want to create this record? Please review the details before proceeding.',
-        positiveText: 'Create',
+        positiveText: 'Confirm',
         negativeText: 'Cancel',
         draggable: true,
         onPositiveClick: async () => {
@@ -91,7 +91,7 @@ const handleUpdateStore = async (values: any) => {
     dialog.success({
         title: 'Confirmation Update User',
         content: 'Are you sure you want to create this record? Please review the details before proceeding.',
-        positiveText: 'Create',
+        positiveText: 'Confirm',
         negativeText: 'Cancel',
         draggable: true,
         onPositiveClick: async () => {
