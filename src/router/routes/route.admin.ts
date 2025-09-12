@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
+import { operationRoutes } from './route.operation'
 
 export const adminRoutes: RouteRecordRaw[] = [
     {
@@ -52,6 +53,8 @@ export const adminRoutes: RouteRecordRaw[] = [
                 name: 'users-form',
                 component: () => import('@module/user/views/UserFormView.vue'),
             },
+            ...operationRoutes,
+
         ]
     }
 ]

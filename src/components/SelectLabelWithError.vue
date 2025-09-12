@@ -6,7 +6,10 @@
 
         <n-select :id="props.name" :status="status" :multiple="multiple" :options="props.options"
             :placeholder="props.placeholder" :disabled="props.readonly" filterable v-bind="$attrs" :value="modelValue"
-            @update:value="emit('update:modelValue', $event)" :class="[props.classContent, 'w-full']">
+            @update:value="(val: any) => {
+                emit('update:modelValue', val)
+                emit('change', val)
+            }" :class="[props.classContent, 'w-full']" @search="emit('search', $event)">
 
 
             <template #arrow>
@@ -53,6 +56,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
     (e: "update:modelValue", value: string | number | string[] | number[] | null): void;
+    (e: "change", value: string | number | string[] | number[] | null): void;
+    (e: "search", value: any): void;
 }>();
 
 const errorMessage = computed(() => props.errors?.[props.name]);

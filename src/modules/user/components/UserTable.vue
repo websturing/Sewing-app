@@ -29,7 +29,6 @@
             :on-after-leave="handleCancelModal">
             <UserForm @submitted="handleSubmitUserForm" after-submit="emit" :initialData="initialData" />
         </n-modal>
-        {{ initialData }}
     </div>
 </template>
 <script setup lang="ts">

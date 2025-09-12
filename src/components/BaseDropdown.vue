@@ -46,7 +46,7 @@ function handleSelect(key: string) {
             {{ props.tooltip }}
         </n-tooltip>
 
-        <BaseButton v-else :label="props.label" :icon="props.icon" :type="props.type" :size="props.size"
-            :quaternary="true" :circle="true" :disabled="props.disabled" />
+        <BaseButton v-else :label="props.label" :icon="props.icon" :type="props.type" :size="props.size" :text="true"
+            :quaternary="true" :circle="false" :disabled="props.disabled" />
     </NDropdown>
 </template>

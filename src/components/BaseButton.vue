@@ -7,13 +7,16 @@ interface Props {
     icon?: Component
     type?: "default" | "primary" | "info" | "success" | "warning" | "error"
     size?: "tiny" | "small" | "medium" | "large"
-    block?: boolean
+    block?: boolean,
+    attrType?: "button" | "submit" | "reset"
+    text?: boolean
     disabled?: boolean
     loading?: boolean
     tertiary?: boolean
     quaternary?: boolean
     circle?: boolean
     tooltip?: string
+    classContent?: string | string[]
     iconPlacement?: "left" | "right" | undefined
 }
 
@@ -26,7 +29,9 @@ const props = withDefaults(defineProps<Props>(), {
     tertiary: false,
     quaternary: false,
     circle: false,
-    iconPlacement: "left"
+    text: false,
+    iconPlacement: "left",
+    attrType: "button"
 })
 
 const emit = defineEmits<{
@@ -38,8 +43,9 @@ const emit = defineEmits<{
     <n-tooltip v-if="props.tooltip" trigger="hover">
         <template #trigger>
             <NButton :type="props.type" :size="props.size" :block="props.block" :disabled="props.disabled"
-                :icon-placement="props.iconPlacement" :tertiary="props.tertiary" :quaternary="props.quaternary"
-                :circle="props.circle" :loading="props.loading" @click="emit('click', $event)">
+                :attr-type="props.attrType" :icon-placement="props.iconPlacement" :tertiary="props.tertiary"
+                :quaternary="props.quaternary" :text="props.text" :class="[props.classContent]" :circle="props.circle"
+                :loading="props.loading" @click="emit('click', $event)">
                 <template v-if="props.icon" #icon>
                     <component :is="props.icon" />
                 </template>
@@ -51,7 +57,8 @@ const emit = defineEmits<{
     </n-tooltip>
     <NButton v-else :type="props.type" :size="props.size" :block="props.block" :disabled="props.disabled"
         :icon-placement="props.iconPlacement" :tertiary="props.tertiary" :quaternary="props.quaternary"
-        :circle="props.circle" :loading="props.loading" @click="emit('click', $event)">
+        :attr-type="props.attrType" :class="[props.classContent]" :circle="props.circle" :loading="props.loading"
+        @click="emit('click', $event)">
         <template v-if="props.icon" #icon>
             <component :is="props.icon" />
         </template>
