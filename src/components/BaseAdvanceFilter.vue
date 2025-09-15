@@ -2,7 +2,7 @@
     <div>
         <div class="flex justify-between gap-2">
             <div class="">
-                <BaseInput :icon="SearchOutline" placeholder="Search Activity" :model-value="props.modelValue"
+                <BaseInput :icon="SearchOutline" placeholder="Search" :model-value="props.modelValue"
                     @update:modelValue="(val) => emit('update:modelValue', val)" />
 
             </div>

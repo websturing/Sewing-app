@@ -1,3 +1,4 @@
+import { transferRoutes } from '@/router/routes/route.transfer'
 import type { RouteRecordRaw } from 'vue-router'
 import { operationRoutes } from './route.operation'
 
@@ -54,6 +55,7 @@ export const adminRoutes: RouteRecordRaw[] = [
                 component: () => import('@module/user/views/UserFormView.vue'),
             },
             ...operationRoutes,
+            ...transferRoutes
 
         ]
     }
