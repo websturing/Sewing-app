@@ -14,7 +14,7 @@ import { useLineView } from '@/modules/lines/composables/line.view';
 import { SaveAnnotation } from '@vicons/carbon';
 import { Search20Filled } from '@vicons/fluent';
 import { SearchOffRound } from '@vicons/material';
-import { useDialog } from 'naive-ui';
+import { useDialog, useMessage } from 'naive-ui';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -30,6 +30,7 @@ const store = useAssignmentLinesStore()
 
 const selectedLayingPlanning = ref<LayingPlanning | null>(null)
 const searchLayingPlanning = ref('')
+const toast = useMessage()
 
 const handleSelectedLayingPlanning = (value: LayingPlanning) => {
     selectedLayingPlanning.value = value
@@ -49,7 +50,14 @@ const handleSubmit = onSubmit(async (values) => {
         negativeText: 'Cancel',
         draggable: true,
         onPositiveClick: async () => {
-            await store.create(values)
+            const { success, message } = await store.create(values)
+            if (success) {
+                toast.success(message)
+            }
+            else {
+                toast.error(message)
+            }
+
         },
     })
 })
@@ -94,6 +102,7 @@ watch(() => store.loading, (val) => {
     } else {
         setTimeout(() => {
             showProgressModal.value = false;
+            selectedLayingPlanning.value = null
             router.push({ name: 'assignment-lines' });
         }, 500); // kasih waktu transisi
     }

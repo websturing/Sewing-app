@@ -5,12 +5,12 @@
             { label: meta.title, icon: BrandAirtable }
         ]" />
 
-        <AssignmentLinesTable />
+        <AssignmentLinesGrid />
     </div>
 </template>
 <script setup lang="ts">
 import BasePageHeader from '@/components/BasePageHeader.vue';
-import AssignmentLinesTable from '@/modules/assignment-lines/components/AssignmentLinesTable.vue';
+import AssignmentLinesGrid from '@/modules/assignment-lines/components/AssignmentLinesGrid.vue';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { BrandAirtable, SmartHome } from '@vicons/tabler';

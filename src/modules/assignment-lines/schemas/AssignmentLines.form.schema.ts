@@ -14,6 +14,7 @@ export const AssignmentLinesFormSchema = z.object({
             orderQty: z.number().int().nonnegative(),
             cutQty: z.number().int().nonnegative(),
         }),
+
     }),
     dateRange: z.array(z.string()).length(2, 'Date range must have exactly two dates'),
 })

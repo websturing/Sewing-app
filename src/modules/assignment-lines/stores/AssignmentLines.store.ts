@@ -1,9 +1,8 @@
 
 
 import api from '@/lib/api';
-import type { AssignmentLinesApi } from '@/modules/assignment-lines/schemas/AssignmentLines.api.schema';
+import { type LineAssignmentApi } from '@/modules/assignment-lines/schemas/AssignmentLines.api.schema';
 import type { AssignmentLinesForm } from '@/modules/assignment-lines/schemas/AssignmentLines.form.schema';
-import type { UsersAPI } from '@/modules/user/schemas/user.api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
 import { type User } from '@module/user/schemas/user.schema';
@@ -20,8 +19,8 @@ type query = {
 
 export const useAssignmentLinesStore = defineStore('assignmentLines', {
     state: () => ({
-        data: [] as AssignmentLinesApi[],
-        searchResult: [] as UsersAPI,
+        data: [] as LineAssignmentApi[],
+        searchResult: [] as LineAssignmentApi[],
         isSearching: false,
         meta: {} as Meta,
         links: {} as Links,
@@ -32,17 +31,37 @@ export const useAssignmentLinesStore = defineStore('assignmentLines', {
         search: "",
     }),
     actions: {
+        async fetch() {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                const res = await api.get(`/api/assignment/lines`);
+                const validatedData = res.data;
+                // const validatedData = LineAssignmentResponseAPiSchema.parse(res.data);
+
+                this.data = validatedData.data
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: validatedData.message ?? "Assignment Lines loaded"
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
         async create(moduleData: AssignmentLinesForm) {
             this.loading = true;
             this.error = null;
             try {
                 const res = await api.post('/api/assignment/line', moduleData)
-                this.data.push(res.data.data)
                 this.error = null
                 return ApiResponseSchema.parse({
                     success: true,
                     message: res.data.message ?? "Data Created Succesfully",
-                    id: res.data.data.id
                 });
             } catch (error: any) {
                 const message =
@@ -108,16 +127,10 @@ export const useAssignmentLinesStore = defineStore('assignmentLines', {
                 return state.data; // tidak ada search → pakai cache utama
             }
 
-            // kalau sedang search dan punya hasil remote
-            if (state.isSearching && state.searchResult.length) {
-                return state.searchResult;
-            }
-
-            // fallback → cari di data lokal sesuai search term
             const term = state.search.toLowerCase();
             return state.data
-                .filter((item: AssignmentLinesApi) =>
-                    item.glNumber?.toLowerCase().includes(term)
+                .filter((item: LineAssignmentApi) =>
+                    item.name?.toLowerCase().includes(term)
                 )
         }
     }
