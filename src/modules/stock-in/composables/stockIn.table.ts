@@ -22,19 +22,27 @@ export function useStockInTable() {
         {
             title: 'No',
             key: 'index',
-            width: 60,
+            align: 'center',
+            width: 50,
             render: (_row: any, index: number) => {
                 return (meta.value.currentPage - 1) * meta.value.perPage + index + 1
             }
         },
         {
+            title: 'Line',
+            key: 'line',
+            width: 120,
+        },
+        {
             title: 'GL Number',
             key: 'glNo',
+            width: 120,
         },
         {
             title: 'Size',
             key: 'size',
-            width: 150,
+            align: 'center',
+            width: 60,
         },
         {
             title: 'Color',
@@ -42,11 +50,15 @@ export function useStockInTable() {
         },
         {
             title: 'Pcs',
-            key: 'pcs'
+            key: 'pcs',
+            align: 'center',
+            width: 60,
         },
         {
             title: 'Input Source',
-            key: 'inputSource'
+            key: 'inputSource',
+            align: 'center',
+            width: 140,
         },
         {
             title: 'Actions',

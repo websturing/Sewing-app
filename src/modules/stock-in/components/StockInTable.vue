@@ -2,6 +2,7 @@
 import BaseAdvanceFilter from '@/components/BaseAdvanceFilter.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseDatable from '@/components/BaseDatable.vue';
+import BaseDatatableButton from '@/components/BaseDataTableButton.vue';
 import { useStockInTable } from '@/modules/stock-in/composables/stockIn.table';
 import { QrCodeScannerSharp } from '@vicons/material';
 import { onMounted, ref } from 'vue';
@@ -21,7 +22,6 @@ const router = useRouter()
 const dateRange = ref()
 
 const handleExportModal = () => { }
-const handleRefresh = () => { }
 const handleDelete = () => { }
 const handleEdit = () => []
 
@@ -37,7 +37,7 @@ onMounted(() => {
         <div class="flex gap-2 justify-between">
             <div class="flex-1">
                 <BaseAdvanceFilter v-model="search" v-model:dateRange="dateRange" @click:export="handleExportModal"
-                    @click:refresh="handleRefresh" />
+                    @click:refresh="handleFetch" />
             </div>
             <div>
                 <BaseButton label="Scan Stock In" :icon="QrCodeScannerSharp" type="primary"

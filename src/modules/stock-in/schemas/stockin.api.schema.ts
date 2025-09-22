@@ -20,6 +20,7 @@ export const stockInApiSchema = z.object({
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
     inputSource: z.string().min(1),
+    line: z.string(),
     containerScanStatus: z.string().min(1)
 });
 
