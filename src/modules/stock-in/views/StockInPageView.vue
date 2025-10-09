@@ -4,13 +4,14 @@
             { label: 'Home', icon: SmartHome, to: '/' },
             { label: meta.title, icon: QrCodeScannerSharp }
         ]" />
-
+        <SummaryToday />
         <StockInTable />
     </div>
 </template>
 <script setup lang="ts">
 import BasePageHeader from '@/components/BasePageHeader.vue';
 import StockInTable from '@/modules/stock-in/components/StockInTable.vue';
+import SummaryToday from "@/modules/summary/components/SummaryToday.vue";
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { QrCodeScannerSharp } from '@vicons/material';

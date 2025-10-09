@@ -4,6 +4,6 @@ export const transferRoutes: RouteRecordRaw[] = [
     {
         path: 'stock-ins',
         name: 'stock-ins',
-        component: () => import('@module/stock-in/views/StockInView.vue'),
+        component: () => import('@/modules/stock-in/views/StockInPageView.vue'),
     },
 ]

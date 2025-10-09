@@ -21,7 +21,7 @@
         </BaseDatable>
         <div class="flex justify-end mt-4">
             <n-pagination :page="meta.currentPage" :page-size="meta.perPage" :page-count="meta.lastPage"
-                show-size-picker :page-sizes="[5, 10, 20, 50]" @update:page="handlePageChange"
+                :page-sizes="[5, 10, 20, 50]" @update:page="handlePageChange"
                 @update:page-size="handlePageSizeChange" />
         </div>
 
