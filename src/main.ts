@@ -8,6 +8,15 @@ import App from './App.vue';
 import "./assets/css/tailwind.css";
 import router from './router';
 
+/** Echart */
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
+import { GridComponent, LegendComponent, TooltipComponent } from 'echarts/components';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+
+use([CanvasRenderer, LineChart, BarChart, PieChart, GridComponent, TooltipComponent, LegendComponent])
+
+
 
 const app = createApp(App)
 const head = createHead()

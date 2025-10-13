@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { useSideBar } from '@/composables/useSideBar';
-import { useLogout } from '@/modules/Login/composables/useLogout';
+import { useLogout } from '@/modules/login/composables/useLogout';
 import { LogOutOutline } from '@vicons/ionicons5';
 
 const {

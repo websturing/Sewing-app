@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import LoginForm from '@/modules/Login/components/LoginForm.vue';
+import LoginForm from '@/modules/login/components/LoginForm.vue';
 import { useHead } from '@unhead/vue';
 
 useHead({

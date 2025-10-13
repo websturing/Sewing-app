@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import HeaderBar from '@/components/HeaderBar.vue';
 import SideBar from '@/components/SideBar.vue';
-import LogOutForm from '@/modules/Login/components/LogOutForm.vue';
+import LogOutForm from '@/modules/login/components/LogOutForm.vue';
 </script>
 
 <style scoped>

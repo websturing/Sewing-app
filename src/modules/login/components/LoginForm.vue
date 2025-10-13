@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import ErrorCard from '@/components/ErrorCard.vue';
-import { useLoginForm } from '@module/Login/composables/useLoginForm';
+import { useLoginForm } from '@/modules/login/composables/useLoginForm';
 import { LockClosedOutline, LogInOutline, PersonCircleOutline } from '@vicons/ionicons5';
 
 const {

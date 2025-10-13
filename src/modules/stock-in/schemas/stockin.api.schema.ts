@@ -11,7 +11,7 @@ export const stockInApiSchema = z.object({
     userDispatchId: z.number().int().nonnegative(),
     color: z.string().min(1),
     pcs: z.number().int().positive(),
-    dateStockOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    dateStockOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
     corId: z.number().int().positive(),
     userId: z.number().int().positive(),
     userDispatchName: z.string(),

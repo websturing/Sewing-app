@@ -1,6 +1,6 @@
 
+import { loginSchema } from '@/modules/login/schemas/LoginSchema';
 import { useAuthStore } from '@/stores/auth';
-import { loginSchema } from '@module/Login/schemas/LoginSchema';
 import { useMessage } from 'naive-ui';
 import { useField, useForm } from 'vee-validate';
 import { ref } from 'vue';
@@ -36,8 +36,8 @@ export function useLoginForm() {
             loading.value = false
 
             message.success(`Great to have you back, ${response.data.data.user.email}! 🎉.`, {
-            duration: 3000
-        })
+                duration: 3000
+            })
             router.push({ name: 'dashboard' })
         } catch (error: any) {
             // Tutup loading message jika ada

@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import defaultAvatar from '@/assets/img/profile-circle.png'
 import { useAuth } from '@/composables/useAuth'
-import { useLogout } from '@/modules/Login/composables/useLogout'
+import { useLogout } from '@/modules/login/composables/useLogout'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 

@@ -6,7 +6,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { useLogout } from "@module/Login/composables/useLogout";
+import { useLogout } from "@/modules/login/composables/useLogout";
 
 
 

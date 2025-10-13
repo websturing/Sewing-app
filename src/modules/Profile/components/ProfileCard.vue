@@ -35,7 +35,7 @@
 </template>
 <script setup lang="ts">
 import defaultAvatar from '@/assets/img/profile-circle.png';
-import { useLogout } from '@/modules/Login/composables/useLogout';
+import { useLogout } from '@/modules/login/composables/useLogout';
 import { useProfile } from '@module/Profile/composables/useProfile';
 import { DocumentLockOutline, LogOut } from '@vicons/ionicons5';
 
