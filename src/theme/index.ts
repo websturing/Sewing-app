@@ -6,7 +6,8 @@ export const themeOverrides: GlobalThemeOverrides = {
     textColorBase: '#000',
     borderRadius: '8px',
     primaryColor: '#337080',
-    primaryColorHover: '#0f65d6ff'
+    primaryColorHover: '#0f65d6ff',
+    fontSize: '1rem',
   },
   Layout: {
     siderColorInverted: "#22333b",

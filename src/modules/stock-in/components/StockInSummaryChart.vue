@@ -1,8 +1,6 @@
 <template>
     <div>
-        Summary Today
         <VChart :option="optionsEchart" autoresize style="height: 400px;" />
-        <n-progress type="dashboard" gap-position="bottom" :percentage="100" />
     </div>
 </template>
 <script setup lang="ts">

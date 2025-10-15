@@ -16,6 +16,8 @@ export const StockInSummaryLinesChartSchema = z.object({
     stockinCount: z.object({
         bundle: z.number(),
         pcs: z.number(),
+        updatedAt: z.string().nullable(),
+        updatedAtFull: z.string().nullable(),
     })
 });
 
