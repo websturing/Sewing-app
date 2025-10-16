@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { FolderOff } from '@vicons/carbon';
+import { Folder } from '@vicons/tabler';
+
+interface Props {
+    stockIn: {
+        pcs: number
+        bundle: number
+        lastUpdated: string | null
+    }
+}
+
+const props = defineProps<Props>()
+
+</script>
+
 <template>
     <div>
         <n-card class="shadow-xs">
@@ -43,18 +59,3 @@
         </n-card>
     </div>
 </template>
-<script setup lang="ts">
-import { FolderOff } from '@vicons/carbon';
-import { Folder } from '@vicons/tabler';
-
-interface Props {
-    stockIn: {
-        pcs: number
-        bundle: number
-        lastUpdated: string | null
-    }
-}
-
-const props = defineProps<Props>()
-
-</script>

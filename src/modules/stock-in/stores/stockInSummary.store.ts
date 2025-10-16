@@ -78,36 +78,29 @@ export const useStockInSummary = defineStore('stockInSummary', {
                 }
             }
 
-            // Hitung total
-            const totals = state.chartLines.reduce((acc, item) => {
-                return {
-                    pcs: acc.pcs + item.stockinCount.pcs,
-                    bundle: acc.bundle + item.stockinCount.bundle
-                }
-            }, { pcs: 0, bundle: 0 })
+            const totals = state.chartLines.reduce((acc, item) => ({
+                pcs: acc.pcs + item.stockinCount.pcs,
+                bundle: acc.bundle + item.stockinCount.bundle
+            }), { pcs: 0, bundle: 0 });
 
-            // Fungsi untuk parse date format "Wednesday, 8 October 2025 08:11"
-            const parseCustomDate = (dateString: any) => {
-                try {
-                    // Hilangkan hari dan koma, lalu parse
-                    const dateWithoutDay = dateString.replace(/^[A-Za-z]+, /, '');
-                    return new Date(dateWithoutDay);
-                } catch (error) {
-                    console.error('Error parsing date:', dateString, error);
-                    return new Date(0); // Return tanggal minimal jika error
-                }
+            // Dapatkan semua updatedAtFull yang valid
+            const validDates = state.chartLines
+                .map(item => item.stockinCount.updatedAtFull)
+                .filter(dateStr => dateStr !== null && dateStr !== undefined);
+
+            // Cari yang terbaru
+            let lastUpdated = null;
+            if (validDates.length > 0) {
+                lastUpdated = validDates.reduce((latest, current) => {
+                    const latestDate = new Date(latest.replace(/^[A-Za-z]+, /, ''));
+                    const currentDate = new Date(current.replace(/^[A-Za-z]+, /, ''));
+                    return currentDate > latestDate ? current : latest;
+                });
             }
-
-            // Cari last_updated terbaru
-            const lastUpdated = state.chartLines.reduce((latest, item) => {
-                const itemDate = parseCustomDate(item.stockinCount.updatedAtFull);
-                const latestDate = parseCustomDate(latest);
-                return itemDate > latestDate ? (item.stockinCount.updatedAtFull) : latest;
-            }, state.chartLines[0].stockinCount.updatedAtFull);
 
             return {
                 ...totals,
-                lastUpdated: lastUpdated,
+                lastUpdated,
             }
         }
     }
