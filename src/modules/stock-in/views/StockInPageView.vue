@@ -20,10 +20,10 @@
             <div class="w-full">
                 <div class="flex gap-2">
                     <div class="w-full md:w-3/5">
-                        <SummaryMatrix :stock-in="stockInTotal" />
+                        <SummaryMatrix :stock-in="stockInTotal" :isLoading="loading" />
                     </div>
                     <div class="w-full md:w-2/5">
-                        <LinePerformanceChart :line="linePerformance" :slice="3" />
+                        <LinePerformanceChart :line="linePerformance" :slice="3" :isLoading="loading" />
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@ useHead({
     ]
 })
 
-const { stockInTotal, linePerformance, handleFetchChartLines } = useStockInSummaryChart()
+const { stockInTotal, linePerformance, handleFetchChartLines, loading } = useStockInSummaryChart()
 
 const handlDateRange = () => {
     const today = new Date()

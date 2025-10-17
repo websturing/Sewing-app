@@ -13,7 +13,7 @@ export function useStockInSummaryChart() {
     const store = useStockInSummary();
     const toast = useMessage()
 
-    const { chartLines, topThreeByPcsNonZero, totalStockInPcs, stockInTotal, linePerformance } = storeToRefs(store);
+    const { chartLines, topThreeByPcsNonZero, totalStockInPcs, stockInTotal, linePerformance, loading } = storeToRefs(store);
     const optionsEchart = ref({});
 
     const labels = computed(() => chartLines.value.map(item => item.name))
@@ -92,6 +92,7 @@ export function useStockInSummaryChart() {
     }
 
     return {
+        loading,
         linePerformance,
         stockInTotal,
         totalStockInPcs,
