@@ -1,0 +1,14 @@
+stages:
+  - build
+
+build_vue:
+  stage: build
+  image: node:20
+  before_script:
+    - npm install
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist
+  
