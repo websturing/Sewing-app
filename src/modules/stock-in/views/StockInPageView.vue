@@ -15,15 +15,19 @@
             </div>
         </div>
 
+        <div>
+            <LinePerformanceChart :line="linePerformance" :slice="10" :isLoading="loading" :isHorizontal="true" />
+        </div>
 
         <div class="flex gap-2">
             <div class="w-full">
                 <div class="flex gap-2">
-                    <div class="w-full md:w-3/5">
+                    <div class="w-full md:w-[70%]">
                         <SummaryMatrix :stock-in="stockInTotal" :isLoading="loading" />
+                        <SummaryChart />
                     </div>
-                    <div class="w-full md:w-2/5">
-                        <LinePerformanceChart :line="linePerformance" :slice="3" :isLoading="loading" />
+                    <div class="w-full md:w-[30%]">
+                        <StockInGroupByGL />
                     </div>
                 </div>
 
@@ -39,6 +43,7 @@
 import BaseButton from '@/components/BaseButton.vue';
 import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
 import LinePerformanceChart from '@/modules/lines/components/LinePerformanceChart.vue';
+import StockInGroupByGL from "@/modules/stock-in/components/StockInGroupByGL.vue";
 import SummaryChart from "@/modules/stock-in/components/StockInSummaryChart.vue";
 import SummaryMatrix from "@/modules/stock-in/components/StockInSummaryMatrix.vue";
 import StockInTable from '@/modules/stock-in/components/StockInTable.vue';
@@ -76,7 +81,7 @@ const handlDateRange = () => {
                 startDate: formatted[0],
                 endDate: formatted[1]
             }
-        })
+        }, { notify: false })
 
     }
 }

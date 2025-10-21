@@ -1,17 +1,29 @@
 
 
 import { stockInApi } from '@/modules/stock-in/api/stockInApi';
-import { StockInSummaryLinesChartResponseSchema, type StockInSummaryLinesChart } from '@/modules/stock-in/schemas/stockInSummary.api.schema';
+import { StockInSummaryGroupByGlNumberResponseSchema, StockInSummaryLinesChartResponseSchema, type GroupByGlNumberQuery, type StockInSummaryGroupByGlNumber, type StockInSummaryLinesChart } from '@/modules/stock-in/schemas/stockInSummary.api.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
+import type { Links, Meta } from '@/types/metaPagination';
 import { defineStore } from 'pinia';
 
 
-export const useStockInSummary = defineStore('stockInSummary', {
+export const useStockInSummaryStore = defineStore('stockInSummary', {
     state: () => ({
         chartLines: [] as StockInSummaryLinesChart[],
         loading: false,
         error: null as string | null,
         search: "",
+        groupByGlNumber: {
+            searchResult: [] as StockInSummaryGroupByGlNumber[],
+            isSearching: false,
+            data: [] as StockInSummaryGroupByGlNumber[],
+            meta: {} as Meta,
+            search: "",
+            links: {} as Links,
+            currentPage: 1 as number,
+            lastPage: 1 as number,
+        },
+
     }),
     actions: {
         async fetchChartLines(payload = {}) {
@@ -23,6 +35,7 @@ export const useStockInSummary = defineStore('stockInSummary', {
                 const results = await stockInApi.getChartLines(payload)
                 const validate = StockInSummaryLinesChartResponseSchema.parse(results);
                 this.chartLines = validate.data
+
                 return ApiResponseSchema.parse({
                     success: true,
                     message: validate.message ?? "Summary Chart loaded"
@@ -35,6 +48,42 @@ export const useStockInSummary = defineStore('stockInSummary', {
                 this.loading = false;
             }
         },
+        async fetchGroupByGlNumber(query: GroupByGlNumberQuery = {}) {
+            this.loading = true;
+            this.error = null;
+            try {
+
+                console.log("Query Params:", query);
+
+                /** for searching */
+                const params: GroupByGlNumberQuery = {
+                    page: query.page ?? 1,
+                    perPage: query.perPage ?? 10,
+                    search: query.search ?? undefined,
+                }
+
+
+                if (query.search) {
+                    this.groupByGlNumber.searchResult = [];
+                    this.groupByGlNumber.isSearching = true;
+                }
+
+                const results = await stockInApi.getGroupByGlNumber(params)
+                const validate = StockInSummaryGroupByGlNumberResponseSchema.parse(results);
+                this.groupByGlNumber.data = validate.data
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: validate.message ?? "Summary Group By Gl Number loaded"
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        }
 
     },
     getters: {

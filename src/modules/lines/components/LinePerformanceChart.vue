@@ -1,13 +1,28 @@
 <template>
     <div>
-        <div class="flex justify-between">
+        <div class="flex justify-between mb-1">
             <p class="mb-2 text-gray-400">Top Line Performance</p>
-            <BaseButton label="More" :icon="KeyboardArrowRightFilled" :quaternary="true" iconPlacement="right"
-                @click="isModalOpen = !isModalOpen" />
+            <div>
+                <div v-if="isHorizontal" :class="[isHorizontal ? 'flex items-center' : '']">
+                    <BaseButton label="Prev" :icon="KeyboardArrowLeftFilled" type="info" :quaternary="true"
+                        iconPlacement="left" @click="scroll('prev')" />
+
+                    <BaseButton label="Next" :icon="KeyboardArrowRightFilled" type="info" :quaternary="true"
+                        iconPlacement="right" @click="scroll('next')" />
+
+                    <BaseButton label="More" :icon="KeyboardArrowRightFilled" :quaternary="true" iconPlacement="right"
+                        @click="isModalOpen = !isModalOpen" />
+                </div>
+            </div>
+
         </div>
         <n-spin :show="isLoading">
-            <div class="flex flex-col gap-2">
-                <n-card class="shadow-xs cursor-pointer hover:!bg-gray-50"
+            <div ref="scrollContainer" :class="[
+                'relative flex gap-2 overflow-x-auto whitespace-nowrap scroll-smooth no-scrollbar',
+                isHorizontal ? '' : 'flex-col'
+            ]">
+                <n-card
+                    :class="['shadow-xs cursor-pointer hover:!bg-gray-50', isHorizontal ? 'flex-shrink-0 !w-[250px]' : '']"
                     v-for="(item) in props.line.slice(0, props.slice)" :key="item.id" :content-style="{ padding: 0 }">
                     <div class="flex justify-between px-4 py-2">
                         <div>
@@ -68,7 +83,7 @@
 
 <script setup lang="ts">
 import { LocationCurrent } from '@vicons/carbon';
-import { KeyboardArrowRightFilled } from '@vicons/material';
+import { KeyboardArrowLeftFilled, KeyboardArrowRightFilled } from '@vicons/material';
 import { ref } from 'vue';
 
 interface Props {
@@ -80,14 +95,41 @@ interface Props {
         lastUpdated: string | null
     }[],
     slice?: number,
-    isLoading?: boolean
+    isLoading?: boolean,
+    isHorizontal?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
     line: () => [],
     slice: 3,
-    isLoading: false
+    isLoading: false,
+    isHorizontal: false
 })
 
 const isModalOpen = ref(false);
 
+const scrollContainer = ref<HTMLDivElement | null>(null)
+
+const scroll = (direction: 'next' | 'prev') => {
+    const el = scrollContainer.value
+    if (!el) return
+    const scrollAmount = 300 // px, sesuaikan
+    el.scrollBy({
+        left: direction === 'next' ? scrollAmount : -scrollAmount,
+        behavior: 'smooth'
+    })
+}
+
 </script>
+
+<style scoped>
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+</style>

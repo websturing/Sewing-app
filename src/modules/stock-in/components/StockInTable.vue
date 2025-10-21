@@ -27,7 +27,9 @@ const handleEdit = () => []
 
 
 onMounted(() => {
-    handleFetch()
+    handleFetch({
+        notify: false
+    })
 })
 
 </script>

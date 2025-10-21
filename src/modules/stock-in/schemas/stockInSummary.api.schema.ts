@@ -29,3 +29,32 @@ export const StockInSummaryLinesChartResponseSchema = z.object({
 
 export type StockInSummaryLinesChart = z.infer<typeof StockInSummaryLinesChartSchema>;
 export type StockInSummaryLinesChartRequest = z.infer<typeof StockInSummaryLinesChartRequestSchema>;
+
+
+
+/** GROUP BY GL NUMBER */
+
+export const StockInSummaryGroupByGlNumberSchema = z.object({
+    glNo: z.string(),
+    totalBundle: z.number(),
+    totalPcs: z.number(),
+    lastUpdated: z.string().nullable(),
+    lineNames: z.string().nullable()
+});
+
+export const StockInSummaryGroupByGlNumberResponseSchema = z.object({
+    status: z.boolean(),
+    data: z.array(StockInSummaryGroupByGlNumberSchema),
+    message: z.string(),
+});
+
+/** for searching */
+export type GroupByGlNumberQuery = {
+    page?: number
+    search?: string
+    perPage?: number,
+};
+
+
+export type StockInSummaryGroupByGlNumber = z.infer<typeof StockInSummaryGroupByGlNumberSchema>;
+export type StockInSummaryGroupByGlNumberResponse = z.infer<typeof StockInSummaryGroupByGlNumberResponseSchema>;

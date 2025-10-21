@@ -1,5 +1,5 @@
 import type { StockInSummaryLinesChartRequest } from '@/modules/stock-in/schemas/stockInSummary.api.schema';
-import { useStockInSummary } from '@/modules/stock-in/stores/stockInSummary.store';
+import { useStockInSummaryStore } from '@/modules/stock-in/stores/stockInSummary.store';
 import { useMessage } from "naive-ui";
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
@@ -10,7 +10,7 @@ type OptionNotify = {
 
 export function useStockInSummaryChart() {
 
-    const store = useStockInSummary();
+    const store = useStockInSummaryStore();
     const toast = useMessage()
 
     const { chartLines, topThreeByPcsNonZero, totalStockInPcs, stockInTotal, linePerformance, loading } = storeToRefs(store);
