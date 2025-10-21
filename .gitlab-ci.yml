@@ -24,6 +24,8 @@ deploy_production:
     - chmod 600 ~/.ssh/id_ed25519_gitlab
     - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
   script:
-    - rsync -avz --delete dist/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+    - rsync -avz --delete -e "ssh -i ~/.ssh/id_ed25519_gitlab -o StrictHostKeyChecking=no" dist/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
   only:
     - main
+
+
