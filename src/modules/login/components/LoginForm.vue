@@ -42,7 +42,6 @@ const {
     password,
     errors,
     loading,
-    isSubmitting,
     submitForm } = useLoginForm();
 
 </script>

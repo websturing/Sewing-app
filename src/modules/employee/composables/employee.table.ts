@@ -168,6 +168,8 @@ export function useEmployeeTable() {
         meta,
         links,
         editRow,
+        handleEdit,
+        handleDelete,
         handleRefresh,
         handlePageChange,
         handlePageSizeChange

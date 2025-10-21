@@ -4,14 +4,6 @@ import type { Menu } from '@/types/models/menu'
 import type { User } from '@/types/models/user'
 import { defineStore } from 'pinia'
 
-function getCookie(name: string): string | null {
-    const value = `; ${document.cookie}`
-    const parts = value.split(`; ${name}=`)
-    if (parts.length === 2) return parts.pop()?.split(';').shift() ?? null
-    return null
-}
-
-const token = getCookie('XSRF-TOKEN')
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({

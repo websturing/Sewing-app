@@ -20,11 +20,10 @@
 <script setup lang="ts">
 import BaseButton from "@/components/BaseButton.vue";
 import BaseInput from "@/components/BaseInput.vue";
-import { formatDateRangeYMD } from "@/lib/dateRangeFormaterNaive";
 import { DocumentExport } from "@vicons/carbon";
 import { RefreshOutline, SearchOutline } from "@vicons/ionicons5";
 import { storeToRefs } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useActivitiesSearch } from "../composables/activities.search";
 import { useActivitiesStore } from "../stores/activities.store";
 
@@ -36,13 +35,11 @@ const emit = defineEmits<{
 
 const dateRange = ref<[number, number] | null>(null);
 
-watch(dateRange, (val) => {
-    const formatted = formatDateRangeYMD(val);
-});
+// watch(dateRange, (val) => {
+//     // const formatted = formatDateRangeYMD(val);
+// });
 const { search } = storeToRefs(useActivitiesStore())
 const {
-    month,
-    monthList,
     year,
     yearList
 } = useActivitiesSearch()

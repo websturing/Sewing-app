@@ -86,7 +86,6 @@ const {
     errors,
     onSubmit,
     isEdit,
-    resetForm,
     permissionData,
 } = useRoleForm(props.initialData)
 </script>

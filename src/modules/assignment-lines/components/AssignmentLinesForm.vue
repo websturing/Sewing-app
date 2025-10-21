@@ -25,7 +25,7 @@ const { options: glOptions, handleFetch: fetchGls, handleUpdateSearch: handleSea
 const { summaryGl, metaSummary, loading: isLoadingSummary } = useGlSummary()
 
 /** FORM STATE */
-const { glNumber, lineId: line, layingPlanning, errors, dateRangeUnformated, isLoading, onSubmit } = useAssignmentLinesForm()
+const { glNumber, lineId: line, layingPlanning, errors, dateRangeUnformated, onSubmit } = useAssignmentLinesForm()
 const store = useAssignmentLinesStore()
 
 const selectedLayingPlanning = ref<LayingPlanning | null>(null)

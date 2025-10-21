@@ -41,7 +41,7 @@ import { useActivities } from '../composables/useActivities';
 
 import { formatDateRangeYMD } from "@/lib/dateRangeFormaterNaive";
 
-const { search, isFirstLoad, handleFetchActivity } = useActivities()
+const { search, handleFetchActivity } = useActivities()
 const dateRange = ref<[number, number] | null>(null);
 const selectedYear = ref(currentActualYear)
 const dateFrom = ref<string | null>(null)
@@ -51,10 +51,10 @@ const handleExportModal = () => {
     alert('this feature coming soon')
 }
 
-const handleRefresh = async () => {
-    isFirstLoad.value = true
-    await handleFetchActivity();
-}
+// const handleRefresh = async () => {
+//     isFirstLoad.value = true
+//     await handleFetchActivity();
+// }
 
 watch(dateRange, (val) => {
     if (val) {

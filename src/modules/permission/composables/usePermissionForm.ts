@@ -24,7 +24,7 @@ export function usePermissionForm(initialData: any = null) {
         })
     })
 
-    const { handleSubmit, errors, isSubmitting, resetForm: veeResetForm, setValues } = useForm<{
+    const { handleSubmit, errors, isSubmitting, resetForm: veeResetForm } = useForm<{
         name: string
         slug: string
         icon: string

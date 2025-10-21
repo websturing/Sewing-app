@@ -9,7 +9,7 @@ import StockInCard from '@/modules/stock-in/components/StockInCard.vue';
 import { useStockInSummary } from '@/modules/stock-in/composables/useStockInSummary';
 import { onMounted } from 'vue';
 
-const { loading, glData, handleFetchGroupGL } = useStockInSummary();
+const { glData, handleFetchGroupGL } = useStockInSummary();
 
 onMounted(() => {
     handleFetchGroupGL({}, { notify: true });

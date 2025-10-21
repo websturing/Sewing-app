@@ -8,13 +8,7 @@ import type { Links, Meta } from '@/types/metaPagination';
 import { type User } from '@module/user/schemas/user.schema';
 import { defineStore } from 'pinia';
 
-type query = {
-    page?: number
-    q?: string
-    perPage?: number,
-    dateFrom?: string,
-    dateTo?: string
-}
+
 
 
 export const useAssignmentLinesStore = defineStore('assignmentLines', {

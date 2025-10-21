@@ -34,7 +34,7 @@ const actions = ['read', 'create', 'update', 'delete', 'upload', 'download']
 
 <template>
     <!-- row untuk item ini -->
-    <tr v-if="item && item.name">
+    <tr v-if="props.item && props.item.name">
         <td class="text-center">{{ level === 0 ? index : '' }}</td>
         <td :style="{ paddingLeft: `${level * 20}px` }" class="!pl-5">
             <span v-if="level === 0" class="font-semibold">{{ item.name }}</span>

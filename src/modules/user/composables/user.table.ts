@@ -15,14 +15,7 @@ export function useUserTable() {
     const editRow = ref<User>();
     const dateRange = ref<[number, number] | null>(null);
 
-    const availableColors = [
-        "default",
-        "primary",
-        "info",
-        "success",
-        "warning",
-        "error"
-    ] as const
+
 
 
     const columns: DataTableColumns<any> = [

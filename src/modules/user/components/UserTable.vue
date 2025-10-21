@@ -44,7 +44,6 @@ import { MoreVertical24Filled, Password16Regular } from '@vicons/fluent';
 import { Create } from '@vicons/ionicons5';
 import { NIcon, type DropdownOption } from "naive-ui";
 import { h, onMounted, ref } from "vue";
-import { useRouter } from 'vue-router';
 
 const isModalForm = ref<boolean>(false)
 const initialData = ref()
@@ -78,7 +77,6 @@ const handleDropdown = (key: string) => {
     console.log("Selected:", key)
 }
 
-const router = useRouter()
 
 const { columns, rows, loading, search, dateRange, meta, handleFetch, handleDelete, handlePageChange, handlePageSizeChange } = useUserTable()
 

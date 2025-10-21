@@ -69,13 +69,12 @@
 import BaseAdvanceFilter from '@/components/BaseAdvanceFilter.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import { useAssignmentLinesGrid } from '@/modules/assignment-lines/composables/assignmentLine.grid';
-import { useAssignmentLinesStore } from '@/modules/assignment-lines/stores/AssignmentLines.store';
 import { CloudOff16Filled, MoreVertical16Filled } from '@vicons/fluent';
 import { CreateFilled, OnlinePredictionFilled } from '@vicons/material';
 import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
 
-const store = useAssignmentLinesStore()
+
 
 const router = useRouter();
 const dateRange = ref<[number, number] | null>(null);
@@ -84,7 +83,6 @@ const dateRange = ref<[number, number] | null>(null);
 const {
     search,
     searchedItems,
-    data,
     handleFetchStore
 } = useAssignmentLinesGrid()
 

@@ -129,6 +129,8 @@ export function useStockInTable() {
         links,
         editRow,
         handleFetch,
+        handleEdit,
+        handleDelete,
         handlePageChange,
         handlePageSizeChange
     }
