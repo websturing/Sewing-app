@@ -5,6 +5,8 @@ stages:
 build_vue:
   stage: build
   image: node:20.19.0
+  variables:
+    NODE_OPTIONS: "--max-old-space-size=4096"
   script:
     - npm ci
     - npm run build
