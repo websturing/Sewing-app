@@ -1,16 +1,20 @@
 stages:
   - build
+  - deploy
 
 build_vue:
   stage: build
-  image: node:20
+  image: node:20.19.0
+  variables:
+    NODE_OPTIONS: "--max-old-space-size=4096"
   script:
     - npm ci
     - npm run build
   artifacts:
-    name: "vue-dist-$CI_COMMIT_SHORT_SHA"
     paths:
       - dist/
-    expire_in: 7 days
+    expire_in: 1 week
   only:
     - main
+
+
