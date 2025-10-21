@@ -1,31 +1,16 @@
 stages:
   - build
-  - deploy
 
 build_vue:
   stage: build
-  image: node:20.19.0
-  variables:
-    NODE_OPTIONS: "--max-old-space-size=4096"
+  image: node:20
   script:
     - npm ci
     - npm run build
   artifacts:
+    name: "vue-dist-$CI_COMMIT_SHORT_SHA"
     paths:
       - dist/
-
-deploy_production:
-  stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache openssh-client rsync
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519_gitlab
-    - chmod 600 ~/.ssh/id_ed25519_gitlab
-    - ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
-  script:
-    - rsync -avz --delete -e "ssh -i ~/.ssh/id_ed25519_gitlab -o StrictHostKeyChecking=no" dist/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+    expire_in: 7 days
   only:
     - main
-
-
