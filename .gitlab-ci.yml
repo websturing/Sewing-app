@@ -31,11 +31,23 @@ deploy_to_branch:
     - git config --global user.email "gitlab-ci@local"
     - git config --global user.name "GitLab CI"
   script:
-    - git clone --branch production $CI_REPOSITORY_URL production-branch
-    - rsync -av --delete dist/ production-branch/
-    - cd production-branch
-    - git add .
-    - git commit -m "production from pipeline $CI_PIPELINE_ID" || echo "No changes to commit"
-    - git push origin production
+    - |
+      # Clone dengan fetch semua branch
+      git clone --branch production $CI_REPOSITORY_URL production-branch
+      cd production-branch
+      
+      # Pastikan kita di branch production
+      git checkout production
+      
+      # Sync files dari dist
+      cd ..
+      rsync -av --delete dist/ production-branch/
+      
+      # Commit dan push
+      cd production-branch
+      git add .
+      git status
+      git commit -m "Deploy to production from pipeline $CI_PIPELINE_ID" || echo "No changes to commit"
+      git push origin production
   only:
     - main
