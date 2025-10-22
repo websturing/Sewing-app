@@ -33,21 +33,23 @@ deploy_to_branch:
   script:
     - |
       # Clone dengan fetch semua branch
-      git clone --branch production $CI_REPOSITORY_URL production-branch
+      git clone --branch production https://oauth2:${CI_PUSH_TOKEN}@gitlab.com/websturing/vuesewing.git production-branch
       cd production-branch
-      
+
       # Pastikan kita di branch production
       git checkout production
-      
-      # Sync files dari dist
+
+      # Sync files dari dist folder hasil build
       cd ..
       rsync -av --delete dist/ production-branch/
-      
+
       # Commit dan push
       cd production-branch
       git add .
       git status
       git commit -m "Deploy to production from pipeline $CI_PIPELINE_ID" || echo "No changes to commit"
+
+      # Push menggunakan token
       git push origin production
   only:
     - main
