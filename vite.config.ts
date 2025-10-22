@@ -21,6 +21,9 @@ export default defineConfig(({ mode }) => {
         ]
       })
     ],
+    optimizeDeps: {
+      exclude: ['vue-echarts']
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
