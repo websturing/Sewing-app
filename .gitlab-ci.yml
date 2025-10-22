@@ -21,14 +21,17 @@ build_vue:
       - .npm/
       - node_modules/.vite/
   script:
-    - echo "=== Install dependencies ==="
-    - npm ci --prefer-offline
-    - echo "=== Environment Variables ==="
+    - echo "=== Install dependencies (dev included) ==="
+    - npm ci --prefer-offline --include=dev
+
+    - echo "=== Environment Variables from GitLab CI/CD ==="
     - echo "VITE_API_BASE_URL=$VITE_API_BASE_URL"
     - echo "VITE_APP_BASE=$VITE_APP_BASE"
     - echo "VITE_API_PREFIX=$VITE_API_PREFIX"
-    - echo "=== Building Vue Project ==="
+
+    - echo "=== Build Vue Project ==="
     - npm run build
+
   artifacts:
     paths:
       - dist/
@@ -56,7 +59,7 @@ deploy_to_branch:
     - cd ..
     - rsync -av dist/ production-branch/
 
-    - echo "=== Include .htaccess if available ==="
+    - echo "=== Include .htaccess if exists ==="
     - if [ -f dist/.htaccess ]; then cp dist/.htaccess production-branch/; fi
 
     - echo "=== Commit and push to production ==="
