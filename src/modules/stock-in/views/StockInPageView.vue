@@ -30,11 +30,7 @@
                         <StockInGroupByGL />
                     </div>
                 </div>
-
-                <SummaryChart />
             </div>
-
-
         </div>
         <StockInTable />
     </div>

@@ -14,6 +14,7 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
         error: null as string | null,
         search: "",
         groupByGlNumber: {
+            loading: false,
             searchResult: [] as StockInSummaryGroupByGlNumber[],
             isSearching: false,
             data: [] as StockInSummaryGroupByGlNumber[],
@@ -49,7 +50,7 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
             }
         },
         async fetchGroupByGlNumber(query: GroupByGlNumberQuery = {}) {
-            this.loading = true;
+            this.groupByGlNumber.loading = true;
             this.error = null;
             try {
 
@@ -71,6 +72,18 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
                 const results = await stockInApi.getGroupByGlNumber(params)
                 const validate = StockInSummaryGroupByGlNumberResponseSchema.parse(results);
                 this.groupByGlNumber.data = validate.data
+                this.groupByGlNumber.links = validate.links;
+                this.groupByGlNumber.meta = validate.meta;
+                this.groupByGlNumber.currentPage = validate.meta.currentPage;
+                this.groupByGlNumber.lastPage = validate.meta.lastPage;
+
+                if (query.search) {
+                    this.groupByGlNumber.searchResult = validate.data;
+                } else {
+                    this.groupByGlNumber.data = validate.data;
+                    this.groupByGlNumber.isSearching = false;
+                    this.groupByGlNumber.searchResult = [];
+                }
 
                 return ApiResponseSchema.parse({
                     success: true,
@@ -81,20 +94,55 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
                 this.error = message;
                 return ApiResponseSchema.parse({ success: false, message });
             } finally {
-                this.loading = false;
+                this.groupByGlNumber.loading = false;
             }
-        }
+        },
+        async searchOrFetch(term: string) {
+            // kalau keyword berubah → reset dulu
+            if (this.groupByGlNumber.search !== term) {
+                this.groupByGlNumber.searchResult = [];
+                this.groupByGlNumber.isSearching = false;
+            }
+
+            this.groupByGlNumber.search = term;
+
+            // kalau kosong → fallback load awal
+            if (!term) {
+                await this.fetchGroupByGlNumber();
+                return this.groupByGlNumber.data;
+            }
+
+            // cek local result dulu (langsung filter cache utama)
+            const localResult = this.groupByGlNumber.data
+                .filter((item: StockInSummaryGroupByGlNumber) =>
+                    item.glNo?.toLowerCase().includes(term) ||
+                    item.lineNames?.toLowerCase().includes(term)
+                )
+
+            if (localResult.length > 0) {
+                this.groupByGlNumber.searchResult = localResult;
+                this.groupByGlNumber.isSearching = true;
+                return localResult;
+            }
+
+            // kalau ga ada di local → remote fetch
+            const res = await this.fetchGroupByGlNumber({
+                page: 1,
+                search: term
+            });
+            return res.success ? this.groupByGlNumber.searchResult : [];
+        },
 
     },
     getters: {
         linePerformance: (state) => {
             return state.chartLines
-                .sort((a, b) => {
+                .sort((a: any, b: any) => {
                     if (b.stockinCount.pcs !== a.stockinCount.pcs) {
                         return b.stockinCount.pcs - a.stockinCount.pcs;
                     }
                     return a.name.localeCompare(b.name);
-                }).map((item) => ({
+                }).map((item: any) => ({
                     id: item.id,
                     name: item.name,
                     pcs: item.stockinCount.pcs,
@@ -104,8 +152,8 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
         },
         topThreeByPcsNonZero: (state) => {
             return state.chartLines
-                .filter(item => item.stockinCount.pcs > 0)
-                .sort((a, b) => {
+                .filter((item: any) => item.stockinCount.pcs > 0)
+                .sort((a: any, b: any) => {
                     if (b.stockinCount.pcs !== a.stockinCount.pcs) {
                         return b.stockinCount.pcs - a.stockinCount.pcs;
                     }
@@ -114,7 +162,7 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
                 .slice(0, 3)
         },
         totalStockInPcs: (state) => {
-            return state.chartLines.reduce((total, item) => {
+            return state.chartLines.reduce((total: any, item: any) => {
                 return total + item.stockinCount.pcs
             }, 0)
         },
@@ -127,20 +175,20 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
                 }
             }
 
-            const totals = state.chartLines.reduce((acc, item) => ({
+            const totals = state.chartLines.reduce((acc: any, item: any) => ({
                 pcs: acc.pcs + item.stockinCount.pcs,
                 bundle: acc.bundle + item.stockinCount.bundle
             }), { pcs: 0, bundle: 0 });
 
             // Dapatkan semua updatedAtFull yang valid
             const validDates = state.chartLines
-                .map(item => item.stockinCount.updatedAtFull)
-                .filter(dateStr => dateStr !== null && dateStr !== undefined);
+                .map((item: any) => item.stockinCount.updatedAtFull)
+                .filter((dateStr: any) => dateStr !== null && dateStr !== undefined);
 
             // Cari yang terbaru
             let lastUpdated = null;
             if (validDates.length > 0) {
-                lastUpdated = validDates.reduce((latest, current) => {
+                lastUpdated = validDates.reduce((latest: any, current: any) => {
                     const latestDate = new Date(latest.replace(/^[A-Za-z]+, /, ''));
                     const currentDate = new Date(current.replace(/^[A-Za-z]+, /, ''));
                     return currentDate > latestDate ? current : latest;
@@ -151,6 +199,24 @@ export const useStockInSummaryStore = defineStore('stockInSummary', {
                 ...totals,
                 lastUpdated,
             }
+        },
+        searchedGroupGlNumberItems: (state) => {
+            if (!state.groupByGlNumber.search) {
+                return state.groupByGlNumber.data; // tidak ada search → pakai cache utama
+            }
+
+            // kalau sedang search dan punya hasil remote
+            if (state.groupByGlNumber.isSearching && state.groupByGlNumber.searchResult.length) {
+                return state.groupByGlNumber.searchResult;
+            }
+
+            // fallback → cari di data lokal sesuai search term
+            const term = state.groupByGlNumber.search.toLowerCase();
+            return state.groupByGlNumber.data
+                .filter((item: StockInSummaryGroupByGlNumber) =>
+                    item.glNo?.toLowerCase().includes(term) ||
+                    item.lineNames?.toLowerCase().includes(term)
+                )
         }
     }
 });

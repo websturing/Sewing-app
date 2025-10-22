@@ -1,3 +1,4 @@
+import { LinksSchema, MetaSchema } from "@/types/metaPagination";
 import { z } from 'zod';
 
 
@@ -45,6 +46,8 @@ export const StockInSummaryGroupByGlNumberSchema = z.object({
 export const StockInSummaryGroupByGlNumberResponseSchema = z.object({
     status: z.boolean(),
     data: z.array(StockInSummaryGroupByGlNumberSchema),
+    links: LinksSchema,
+    meta: MetaSchema,
     message: z.string(),
 });
 
