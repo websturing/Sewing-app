@@ -18,8 +18,9 @@ build_vue:
   cache:
     key: vue-build-cache
     paths:
-      - .npm/
-      - node_modules/.vite/
+    - .npm/
+    - .vite/
+    - node_modules/
   script:
     - echo "=== Install dependencies (dev included) ==="
     - npm ci --prefer-offline --include=dev
