@@ -16,49 +16,30 @@
             </div>
         </div>
 
-        <Table :data="data" :isLoading="loading" v-model:search="search" :meta="metaTable" @click:refresh="handleFetch"
-            @click:detail="navigateToGLDetail" @update:page="handlePageChange"
-            @update:pageSize="handlePageSizeChange" />
+        <div>
+            <GlsCard title="GL Number" value="" />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 // 1️⃣ Imports
-import Table from "@/modules/gls/components/GlsTable.vue";
-import { useGLPage } from "@/modules/gls/composables/gls.page";
+import GlsCard from '@/modules/gls/components/GlsCard.vue';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { BorderLeft20Filled } from '@vicons/fluent';
 import { SmartHome } from '@vicons/tabler';
-import { onMounted, ref } from "vue";
-
-// 2️⃣ Props (kalau ada)
-// 3️⃣ Emits (kalau ada)
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
 
 // 4️⃣ Local state & composables
+const
 const meta = ref<MetaHead>({
-    title: "GL Number",
-    description: "The GL Number module provides an overview of all production lots currently being processed or already completed within the sewing line."
+    title: "GL Number Transfer & History Overview",
+    description: "View detailed transfer history and current status of GL Number bundles through stock and line workflows."
 })
 
-const {
-    data,
-    meta: metaTable,
-    search,
-    loading,
-    handleFetch,
-    handlePageChange,
-    handlePageSizeChange,
-    navigateToGLDetail
-} = useGLPage()
-
-
-
-
-// 5️⃣ Lifecycle hooks
-onMounted(async () => {
-    await handleFetch()
-})
 
 // 6️⃣ Computed / watchers (kalau ada)
 useHead({
@@ -67,6 +48,14 @@ useHead({
         { name: 'description', content: meta.value.description }
     ]
 })
-// 7️⃣ Methods (local functions, event handlers, dsb.)
 
+watch(
+    () => route.params.id as string,
+    (newId: string) => {
+        if (newId) {
+            alert(newId)
+        }
+    },
+    { immediate: true }
+)
 </script>

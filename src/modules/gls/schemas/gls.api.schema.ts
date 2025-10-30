@@ -33,6 +33,8 @@ export const GLSchema = z.object({
     glNo: z.string(),
     totalBundle: z.number(),
     totalPcs: z.number(),
+    totalColors: z.number(),
+    totalSizes: z.number(),
     lastUpdated: z.string(),
     lineNames: z.string()
 });

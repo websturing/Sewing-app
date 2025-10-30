@@ -26,23 +26,29 @@ export const useGlTableStore = defineStore('glsTable', {
                 const res = await api.get('/api/gls', {
                     params: {
                         page: query.page ?? 1,
-                        perPage: query.perPage ?? 50,
+                        perPage: query.perPage ?? 10,
                         search: query.search ?? undefined,
                     },
                 })
+
                 const validated = GlResponseSchema.parse(res.data)
-                this.data = validated.data
+
+                // ✅ always overwrite — even when API returns []
+                this.data = Array.isArray(validated.data) ? validated.data : []
                 this.meta = validated.meta
                 this.links = validated.links
+
                 return { success: true, message: validated.message ?? 'GLs loaded' }
             } catch (error: any) {
                 const message = error?.response?.data?.message || 'Fetch failed'
                 this.error = message
+                // optional: clear old data when fetch fails
+                this.data = []
                 return { success: false, message }
             } finally {
                 this.loading = false
             }
-        },
+        }
     },
     getters: {
         options: (state) =>
