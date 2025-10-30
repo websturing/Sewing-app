@@ -23,6 +23,32 @@ export type GlApiList = z.infer<typeof GlApiListSchema>
 export type GlApiResponse = z.infer<typeof GlApiResponseSchema>
 
 
+
+/**
+ * GL NUMBERS DB
+ */
+
+
+export const GLSchema = z.object({
+    glNo: z.string(),
+    totalBundle: z.number(),
+    totalPcs: z.number(),
+    lastUpdated: z.string(),
+    lineNames: z.string()
+});
+
+export const GlResponseSchema = z.object({
+    status: z.boolean(),
+    message: z.string(),
+    data: z.array(GLSchema),
+    links: LinksSchema,
+    meta: MetaSchema,
+})
+
+export type GLs = z.infer<typeof GLSchema>
+export type GlResponse = z.infer<typeof GlResponseSchema>
+
+
 /** CUTTING INTEGRATION */
 // Schema untuk summary object
 const summarySchema = z.object({

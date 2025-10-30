@@ -1,24 +1,22 @@
 
 
 import api from '@/lib/api';
-import { GlApiResponseSchema, summaryGlApiResponseSchema, type GlApi, type GlApiList, type GrandTotalGl, type SummaryByColor, type SummaryByGl, type SummaryGlMetadata } from '@/modules/gls/schemas/gls.api.schema';
+import { GlResponseSchema, type GLs } from '@/modules/gls/schemas/gls.api.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
 import { defineStore } from 'pinia';
 
 type queryParams = {
     page?: number
-    q?: string
+    search?: string
     perPage?: number,
-    dateFrom?: string,
-    dateTo?: string
 }
 
 
-export const useGlStore = defineStore('gls', {
+export const useGlTableStore = defineStore('glsTable', {
     state: () => ({
-        data: [] as GlApiList,
-        searchResult: [] as GlApiList,
+        data: [] as GLs[],
+        searchResult: [] as GLs[],
         isSearching: false,
         meta: {} as Meta,
         links: {} as Links,
@@ -27,13 +25,6 @@ export const useGlStore = defineStore('gls', {
         currentPage: 1 as number,
         lastPage: 1 as number,
         search: "",
-        summaryGl: [] as SummaryByGl[],
-        summaryByColor: [] as SummaryByColor[],
-        total: {} as GrandTotalGl,
-        metaSummary: {} as SummaryGlMetadata,
-
-
-
 
     }),
     actions: {
@@ -45,25 +36,23 @@ export const useGlStore = defineStore('gls', {
                 const params: queryParams = {
                     page: query.page ?? 1,
                     perPage: query.perPage ?? 50,
-                    q: query.q ?? undefined,
-                    dateFrom: query.dateFrom,
-                    dateTo: query.dateTo,
+                    search: query.search ?? undefined,
                 }
 
 
-                if (query.q) {
+                if (query.search) {
                     this.searchResult = [];
                     this.isSearching = true;
                 }
 
                 const res = await api.get(`/api/gls`, { params });
-                const validatedData = GlApiResponseSchema.parse(res.data);
+                const validatedData = GlResponseSchema.parse(res.data);
                 this.meta = validatedData.meta;
                 this.links = validatedData.links;
                 this.currentPage = validatedData.meta.currentPage;
                 this.lastPage = validatedData.meta.lastPage;
 
-                if (query.q) {
+                if (query.search) {
                     this.searchResult = validatedData.data;
                 } else {
                     this.data = validatedData.data;
@@ -83,52 +72,6 @@ export const useGlStore = defineStore('gls', {
                 this.loading = false;
             }
         },
-        async fetchGLNumber(glNumber: string) {
-            this.loading = true;
-            this.error = null;
-            try {
-
-                const res = await api.get(`/api/gls/number/${glNumber}`);
-                const validatedData = res.data;
-
-                return ApiResponseSchema.parse({
-                    success: true,
-                    message: validatedData.message ?? "Gl Numbers loaded",
-                    id: validatedData.data.id
-                });
-            } catch (error: any) {
-                const message = error?.response?.data?.message || "Something went wrong";
-                this.error = message;
-                return ApiResponseSchema.parse({ success: false, message });
-            } finally {
-                this.loading = false;
-            }
-        },
-
-        async fetchSummaryGl(glNumber: string) {
-            this.loading = true;
-            this.error = null;
-            try {
-                const res = await api.get(`/api/gls/cutting-summary`, { params: { glNumber } });
-                const validatedData = summaryGlApiResponseSchema.parse(res.data)
-                this.summaryGl = validatedData.data.summaryByGl
-                this.summaryByColor = validatedData.data.summaryByColor
-                this.metaSummary = validatedData.data.metadata
-                this.total = validatedData.data.grandTotal
-
-                return ApiResponseSchema.parse({
-                    success: true,
-                    message: res.data.message ?? "Gl Numbers loaded",
-                });
-            } catch (error: any) {
-                const message = error?.response?.data?.message || "Something went wrong";
-                this.error = message;
-                return ApiResponseSchema.parse({ success: false, message });
-            } finally {
-                this.loading = false;
-            }
-        },
-
         async searchOrFetch(term: string) {
             // kalau keyword berubah → reset dulu
             if (this.search !== term) {
@@ -146,8 +89,8 @@ export const useGlStore = defineStore('gls', {
 
             // cek local result dulu (langsung filter cache utama)
             const localResult = this.data
-                .filter((item: GlApi) =>
-                    item.glNumber?.toLowerCase().includes(term)
+                .filter((item: GLs) =>
+                    item.glNo?.toLowerCase().includes(term)
                 )
 
             if (localResult.length > 0) {
@@ -159,7 +102,7 @@ export const useGlStore = defineStore('gls', {
             // kalau ga ada di local → remote fetch
             const res = await this.fetch({
                 page: 1,
-                q: term
+                search: term
             });
             return res.success ? this.searchResult : [];
         },
@@ -179,14 +122,14 @@ export const useGlStore = defineStore('gls', {
             // fallback → cari di data lokal sesuai search term
             const term = state.search.toLowerCase();
             return state.data
-                .filter((item: GlApi) =>
-                    item.glNumber?.toLowerCase().includes(term)
+                .filter((item: GLs) =>
+                    item.glNo?.toLowerCase().includes(term)
                 )
         },
         options(): Array<{ value: number; label: string }> {
             return this.searchedItems.map((e: any) => ({
-                value: e.glNumber || '',
-                label: e.glNumber || ''
+                value: e.glNo || '',
+                label: e.glNo || ''
             }));
         },
 
