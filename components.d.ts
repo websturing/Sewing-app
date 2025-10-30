@@ -13,6 +13,7 @@ declare module 'vue' {
     BaseDatable: typeof import('./src/components/BaseDatable.vue')['default']
     BaseDataTableButton: typeof import('./src/components/BaseDataTableButton.vue')['default']
     BaseDropdown: typeof import('./src/components/BaseDropdown.vue')['default']
+    BaseFilter: typeof import('./src/components/BaseFilter.vue')['default']
     BaseInput: typeof import('./src/components/BaseInput.vue')['default']
     BasePageHeader: typeof import('./src/components/BasePageHeader.vue')['default']
     BaseSelect: typeof import('./src/components/BaseSelect.vue')['default']

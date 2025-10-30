@@ -7,10 +7,6 @@
 
             </div>
             <div class="flex gap-2">
-                <n-date-picker :value="props.dateRange" type="daterange" clearable
-                    @update:value="(val: any) => emit('update:dateRange', val)" />
-                <!-- <n-select placeholder="Select Year" :value="props.year" :options="optionsYear"
-                    :style="{ width: '150px' }" @update:value="(val: any) => emit('update:year', val)" /> -->
                 <BaseButton label="Export" :icon="DocumentExport" @click="emit('click:export')" :tertiary="true"
                     type="primary" />
 
@@ -33,13 +29,10 @@ import { RefreshRound } from "@vicons/material";
 
 const props = defineProps<{
     modelValue: string
-    dateRange: [number, number] | null
 }>()
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: string): void
-    (e: 'update:year', value: number | null): void
-    (e: 'update:dateRange', value: [number, number] | null): void
     (e: 'click:export'): void
     (e: 'click:refresh'): void
 }>()

@@ -1,42 +1,57 @@
-import { useGlTableStore } from "@/modules/gls/stores/glsTable.store";
-import { useMessage } from "naive-ui";
-import { storeToRefs } from "pinia";
-
-type OptionNotify = {
-    notify?: boolean  // default: false
-}
+import { useGlTableStore } from '@/modules/gls/stores/glsTable.store'
+import { useMessage } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { computed, ref, watch } from 'vue'
 
 export function useGLTable() {
-
-
     const toast = useMessage()
     const store = useGlTableStore()
-    const { search, options, loading, data, meta } = storeToRefs(store)
+    const { data, loading, meta } = storeToRefs(store)
 
+    // ✅ pindahkan state UI ke composable
+    const search = ref('')
+    const localResult = ref<any[]>([])
+    const isSearching = ref(false)
 
-
-
-    const handleFetch = async (options: OptionNotify = { notify: true }) => {
-        const { success, message } = await store.fetch()
-        if (options.notify) {
+    const handleFetch = async (notify = true) => {
+        const { success, message } = await store.fetch({
+            search: search.value || undefined,
+        })
+        if (notify) {
             success ? toast.success(message) : toast.error(message)
         }
-        return { success, message }
     }
 
+    // auto fetch on search change
+    watch(search, async (term) => {
+        if (!term) {
+            localResult.value = []
+            isSearching.value = false
+            await handleFetch(false)
+            return
+        }
 
-    const handleUpdateSearch = (term: string) => {
-        store.searchOrFetch(term)
-    }
+        const cached = store.data.filter((e) =>
+            e.glNo?.toLowerCase().includes(term.toLowerCase())
+        )
 
+        if (cached.length > 0) {
+            localResult.value = cached
+            isSearching.value = true
+        } else {
+            await handleFetch(false)
+        }
+    })
+
+    const visibleData = computed(() =>
+        isSearching.value ? localResult.value : data.value
+    )
 
     return {
         meta,
+        data: visibleData,
         search,
-        data,
-        options,
         loading,
         handleFetch,
-        handleUpdateSearch
     }
 }
