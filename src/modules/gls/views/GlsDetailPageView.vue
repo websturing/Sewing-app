@@ -30,12 +30,23 @@
             </div>
         </div>
 
+        <div>
+            <GlsColorTable :data="glCombineColors" :isLoading="glCombineLoading" />
+        </div>
+        <div class="flex gap-2">
+            <div class="w-full md:w-[60%] bg-red-100">
 
+            </div>
+            <div class="w-full md:w-[40%]">
+
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import GlsCard from '@/modules/gls/components/GlsCard.vue';
+import GlsColorTable from '@/modules/gls/components/GlsColorTable.vue';
 import { useGLPage } from '@/modules/gls/composables/gls.page';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
@@ -54,6 +65,8 @@ const meta = ref<MetaHead>({
 
 const {
     glCombineData,
+    glCombineColors,
+    glCombineLoading,
     handleCuttingIntegrationGl,
     handleSyncCuttingGL
 } = useGLPage()
