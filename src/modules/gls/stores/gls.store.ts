@@ -2,6 +2,7 @@
 
 import api from '@/lib/api';
 import { GlApiResponseSchema, summaryGlApiResponseSchema, type GlApi, type GlApiList, type GrandTotalGl, type SummaryByColor, type SummaryByGl, type SummaryGlMetadata } from '@/modules/gls/schemas/gls.api.schema';
+import { GLCombineResponseSchema } from '@/modules/gls/schemas/glsCombine.api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
 import { defineStore } from 'pinia';
@@ -31,10 +32,6 @@ export const useGlStore = defineStore('gls', {
         summaryByColor: [] as SummaryByColor[],
         total: {} as GrandTotalGl,
         metaSummary: {} as SummaryGlMetadata,
-
-
-
-
     }),
     actions: {
         async fetch(query: queryParams = {}) {
@@ -115,6 +112,27 @@ export const useGlStore = defineStore('gls', {
                 this.summaryByColor = validatedData.data.summaryByColor
                 this.metaSummary = validatedData.data.metadata
                 this.total = validatedData.data.grandTotal
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: res.data.message ?? "Gl Numbers loaded",
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        async fetchSyncCuttingGL(glNumber: string) {
+            this.loading = true;
+            this.error = null;
+            try {
+                const res = await api.get(`/api/gls/syncCuttingGlNumber`, { params: { glNumber } });
+                const validatedData = GLCombineResponseSchema.parse(res.data)
+                console.log(validatedData);
 
                 return ApiResponseSchema.parse({
                     success: true,

@@ -28,7 +28,6 @@ export type GlApiResponse = z.infer<typeof GlApiResponseSchema>
  * GL NUMBERS DB
  */
 
-
 export const GLSchema = z.object({
     glNo: z.string(),
     totalBundle: z.number(),

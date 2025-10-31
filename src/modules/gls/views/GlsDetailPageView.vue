@@ -16,6 +16,8 @@
             </div>
         </div>
 
+        {{ glCombineData }}
+        {{ glCombineColors }}
 
         <div class="flex justify-between">
             <div class="flex flex-inline gap-2">
@@ -36,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-// 1️⃣ Imports
 import GlsCard from '@/modules/gls/components/GlsCard.vue';
 import { useGLPage } from '@/modules/gls/composables/gls.page';
 import type { MetaHead } from '@/types/metaHead';
@@ -55,7 +56,11 @@ const meta = ref<MetaHead>({
 })
 
 const {
-    handleCuttingIntegrationGl
+    glCombineData,
+    glCombineColors,
+    glCombineLoading,
+    handleCuttingIntegrationGl,
+    handleSyncCuttingGL
 } = useGLPage()
 
 
@@ -74,6 +79,7 @@ watch(
         if (newId) {
             glNumber.value = newId
             handleCuttingIntegrationGl(newId)
+            handleSyncCuttingGL(newId)
         }
     },
     { immediate: true }
