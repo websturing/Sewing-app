@@ -31,7 +31,7 @@
         </div>
 
         <div>
-            <GlsColorTable :data="glCombineColors" :isLoading="glCombineLoading" />
+            <GlsColorTable :data="glCombineColors" :isLoading="glCombineLoading" :glNumber="glNumber" />
         </div>
         <div class="flex gap-2">
             <div class="w-full md:w-[60%] bg-red-100">
