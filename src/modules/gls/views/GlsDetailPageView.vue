@@ -15,17 +15,14 @@
                 </n-breadcrumb>
             </div>
         </div>
-
-        {{ glCombineData }}
-        {{ glCombineColors }}
-
         <div class="flex justify-between">
             <div class="flex flex-inline gap-2">
                 <GlsCard title="GL Number" :value="glNumber" variant="text-black" />
 
-                <GlsCard title="Current Stock Cut Pieces" :value="glNumber" />
-                <GlsCard title="Total Production Output" :value="glNumber" variant="text-teal-500" />
-                <GlsCard title="Order Cut Pieces" :value="glNumber" variant="text-gray-500" />
+                <GlsCard title="Current Stock Cut Pieces" :value="glCombineData.sewingTotalStockinQty" />
+                <GlsCard title="Total Production Output" :value="glCombineData.sewingTotalStockoutQty"
+                    variant="text-teal-500" />
+                <GlsCard title="Order Cut Pieces" :value="glCombineData.orderQty" variant="text-gray-500" />
             </div>
             <div>
                 <p>Last Updated</p>
@@ -57,8 +54,6 @@ const meta = ref<MetaHead>({
 
 const {
     glCombineData,
-    glCombineColors,
-    glCombineLoading,
     handleCuttingIntegrationGl,
     handleSyncCuttingGL
 } = useGLPage()

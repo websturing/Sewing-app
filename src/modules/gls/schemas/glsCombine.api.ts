@@ -56,6 +56,8 @@ export const GLCombineResponseSchema = z.object({
     data: GLCombineSchema
 })
 
+export const GLCombineWithoutColorsSchema = GLCombineSchema.omit({ colors: true });
+export type GLCombineWithoutColors = z.infer<typeof GLCombineWithoutColorsSchema>;
 export type GLCombineColor = z.infer<typeof GLCombineColorsSchema>
 export type GLCombineSize = z.infer<typeof GLCombineSizesSchema>
 export type GLCombine = z.infer<typeof GLCombineSchema>

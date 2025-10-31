@@ -1,7 +1,7 @@
 
 
 import api from '@/lib/api';
-import { GLCombineResponseSchema, type GLCombine, type GLCombineColor } from '@/modules/gls/schemas/glsCombine.api';
+import { GLCombineResponseSchema, type GLCombineColor, type GLCombineWithoutColors } from '@/modules/gls/schemas/glsCombine.api';
 import { ApiResponseSchema } from '@/types/api.schema';
 import { defineStore } from 'pinia';
 
@@ -9,7 +9,7 @@ import { defineStore } from 'pinia';
 
 export const useGlSyncCuttingStore = defineStore('glsSync', {
     state: () => ({
-        data: {} as GLCombine,
+        data: {} as GLCombineWithoutColors,
         colors: [] as GLCombineColor[],
         loading: false,
         error: null
@@ -22,7 +22,9 @@ export const useGlSyncCuttingStore = defineStore('glsSync', {
                 const res = await api.get(`/api/gls/syncCuttingGlNumber`, { params: { glNumber } });
                 const validatedData = GLCombineResponseSchema.parse(res.data)
 
-                this.data = validatedData.data
+                const { colors, ...dataWithoutColors } = validatedData.data
+
+                this.data = dataWithoutColors
                 this.colors = validatedData.data.colors
 
                 return ApiResponseSchema.parse({
