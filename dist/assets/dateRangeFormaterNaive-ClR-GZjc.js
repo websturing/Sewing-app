@@ -1,1 +1,0 @@
-function r(t){if(!t)return"";const n=new Date(t),e=n.getFullYear(),a=String(n.getMonth()+1).padStart(2,"0"),o=String(n.getDate()).padStart(2,"0");return`${e}-${a}-${o}`}function u(t){return t?[r(t[0]),r(t[1])]:null}export{u as f};
