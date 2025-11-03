@@ -66,7 +66,8 @@
                             <n-icon :component="FolderSync16Regular" :size="24" />
                             <span>{{ colorDetail?.lastSyncAt }}</span>
                         </div>
-                        <BaseButton label="Export" :tertinary="true" :icon="DocumentPdf" />
+                        <BaseButton label="Export" :tertinary="true" :icon="DocumentPdf"
+                            @click="exportJsonToPdf(colorDetail)" />
                     </div>
                 </div>
             </template>
@@ -122,8 +123,9 @@ import BaseButton from "@/components/BaseButton.vue";
 import { type GLCombineColor } from '@/modules/gls/schemas/glsCombine.api';
 import { DocumentPdf } from "@vicons/carbon";
 import { Color20Filled, FolderSync16Regular } from "@vicons/fluent";
+import { jsPDF } from "jspdf";
+import autoTable, { type RowInput } from "jspdf-autotable";
 import { ref } from "vue";
-
 // 2️⃣ Props (kalau ada)
 interface Props {
     data: GLCombineColor[],
@@ -163,4 +165,83 @@ const handleColorDetail = (item: GLCombineColor) => {
     showModal.value = true
     colorDetail.value = item
 }
+
+
+const exportJsonToPdf = (data: GLCombineColor | undefined) => {
+    const doc = new jsPDF("landscape", "mm", "a4");
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    // 🧾 Header perusahaan dan laporan
+    doc.setFontSize(12);
+    doc.text("PT. Ghim Li Indonesia", 14, 18);
+    doc.setFontSize(14);
+    doc.text("Production Summary", pageWidth / 2, 12, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.text(`${props.glNumber} - ${data?.color}`, pageWidth / 2, 18, { align: "center" });
+    doc.setFontSize(9);
+    doc.text(`Print Date: ${new Date().toLocaleString("id-ID")}`, pageWidth - 14, 18, { align: "right" });
+
+    // 🧱 Header tabel (multi-row + colspan)
+    const head: RowInput[] = [
+        [
+            { content: "Size", rowSpan: 2 },
+            { content: "Order", rowSpan: 2 },
+            { content: "Cut Pieces Flow", colSpan: 4, styles: { halign: "center" } },
+            { content: "Sewing Progress", colSpan: 2, styles: { halign: "center" } },
+        ],
+        [
+            { content: "Cut" },
+            { content: "Cut To Sew" },
+            { content: "Sew In" },
+            { content: "Sew Out" },
+            { content: "Input %" },
+            { content: "Output %" },
+        ],
+    ];
+
+    const body = data?.sizes.map((i) => [
+        i.size,
+        i.orderQty,
+        i.cutQty,
+        i.stockOutQty,
+        i.sewingStockinQty,
+        i.sewingStockoutQty,
+        `${((i.sewingStockinQty / i.cutQty) * 100).toFixed(1)}%`,
+        `${((i.sewingStockoutQty / i.cutQty) * 100).toFixed(1)}%`,
+    ]);
+
+    autoTable(doc, {
+        startY: 22,
+        head,
+        body,
+        theme: "grid",
+        styles: {
+            fontSize: 9,
+            cellPadding: 3,
+            halign: "center",
+            valign: "middle",
+            lineWidth: 0.1, // border tipis
+        },
+        headStyles: {
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0],
+            fontStyle: "bold",
+            lineWidth: 0.1,
+        },
+
+        // ⬇️ Tambahan supaya header tetap ada border meskipun colspan
+        didDrawCell: (data) => {
+            if (data.section === "head") {
+                const { cell, doc } = data;
+                doc.setLineWidth(0.1);
+                doc.rect(cell.x, cell.y, cell.width, cell.height);
+            }
+        },
+    });
+
+    doc.save("sewing-report.pdf");
+};
+
 </script>
