@@ -1,0 +1,72 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  GIT_STRATEGY: fetch
+  GIT_SUBMODULE_STRATEGY: recursive
+  NODE_ENV: production
+  NODE_OPTIONS: "--max-old-space-size=4096"
+  NPM_CONFIG_CACHE: ".npm"
+
+# ==========================
+#   🧩 BUILD VUE SEWING
+# ==========================
+build_vue:
+  stage: build
+  image: node:20.19.0
+  cache:
+    key: vue-build-cache
+    paths:
+    - .npm/
+    - .vite/
+    - node_modules/
+  script:
+    - echo "=== Install dependencies (dev included) ==="
+    - npm ci --prefer-offline --include=dev
+
+    - echo "=== Environment Variables from GitLab CI/CD ==="
+    - echo "VITE_API_BASE_URL=$VITE_API_BASE_URL"
+    - echo "VITE_APP_BASE=$VITE_APP_BASE"
+    - echo "VITE_API_PREFIX=$VITE_API_PREFIX"
+
+    - echo "=== Build Vue Project ==="
+    - npm run build
+
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+  only:
+    - main
+
+# ==========================
+#   🚀 DEPLOY TO PRODUCTION
+# ==========================
+deploy_to_branch:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache git rsync
+    - git config --global user.email "gitlab-ci@local"
+    - git config --global user.name "GitLab CI"
+  script:
+    - echo "=== Clone production branch ==="
+    - git clone --branch production https://oauth2:${CI_PUSH_TOKEN}@gitlab.com/websturing/vuesewing.git production-branch
+
+    - echo "=== Clean and copy build output ==="
+    - cd production-branch
+    - rm -rf ./*
+    - cd ..
+    - rsync -av dist/ production-branch/
+
+    - echo "=== Include .htaccess if exists ==="
+    - if [ -f dist/.htaccess ]; then cp dist/.htaccess production-branch/; fi
+
+    - echo "=== Commit and push to production ==="
+    - cd production-branch
+    - git add .
+    - git commit -m "Deploy build from pipeline $CI_PIPELINE_ID" || echo "No changes to commit"
+    - git push origin HEAD:production --force
+  only:
+    - main
