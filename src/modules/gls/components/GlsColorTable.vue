@@ -48,64 +48,69 @@
 
 
 
-        <n-modal v-model:show="showModal">
-            <n-card style="width: 1200px" :bordered="false" size="huge" role="dialog" aria-modal="true">
-                <div class="flex flex-col gap-5">
-                    <div class="flex gap-10">
+        <n-modal v-model:show="showModal" preset="card" :style="'width: 1200px'">
+            <template #header>
+                <div class="flex justify-between items-end">
+                    <div class="flex gap-6 items-end">
                         <div>
-                            <p class="text-gray-400">Color</p>
-                            <p class="font-bold text-xl">{{ colorDetail?.color }}</p>
+                            <p class="text-gray-400 text-sm font-normal">GL Number</p>
+                            <p class="font-bold">{{ glNumber }}</p>
                         </div>
                         <div>
-                            <p class="text-gray-400">GL Number</p>
-                            <p class="font-bold text-xl">{{ glNumber }}</p>
+                            <p class="text-gray-400 text-sm font-normal">Color</p>
+                            <p class="font-bold">{{ colorDetail?.color }}</p>
                         </div>
                     </div>
-                    <n-table :single-line="false">
-                        <thead>
-                            <tr class="text-center">
-                                <th rowspan="2">Size</th>
-                                <th rowspan="2">Order</th>
-                                <th colspan="4">Cut Pieces Flow</th>
-                                <th colspan="2">Sewing Progress</th>
-                            </tr>
-                            <tr class="text-center">
-                                <th width="100px">Cut</th>
-                                <th width="100px">Cut -> Sew</th>
-                                <th width="100px">Sew In</th>
-                                <th width="100px">Sew Out</th>
-                                <th width="100px">Input</th>
-                                <th width="100px">Output</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="i in colorDetail?.sizes" :key="i.id">
-                                <td class="text-center">{{ i.size }}</td>
-                                <td class="text-center">{{ i.orderQty }}</td>
-                                <td class="text-center">{{ i.cutQty }}</td>
-                                <td class="text-center">{{ i.stockOutQty }}</td>
-                                <td class="text-center">{{ i.sewingStockinQty }}</td>
-                                <td class="text-center">{{ i.sewingStockoutQty }}</td>
-                                <td width="80px" :class="[
-                                    getPercentageColor(calculateSewingPercentage(i.cutQty, i.sewingStockinQty)),
-                                    'text-center'
-                                ]">
-                                    {{ calculateSewingPercentage(i.cutQty, i.sewingStockinQty)
-                                    }} %</td>
-                                <td width="80px" :class="[
-                                    getPercentageColor(calculateSewingPercentage(i.sewingStockinQty, i.sewingStockoutQty)),
-                                    'text-center'
-                                ]">{{
-                                    calculateSewingPercentage(i.sewingStockinQty, i.sewingStockoutQty) }} %</td>
-                            </tr>
-                        </tbody>
-                    </n-table>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1 text-sm text-gray-600">
+                            <n-icon :component="FolderSync16Regular" :size="24" />
+                            <span>{{ colorDetail?.lastSyncAt }}</span>
+                        </div>
+                        <BaseButton label="Export" :tertinary="true" :icon="DocumentPdf" />
+                    </div>
                 </div>
-
-                <template #footer>
-                    Footer
-                </template>
-            </n-card>
+            </template>
+            <div>
+                <n-table :single-line="false">
+                    <thead>
+                        <tr class="text-center">
+                            <th rowspan="2">Size</th>
+                            <th rowspan="2">Order</th>
+                            <th colspan="4">Cut Pieces Flow</th>
+                            <th colspan="2">Sewing Progress</th>
+                        </tr>
+                        <tr class="text-center">
+                            <th width="100px">Cut</th>
+                            <th width="100px">Cut -> Sew</th>
+                            <th width="100px">Sew In</th>
+                            <th width="100px">Sew Out</th>
+                            <th width="100px">Input</th>
+                            <th width="100px">Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="i in colorDetail?.sizes" :key="i.id">
+                            <td class="text-center">{{ i.size }}</td>
+                            <td class="text-center">{{ i.orderQty }}</td>
+                            <td class="text-center">{{ i.cutQty }}</td>
+                            <td class="text-center">{{ i.stockOutQty }}</td>
+                            <td class="text-center">{{ i.sewingStockinQty }}</td>
+                            <td class="text-center">{{ i.sewingStockoutQty }}</td>
+                            <td width="80px" :class="[
+                                getPercentageColor(calculateSewingPercentage(i.cutQty, i.sewingStockinQty)),
+                                'text-center'
+                            ]">
+                                {{ calculateSewingPercentage(i.cutQty, i.sewingStockinQty)
+                                }} %</td>
+                            <td width="80px" :class="[
+                                getPercentageColor(calculateSewingPercentage(i.sewingStockinQty, i.sewingStockoutQty)),
+                                'text-center'
+                            ]">{{
+                                calculateSewingPercentage(i.sewingStockinQty, i.sewingStockoutQty) }} %</td>
+                        </tr>
+                    </tbody>
+                </n-table>
+            </div>
         </n-modal>
 
 
@@ -115,7 +120,8 @@
 // 1️⃣ Imports
 import BaseButton from "@/components/BaseButton.vue";
 import { type GLCombineColor } from '@/modules/gls/schemas/glsCombine.api';
-import { Color20Filled } from "@vicons/fluent";
+import { DocumentPdf } from "@vicons/carbon";
+import { Color20Filled, FolderSync16Regular } from "@vicons/fluent";
 import { ref } from "vue";
 
 // 2️⃣ Props (kalau ada)
