@@ -1,12 +1,9 @@
 <template>
     <div class="flex flex-col gap-3">
-        <div>
-            <p class="font-bold">GL Production Summary Oct 20 - Nov 03, 2025</p>
-        </div>
 
-        <n-timeline size="large">
+        <n-timeline size="large" v-if="data.length > 0">
             <n-timeline-item v-for="(i, index) in props.data"
-                :type="index != (props.data.length - 1) || props.data.length == 1 ? 'success' : ''">
+                :type="index != (props.data.length - 1) || props.data.length == 1 ? '' : ''">
                 <n-card>
                     <template #header>
                         <p class="text-blue-700 text-sm">{{ i.color }}</p>
@@ -33,6 +30,10 @@
                 </n-card>
             </n-timeline-item>
         </n-timeline>
+        <p v-else>
+            <n-empty description="You can't find anything">
+            </n-empty>
+        </p>
     </div>
 </template>
 <script setup lang="ts">
@@ -42,6 +43,8 @@ import { KeyboardArrowRightFilled } from "@vicons/material";
 interface Props {
     data: matrixSummaryColor[]
 }
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+    data: () => []
+})
 
 </script>

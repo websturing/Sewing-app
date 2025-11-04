@@ -17,6 +17,8 @@ export function useGLChart() {
     const GLNumberOptionsEchart = ref({});
     const labels = computed(() => matrixData.value.map(item => item.date))
     const pcsData = computed(() => matrixData.value.map(item => item.totalPcs))
+    const startDate = ref<string>()
+    const endDate = ref<string>()
 
     GLNumberOptionsEchart.value = {
         tooltip: { trigger: 'axis' },
@@ -60,9 +62,14 @@ export function useGLChart() {
         payload: GLMatrixRequest,
         options: OptionNotify = { notify: true }
     ) => {
-        const { success, message } = await store.fetchGLMatix(payload);
+        const { success, message, data } = await store.fetchGLMatix(payload);
         if (options.notify) {
             success ? toast.success(message) : toast.error(message)
+        }
+
+        if (success && data) {
+            startDate.value = (data as any).startDate;
+            endDate.value = (data as any).endDate;
         }
 
     }
@@ -70,6 +77,8 @@ export function useGLChart() {
     return {
         matrixData,
         matrixSummary,
+        startDate,
+        endDate,
         GLNumberOptionsEchart,
         handleFetchGLMatrix,
     }

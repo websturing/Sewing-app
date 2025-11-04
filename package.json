@@ -20,7 +20,7 @@
     "clipboard": "^2.0.11",
     "datatables.net-vue3": "^3.0.4",
     "date-fns": "^4.1.0",
-    "dayjs": "^1.11.18",
+    "dayjs": "^1.11.19",
     "echarts": "^6.0.0",
     "jspdf": "^3.0.3",
     "jspdf-autotable": "^5.0.2",

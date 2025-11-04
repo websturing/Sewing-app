@@ -30,15 +30,14 @@
             </div>
         </div>
 
-
-        <div class="flex gap-5">
-            <div class="w-full md:w-[70%]">
-                <GlSummaryChart :chart="GLNumberOptionsEchart" />
+        <n-card class="shadow-sm">
+            <div class="flex gap-5">
+                <div class="w-full">
+                    <GlSummaryChart :chart="GLNumberOptionsEchart" :matrix="matrixSummary" :startDate="startDate"
+                        :endDate="endDate" @update:dateRange="handleDateRangeMatrix" />
+                </div>
             </div>
-            <div class="w-full md:w-[30%]">
-                <GlsColorTable :data="matrixSummary.colors" />
-            </div>
-        </div>
+        </n-card>
         <div>
             <GlsSummaryColorTable :data="glCombineColors" :isLoading="glCombineLoading" :glNumber="glNumber" />
         </div>
@@ -46,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import { formatDateRangeYMD } from '@/lib/dateRangeFormaterNaive';
 import GlsCard from '@/modules/gls/components/GlsCard.vue';
-import GlsColorTable from '@/modules/gls/components/GlsColorTable.vue';
 import GlsSummaryColorTable from '@/modules/gls/components/GlsSummaryColorTable.vue';
 import GlSummaryChart from '@/modules/gls/components/GlSummaryChart.vue';
 import { useGLPage } from '@/modules/gls/composables/gls.page';
@@ -68,6 +67,8 @@ const meta = ref<MetaHead>({
 
 const {
     matrixData,
+    startDate,
+    endDate,
     matrixSummary,
     GLNumberOptionsEchart,
     glCombineData,
@@ -103,4 +104,16 @@ watch(
 onMounted(() => handleFetchGLMatrix({
     glNumber: glNumber.value
 }))
+
+const handleDateRangeMatrix = (val: any) => {
+    const formatted = formatDateRangeYMD(val);
+    if (formatted) {
+        handleFetchGLMatrix({
+            glNumber: glNumber.value,
+            startDate: formatted[0],
+            endDate: formatted[1],
+        })
+
+    }
+}
 </script>

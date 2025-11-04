@@ -121,7 +121,6 @@ export function useEmployeeTable() {
         await store.searchOrFetch(term)
     })
     watch(dateRange, async (val) => {
-
         if (val) {
             const formatted = formatDateRangeYMD(val);
             if (formatted) {

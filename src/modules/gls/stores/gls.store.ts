@@ -36,7 +36,8 @@ export const useGlStore = defineStore('gls', {
         total: {} as GrandTotalGl,
         metaSummary: {} as SummaryGlMetadata,
         matrixData: [] as matrixItem[],
-        matrixSummary: {} as matrixGlSummary
+        matrixSummary: {} as matrixGlSummary,
+
     }),
     actions: {
         async fetch(query: queryParams = {}) {
@@ -162,10 +163,16 @@ export const useGlStore = defineStore('gls', {
                 this.matrixData = validate.data
                 this.matrixSummary = validate.summary
 
-
                 return ApiResponseSchema.parse({
                     success: true,
-                    message: validate.message ?? "Summary Chart loaded"
+                    message: validate.message ?? "Summary Chart loaded",
+                    data: {
+                        startDate: validate.startDate,  // ✅ ini bener
+                        endDate: validate.endDate,      // ✅ tambah ini
+                        glNo: validate.glNo,            // ✅ data lainnya
+                        summary: validate.summary,      // ✅ data summary
+                        chartData: validate.data        // ✅ data chart
+                    }
                 });
             } catch (error: any) {
                 const message = error?.response?.data?.message || "Something went wrong";

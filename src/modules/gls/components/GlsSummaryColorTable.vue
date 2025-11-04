@@ -1,5 +1,17 @@
 <template>
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-3">
+        <div class="flex justify-between items-end">
+            <div class="flex-1">
+                <p class="font-semibold">GL Production Summary by Color</p>
+                <p class="text-gray-400">Overall total production output grouped by color.</p>
+            </div>
+            <div class="flex gap-2">
+                <BaseInput v-model="search" :icon="Search" placeholder="Type to search" />
+                <BaseButton label="Export" :tertinary="true" :icon="DocumentPdf"
+                    @click="exportGlColorJsonToPdf(props.data)" />
+            </div>
+        </div>
+
         <n-table :single-line="false">
             <thead>
                 <tr class="text-center">
@@ -19,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="i in props.data" :key="i.id">
+                <tr v-for="i in GlByColor" :key="i.id">
                     <td>
                         <BaseButton :label="i.color" :icon="Color20Filled" :quaternary="true" type="primary"
                             @click="handleColorDetail(i)" />
@@ -120,12 +132,13 @@
 <script setup lang="ts">
 // 1️⃣ Imports
 import BaseButton from "@/components/BaseButton.vue";
+import BaseInput from "@/components/BaseInput.vue";
 import { type GLCombineColor } from '@/modules/gls/schemas/glsCombine.api';
-import { DocumentPdf } from "@vicons/carbon";
+import { DocumentPdf, Search } from "@vicons/carbon";
 import { Color20Filled, FolderSync16Regular } from "@vicons/fluent";
 import { jsPDF } from "jspdf";
 import autoTable, { type RowInput } from "jspdf-autotable";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 // 2️⃣ Props (kalau ada)
 interface Props {
     data: GLCombineColor[],
@@ -140,6 +153,32 @@ const props = withDefaults(defineProps<Props>(), {
 
 const colorDetail = ref<GLCombineColor>()
 const showModal = ref<boolean>(false)
+const search = ref<string>("")
+
+const DateNow = new Date();
+const formattedDate = DateNow.toLocaleString("en-US", {
+    month: "long",  // October
+    day: "2-digit", // 04
+    year: "numeric", // 2025
+    hour: "2-digit", // 14
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,  // format 24 jam
+});
+
+
+
+const GlByColor = computed(() => {
+    if (!search.value) {
+        return props.data;
+    }
+
+    const term = search.value.toLowerCase()
+    return props.data
+        .filter((item: GLCombineColor) =>
+            item.color.toLowerCase().includes(term)
+        )
+})
 
 
 // 5️⃣ Lifecycle hooks
@@ -181,7 +220,7 @@ const exportJsonToPdf = (data: GLCombineColor | undefined) => {
     doc.setFontSize(12);
     doc.text(`${props.glNumber} - ${data?.color}`, pageWidth / 2, 18, { align: "center" });
     doc.setFontSize(9);
-    doc.text(`Print Date: ${new Date().toLocaleString("id-ID")}`, pageWidth - 14, 18, { align: "right" });
+    doc.text(`Print Date: ${formattedDate}`, pageWidth - 14, 18, { align: "right" });
 
     // 🧱 Header tabel (multi-row + colspan)
     const head: RowInput[] = [
@@ -241,7 +280,88 @@ const exportJsonToPdf = (data: GLCombineColor | undefined) => {
         },
     });
 
-    doc.save("sewing-report.pdf");
+    doc.save(`Sewing_GL_${props.glNumber}_${data?.color}_report.pdf`);
+};
+
+const exportGlColorJsonToPdf = (data: GLCombineColor[] | undefined) => {
+    const doc = new jsPDF("landscape", "mm", "a4");
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    // 🧾 Header perusahaan dan laporan
+    doc.setFontSize(12);
+    doc.text("PT. Ghim Li Indonesia", 14, 18);
+    doc.setFontSize(14);
+    doc.text("Production Summary", pageWidth / 2, 12, { align: "center" });
+
+    doc.setFontSize(12);
+    doc.text(`GL-${props.glNumber}`, pageWidth / 2, 18, { align: "center" });
+    doc.setFontSize(9);
+    doc.text(`Print Date: ${formattedDate}`, pageWidth - 14, 18, { align: "right" });
+
+    // 🧱 Header tabel (multi-row + colspan)
+    const head: RowInput[] = [
+        [
+            { content: "Color", rowSpan: 2 },
+            { content: "Type", rowSpan: 2 },
+            { content: "Order", rowSpan: 2 },
+            { content: "Cut Pieces Flow", colSpan: 4, styles: { halign: "center" } },
+            { content: "Sewing Progress", colSpan: 2, styles: { halign: "center" } },
+        ],
+        [
+            { content: "Cut" },
+            { content: "Cut To Sew" },
+            { content: "Sew In" },
+            { content: "Sew Out" },
+            { content: "Input %" },
+            { content: "Output %" },
+        ],
+    ];
+
+    const body = data?.map((i) => [
+        i.color,
+        i.type,
+        i.orderQty,
+        i.cutQty,
+        i.stockOutQty,
+        i.sewingTotalStockinQty,
+        i.sewingTotalStockoutQty,
+        `${((i.sewingTotalStockinQty / i.cutQty) * 100).toFixed(1)}%`,
+        `${((i.sewingTotalStockoutQty / i.cutQty) * 100).toFixed(1)}%`,
+    ]);
+
+    autoTable(doc, {
+        startY: 22,
+        head,
+        body,
+        theme: "grid",
+        styles: {
+            fontSize: 9,
+            cellPadding: 3,
+            halign: "center",
+            valign: "middle",
+            lineWidth: 0.1, // border tipis
+        },
+        headStyles: {
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0],
+            fontStyle: "bold",
+            lineWidth: 0.1,
+        },
+        columnStyles: {
+            0: { halign: "left" }, // Kolom pertama (Color)
+        },
+
+        // ⬇️ Tambahan supaya header tetap ada border meskipun colspan
+        didDrawCell: (data) => {
+            if (data.section === "head") {
+                const { cell, doc } = data;
+                doc.setLineWidth(0.1);
+                doc.rect(cell.x, cell.y, cell.width, cell.height);
+            }
+        },
+    });
+
+    doc.save(`Sewing_Production_Summary_${props.glNumber}_report.pdf`);
 };
 
 </script>
