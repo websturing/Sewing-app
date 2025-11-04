@@ -36,11 +36,11 @@
                 <GlSummaryChart :chart="GLNumberOptionsEchart" />
             </div>
             <div class="w-full md:w-[30%]">
-                <GlsSizeTable :data="matrixData" />
+                <GlsColorTable :data="matrixSummary.colors" />
             </div>
         </div>
         <div>
-            <GlsColorTable :data="glCombineColors" :isLoading="glCombineLoading" :glNumber="glNumber" />
+            <GlsSummaryColorTable :data="glCombineColors" :isLoading="glCombineLoading" :glNumber="glNumber" />
         </div>
     </div>
 </template>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import GlsCard from '@/modules/gls/components/GlsCard.vue';
 import GlsColorTable from '@/modules/gls/components/GlsColorTable.vue';
-import GlsSizeTable from '@/modules/gls/components/GlsSizeTable.vue';
+import GlsSummaryColorTable from '@/modules/gls/components/GlsSummaryColorTable.vue';
 import GlSummaryChart from '@/modules/gls/components/GlSummaryChart.vue';
 import { useGLPage } from '@/modules/gls/composables/gls.page';
 import type { MetaHead } from '@/types/metaHead';
@@ -68,6 +68,7 @@ const meta = ref<MetaHead>({
 
 const {
     matrixData,
+    matrixSummary,
     GLNumberOptionsEchart,
     glCombineData,
     glCombineColors,

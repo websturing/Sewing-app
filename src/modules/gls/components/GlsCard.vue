@@ -8,9 +8,9 @@
 </template>
 <script setup lang="ts">
 interface Props {
-    title: string | boolean | number,
-    value: string | boolean | number,
-    variant?: string
+    title: string | boolean | number | undefined,
+    value: string | boolean | number | undefined,
+    variant?: string | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {

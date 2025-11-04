@@ -17,7 +17,7 @@ export function useGLPage() {
     const storeGlCombine = useGlSyncCuttingStore()
     const { handleFetch, data, loading, search, meta, } = useGLTable()
     const { data: glCombineData, loading: glCombineLoading, colors: glCombineColors } = storeToRefs(storeGlCombine);
-    const { matrixData, GLNumberOptionsEchart, handleFetchGLMatrix } = useGLChart()
+    const { matrixData, matrixSummary, GLNumberOptionsEchart, handleFetchGLMatrix } = useGLChart()
 
     const perPage = ref(10)
     const router = useRouter();
@@ -63,6 +63,7 @@ export function useGLPage() {
         glCombineLoading,
 
         matrixData,
+        matrixSummary,
         GLNumberOptionsEchart,
 
 

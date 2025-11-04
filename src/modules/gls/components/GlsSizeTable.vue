@@ -9,7 +9,6 @@
                 <tr class="text-center">
                     <th width="100px">Cut Pcs</th>
                     <th width="100px">Bundles</th>
-                    <th width="100px">Colors</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,7 +16,6 @@
                     <td>{{ e.size }}</td>
                     <td>{{ e.totalPcs }}</td>
                     <td>{{ e.totalBundle }}</td>
-                    <td>{{ e.totalColors }}</td>
                 </tr>
             </tbody>
         </n-table>
@@ -30,7 +28,5 @@ interface Props {
     data: matrixItem[]
 }
 
-const props = withDefaults(defineProps<Props>(), {
-
-})
+const props = withDefaults(defineProps<Props>(), {})
 </script>

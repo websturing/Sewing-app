@@ -2,7 +2,8 @@
     <div class="flex flex-col gap-1">
         <div class="flex justify-between">
             <div>
-                <p class="font-bold ">GL transaction for Oct 20 - Nov 03, 2025</p>
+                <p class="font-bold ">Daily Production Movement</p>
+                <p class="font-semibold ">Oct 20 - Nov 03, 2025</p>
             </div>
             <div class="flex gap-2">
 

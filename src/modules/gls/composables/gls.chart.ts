@@ -12,7 +12,7 @@ export function useGLChart() {
 
     const store = useGlStore();
     const toast = useMessage()
-    const { matrixData } = storeToRefs(store)
+    const { matrixData, matrixSummary } = storeToRefs(store)
 
     const GLNumberOptionsEchart = ref({});
     const labels = computed(() => matrixData.value.map(item => item.date))
@@ -69,6 +69,7 @@ export function useGLChart() {
 
     return {
         matrixData,
+        matrixSummary,
         GLNumberOptionsEchart,
         handleFetchGLMatrix,
     }

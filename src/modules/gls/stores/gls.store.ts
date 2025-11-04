@@ -36,7 +36,7 @@ export const useGlStore = defineStore('gls', {
         total: {} as GrandTotalGl,
         metaSummary: {} as SummaryGlMetadata,
         matrixData: [] as matrixItem[],
-        matrixSummary: [] as matrixGlSummary[]
+        matrixSummary: {} as matrixGlSummary
     }),
     actions: {
         async fetch(query: queryParams = {}) {
