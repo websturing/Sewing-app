@@ -72,7 +72,7 @@
                 </div>
             </template>
             <div>
-                <n-table :single-line="false">
+                <n-table :single-line="false" size="small">
                     <thead>
                         <tr class="text-center">
                             <th rowspan="2">Size</th>

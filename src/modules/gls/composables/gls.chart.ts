@@ -12,20 +12,19 @@ export function useGLChart() {
 
     const store = useGlStore();
     const toast = useMessage()
-    const { matrixData, matrixSummary } = storeToRefs(store)
+    const { matrixData } = storeToRefs(store)
 
     const GLNumberOptionsEchart = ref({});
     const labels = computed(() => matrixData.value.map(item => item.date))
     const pcsData = computed(() => matrixData.value.map(item => item.totalPcs))
 
     GLNumberOptionsEchart.value = {
-        title: { text: 'Cut Pieces Flow' },
         tooltip: { trigger: 'axis' },
         legend: { data: ['PCS', 'Bundle'] },
-        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+        grid: { left: '0%', right: '0%', bottom: '1%', containLabel: true },
         xAxis: {
             type: 'category',
-            boundaryGap: false, // biar area chart nempel ke kiri-kanan
+            boundaryGap: true, // biar area chart nempel ke kiri-kanan
             data: labels,
         },
         yAxis: { type: 'value' },

@@ -31,15 +31,14 @@
         </div>
 
 
-        <div class="flex gap-2">
-            <div class="w-full md:w-[60%] bg-red-100">
-                <GlSummaryChart />
+        <div class="flex gap-5">
+            <div class="w-full md:w-[70%]">
+                <GlSummaryChart :chart="GLNumberOptionsEchart" />
             </div>
-            <div class="w-full md:w-[40%]">
-
+            <div class="w-full md:w-[30%]">
+                <GlsSizeTable :data="matrixData" />
             </div>
         </div>
-
         <div>
             <GlsColorTable :data="glCombineColors" :isLoading="glCombineLoading" :glNumber="glNumber" />
         </div>
@@ -49,13 +48,14 @@
 <script setup lang="ts">
 import GlsCard from '@/modules/gls/components/GlsCard.vue';
 import GlsColorTable from '@/modules/gls/components/GlsColorTable.vue';
+import GlsSizeTable from '@/modules/gls/components/GlsSizeTable.vue';
 import GlSummaryChart from '@/modules/gls/components/GlSummaryChart.vue';
 import { useGLPage } from '@/modules/gls/composables/gls.page';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { BorderLeft20Filled } from '@vicons/fluent';
 import { SmartHome } from '@vicons/tabler';
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
 
@@ -67,11 +67,14 @@ const meta = ref<MetaHead>({
 })
 
 const {
+    matrixData,
+    GLNumberOptionsEchart,
     glCombineData,
     glCombineColors,
     glCombineLoading,
     handleCuttingIntegrationGl,
-    handleSyncCuttingGL
+    handleSyncCuttingGL,
+    handleFetchGLMatrix
 } = useGLPage()
 
 
@@ -95,4 +98,8 @@ watch(
     },
     { immediate: true }
 )
+
+onMounted(() => handleFetchGLMatrix({
+    glNumber: glNumber.value
+}))
 </script>

@@ -1,22 +1,32 @@
 <template>
-    <div>
-        <VChart :option="GLNumberOptionsEchart" autoresize style="height: 400px;" />
+    <div class="flex flex-col gap-1">
+        <div class="flex justify-between">
+            <div>
+                <p class="font-bold ">GL transaction for Oct 20 - Nov 03, 2025</p>
+            </div>
+            <div class="flex gap-2">
+
+                <BaseButton label="Reset" :icon="ArrowReset20Filled" quaternary type="error" />
+                <BaseButton label="Refresh" :icon="RefreshRound" />
+                <n-date-picker v-model:value="range" type="datetimerange" clearable />
+            </div>
+        </div>
+
+
+        <VChart :option="props.chart" autoresize style="height: 380px; width: 100%;" />
     </div>
 </template>
 <script setup lang="ts">
-import { useGLChart } from '@/modules/gls/composables/gls.chart';
-import { onMounted } from 'vue';
+import BaseButton from "@/components/BaseButton.vue";
+import { ArrowReset20Filled } from "@vicons/fluent";
+import { RefreshRound } from '@vicons/material';
+import { ref } from 'vue';
 
+interface Props {
+    chart: any
+}
+const props = withDefaults(defineProps<Props>(), {})
 
-const {
-    GLNumberOptionsEchart,
-    handleFetchGLMatrix
-} = useGLChart()
-
-onMounted(async () => {
-    await handleFetchGLMatrix({
-        glNumber: '65592-01'
-    })
-})
+const range = ref<[number, number]>([1183135260000, Date.now()])
 
 </script>

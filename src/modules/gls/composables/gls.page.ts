@@ -1,3 +1,4 @@
+import { useGLChart } from "@/modules/gls/composables/gls.chart"
 import { useGLTable } from "@/modules/gls/composables/gls.table"
 import { useGlStore } from "@/modules/gls/stores/gls.store"
 import { useGlSyncCuttingStore } from "@/modules/gls/stores/glsSync.store"
@@ -16,6 +17,7 @@ export function useGLPage() {
     const storeGlCombine = useGlSyncCuttingStore()
     const { handleFetch, data, loading, search, meta, } = useGLTable()
     const { data: glCombineData, loading: glCombineLoading, colors: glCombineColors } = storeToRefs(storeGlCombine);
+    const { matrixData, GLNumberOptionsEchart, handleFetchGLMatrix } = useGLChart()
 
     const perPage = ref(10)
     const router = useRouter();
@@ -60,6 +62,8 @@ export function useGLPage() {
         glCombineColors,
         glCombineLoading,
 
+        matrixData,
+        GLNumberOptionsEchart,
 
 
         handleFetch,
@@ -67,6 +71,10 @@ export function useGLPage() {
         handlePageSizeChange,
         handleCuttingIntegrationGl,
         handleSyncCuttingGL,
-        navigateToGLDetail
+        navigateToGLDetail,
+
+
+
+        handleFetchGLMatrix
     }
 }
