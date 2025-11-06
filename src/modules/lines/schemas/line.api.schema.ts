@@ -1,11 +1,16 @@
+import { stockInApiSchema } from "@/modules/stock-in/schemas/stockin.api.schema";
 import { LinksSchema, MetaSchema } from "@/types/metaPagination";
 import { z } from "zod";
+
+
+
+
 
 export const LineApiSchema = z.object({
     id: z.number().optional(),
     name: z.string().min(1, 'Line name is required'),
-    createdAt: z.string().optional(),
-    updatedAt: z.string().optional()
+    location: z.string().nullable(),
+    latestStockin: stockInApiSchema.nullable(),
 })
 
 const LineApiListSchema = z.array(LineApiSchema)

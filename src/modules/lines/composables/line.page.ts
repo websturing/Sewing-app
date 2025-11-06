@@ -1,25 +1,22 @@
+import type { LineFilterRequest } from "@/modules/lines/schemas/line.request.schema";
 import { useLineStore } from "@/modules/lines/stores/line.store";
 import { useMessage } from "naive-ui";
-import { storeToRefs } from "pinia";
 
 type OptionNotify = {
     notify?: boolean  // default: false
 }
 
-export function useLineView() {
+export function useLinePage() {
 
 
     const toast = useMessage()
     const store = useLineStore()
-    const { search, options } = storeToRefs(store)
 
 
-    const handleUpdateSearch = (term: string) => {
-        store.searchOrFetch(term)
-    }
 
-    const handleFetch = async (options: OptionNotify = { notify: true }) => {
-        const { success, message } = await store.fetch()
+
+    const handleFetch = async (options: OptionNotify = { notify: true }, payload: LineFilterRequest) => {
+        const { success, message } = await store.fetchLines(payload)
         if (options.notify) {
             success ? toast.success(message) : toast.error(message)
         }
@@ -28,9 +25,6 @@ export function useLineView() {
 
 
     return {
-        search,
-        options,
         handleFetch,
-        handleUpdateSearch
     }
 }

@@ -15,12 +15,12 @@ export const stockInApiSchema = z.object({
     corId: z.number().int().positive(),
     userId: z.number().int().positive(),
     userDispatchName: z.string(),
-    boxNumber: z.string().min(1),
+    boxNumber: z.string().nullable(),
     lineId: z.number().int().positive(),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
     inputSource: z.string().min(1),
-    line: z.string(),
+    line: z.string().optional(),
     containerScanStatus: z.string().min(1)
 });
 
