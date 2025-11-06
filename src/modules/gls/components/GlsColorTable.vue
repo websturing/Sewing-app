@@ -15,16 +15,22 @@
                     <div class="flex flex-col gap-2">
 
                         <div class="flex gap-5 gap-y-1 items-center flex-wrap">
-                            <p class="text-gray-500 text-sm">
-                                Total Cut Pieces : <span class="font-semibold">{{ i.totalPcs }}</span>
-                            </p>
-                            <p class="text-gray-500 text-sm">
-                                Total Bundles : <span class="font-semibold">{{ i.totalBundle }}</span>
-                            </p>
-
-                            <p class="text-gray-500 text-sm">
-                                Total Sizes : <span class="font-semibold">{{ i.totalSizes }}</span>
-                            </p>
+                            <div class="text-gray-500 text-sm">
+                                <p>Cut Pieces</p>
+                                <p class="font-semibold">{{ i.totalPcs }}</p>
+                            </div>
+                            <div class="text-gray-500 text-sm">
+                                <p>Bundles</p>
+                                <p class="font-semibold">{{ i.totalBundle }}</p>
+                            </div>
+                            <div class="text-gray-500 text-sm">
+                                <p>Sizes</p>
+                                <p class="font-semibold">{{ i.totalSizes }}</p>
+                            </div>
+                            <div class="text-gray-500 text-sm">
+                                <p>Defect</p>
+                                <p class="font-semibold text-red-400">{{ i.totalDefect }}</p>
+                            </div>
                         </div>
                     </div>
                 </n-card>

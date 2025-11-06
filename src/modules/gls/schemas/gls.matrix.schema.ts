@@ -6,7 +6,8 @@ export const matrixItemSchema = z.object({
     date: z.string(), // atau z.date() jika ingin di-parse sebagai Date
     size: z.string(),
     totalBundle: z.number(),
-    totalPcs: z.union([z.string(), z.number()]), // karena ada string dan number
+    totalPcs: z.union([z.string(), z.number()]),
+    totalDefect: z.union([z.string(), z.number()]),
     lineNames: z.string(),
     totalColors: z.number()
 });
@@ -23,6 +24,7 @@ export const matrixSummaryColorSchema = z.object({
     totalPcs: z.number(),
     totalBundle: z.number(),
     totalSizes: z.number(),
+    totalDefect: z.number(),
     sizes: z.array(matrixSizeSummarySchema)
 });
 

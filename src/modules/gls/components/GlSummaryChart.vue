@@ -8,7 +8,6 @@
 
 
                 <BaseButton label="Export" type="primary" :icon="DocumentPdf" @click="exportJsonToPdf(props.matrix)" />
-                <BaseButton label="Refresh" :icon="RefreshRound" />
                 <n-date-picker :value="range" type="daterange" clearable
                     @update:value="(val: any) => emit('update:dateRange', val)" />
             </div>
@@ -30,7 +29,6 @@ import BaseButton from "@/components/BaseButton.vue";
 import GlsColorTable from '@/modules/gls/components/GlsColorTable.vue';
 import type { matrixGlSummary } from "@/modules/gls/schemas/gls.matrix.schema";
 import { DocumentPdf } from "@vicons/carbon";
-import { RefreshRound } from '@vicons/material';
 import dayjs from "dayjs";
 import { jsPDF } from "jspdf";
 import autoTable, { type RowInput } from "jspdf-autotable";
