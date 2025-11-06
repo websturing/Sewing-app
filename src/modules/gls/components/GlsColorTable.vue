@@ -32,6 +32,11 @@
                                 <p class="font-semibold text-red-400">{{ i.totalDefect }}</p>
                             </div>
                         </div>
+
+                        <div class="bg-gray-100 rounded-md p-2 mt-2">
+                            <p class="text-sm text-gray-400">Line Names</p>
+                            {{ i.lineNames }}
+                        </div>
                     </div>
                 </n-card>
             </n-timeline-item>

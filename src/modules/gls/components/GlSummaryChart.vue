@@ -12,11 +12,13 @@
                     @update:value="(val: any) => emit('update:dateRange', val)" />
             </div>
         </div>
-        <div class="flex gap-10">
-            <div class="flex-2">
+        <!-- Default: Stack vertical untuk mobile -->
+        <div class="flex flex-col lg:flex-row gap-4 lg:gap-10">
+            <!-- Biarkan flexbox handle distribution -->
+            <div class="flex-1"> <!-- Akan mengambil sisa space -->
                 <VChart :option="props.chart" autoresize style="height: 380px; width: 100%;" />
             </div>
-            <div>
+            <div class="lg:w-80 xl:w-96"> <!-- Fixed width untuk sidebar -->
                 <n-scrollbar style="max-height: 380px" trigger="none">
                     <GlsColorTable :data="props.matrix.colors" />
                 </n-scrollbar>
