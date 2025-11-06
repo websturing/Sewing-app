@@ -26,7 +26,7 @@
             </div>
             <div>
                 <p>Last Updated</p>
-                <p class="text-2xl text-gray-400">28/07/2025 14:40:15</p>
+                <p class="text-2xl text-gray-400">{{ formattedLastSync }}</p>
             </div>
         </div>
 
@@ -54,8 +54,11 @@ import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { BorderLeft20Filled } from '@vicons/fluent';
 import { SmartHome } from '@vicons/tabler';
+import dayjs from 'dayjs';
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+
+
 const route = useRoute();
 
 // 4️⃣ Local state & composables
@@ -66,7 +69,6 @@ const meta = ref<MetaHead>({
 })
 
 const {
-    matrixData,
     startDate,
     endDate,
     matrixSummary,
@@ -79,7 +81,7 @@ const {
     handleFetchGLMatrix
 } = useGLPage()
 
-
+const formattedLastSync = dayjs(glCombineData.value.lastSyncAt).format('MMMM DD, YYYY HH:mm');
 
 // 6️⃣ Computed / watchers (kalau ada)
 useHead({
