@@ -11,9 +11,8 @@
             </div>
         </div>
 
-        <BaseDatable :columns="columns" :data="rows" :loading="loading">
+        <BaseDatable :columns="columns" :data="rowFilter" :loading="loading">
         </BaseDatable>
-
 
         <div class="flex justify-end mt-4">
             <n-pagination :page="meta.currentPage" :page-size="meta.perPage" :page-count="meta.lastPage"
@@ -28,9 +27,10 @@ import BaseDatable from '@/components/BaseDatable.vue';
 import BaseButton from "@/components/BaseButton.vue";
 import { useLineTable } from '@/modules/lines/composables/line.table';
 import { type DataTableColumns } from "naive-ui";
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { SearchOutline, Create } from "@vicons/ionicons5";
 import { RefreshRound } from "@vicons/material";
+import type { LineApi } from '@/modules/lines/schemas/line.api.schema';
 
 
 const search = ref<string>('');
@@ -66,6 +66,22 @@ const columns: DataTableColumns<any> = [
         }
     },
 ]
+
+const rowFilter = computed(() => {
+    if (!search.value) {
+        return rows.value; // tidak ada search → pakai cache utama
+    }
+
+    // fallback → cari di data lokal sesuai search term
+    const term = search.value.toLowerCase();
+    return rows.value
+        .filter((item: LineApi) =>
+            item.name?.toLowerCase().includes(term) ||
+            item.latestStockin?.glNo?.toLowerCase().includes(term) ||
+            item.latestStockin?.color?.toLowerCase().includes(term)
+        )
+})
+
 const {
     loading,
     rows,
