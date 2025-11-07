@@ -4,14 +4,60 @@ import { z } from "zod";
 
 
 
-
-
 export const LineApiSchema = z.object({
     id: z.number().optional(),
     name: z.string().min(1, 'Line name is required'),
     location: z.string().nullable(),
     latestStockin: stockInApiSchema.nullable(),
 })
+
+
+
+export const LineDetailApiSchema = z.object({
+    id: z.number().optional(),
+    name: z.string().min(1, 'Line name is required'),
+    location: z.string().nullable(),
+})
+
+export const LineGlsizeSchema = z.object({
+    size: z.string(),
+    bundle: z.number().int().nonnegative(),
+    pcs: z.string().or(z.number()), // bisa string atau number
+    defect: z.string().or(z.number()) // bi
+});
+
+export const lineGlColorSchema = z.object({
+    color: z.string(),
+    totalBundle: z.number().int().nonnegative(),
+    totalPcs: z.number().int().nonnegative(),
+    totalDefect: z.number().int().nonnegative(),
+    sizes: z.array(LineGlsizeSchema)
+});
+
+export const LineGlSummarySchema = z.object({
+    glNo: z.string(),
+    totalColors: z.number().int().positive(),
+    totalPcs: z.number().int().nonnegative(),
+    colors: z.array(lineGlColorSchema)
+})
+
+
+export const LineDetailApiResponseSchema = z.object({
+    message: z.string(),
+    data: z.object({
+        line: LineDetailApiSchema,
+        stockinSummary: z.array(LineGlSummarySchema)
+    }),
+    status: z.boolean()
+})
+
+
+export type LineDetail = z.infer<typeof LineDetailApiSchema>
+export type LineStockInSummary = z.infer<typeof LineGlSummarySchema>
+
+
+
+
 
 const LineApiListSchema = z.array(LineApiSchema)
 

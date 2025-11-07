@@ -24,7 +24,7 @@ export const matrixSummaryColorSchema = z.object({
     totalPcs: z.number(),
     totalBundle: z.number(),
     totalSizes: z.number(),
-    totalDefect: z.number(),
+    totalDefect: z.number().optional(),
     lineNames: z.string(),
     sizes: z.array(matrixSizeSummarySchema)
 });

@@ -11,4 +11,12 @@ export const linesApi = {
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
         }).then(r => r.data),
 
+    getlineById: (params: LineFilterRequest) => {
+        const { id, ...queryParams } = params;
+        return api.get(`${apiPrefix}/lines/${id}`, {
+            params: queryParams,
+            paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
+        }).then(r => r.data);
+    }
+
 }
