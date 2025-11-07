@@ -78,7 +78,6 @@ export function useEmployeeTable() {
 
 
 
-
     function getGenderConfig(gender: string) {
         const lowerGender = gender?.toLowerCase()
 

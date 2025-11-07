@@ -2,7 +2,6 @@ import { glsRoutes } from '@/modules/gls/routes/gls.route'
 import { lineRoutes } from '@/modules/lines/routes/lines.route'
 import { stockInRoutes } from '@/modules/stock-in/routes/stockIn.route'
 import type { RouteRecordRaw } from 'vue-router'
-import { operationRoutes } from './route.operation'
 
 export const adminRoutes: RouteRecordRaw[] = [
     {
@@ -56,7 +55,6 @@ export const adminRoutes: RouteRecordRaw[] = [
                 name: 'users-form',
                 component: () => import('@module/user/views/UserFormView.vue'),
             },
-            ...operationRoutes,
             ...stockInRoutes,
             ...glsRoutes,
             ...lineRoutes

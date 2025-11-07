@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-col gap-10">
         <div class="flex justify-between items-center">
             <div class="w-84 flex-auto">
                 <h2 class="text-xl font-bold mb-1">{{ meta.title }}</h2>
@@ -15,11 +15,14 @@
                 </n-breadcrumb>
             </div>
         </div>
+
+        <LinesTable />
     </div>
 </template>
 
 <script setup lang="ts">
 // 1️⃣ Imports
+import LinesTable from '@/modules/lines/components/LinesTable.vue';
 import { useLinePage } from '@/modules/lines/composables/line.page';
 import type { MetaHead } from '@/types/metaHead';
 import { BrandAirtable, SmartHome } from '@vicons/tabler';
