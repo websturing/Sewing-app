@@ -12,6 +12,12 @@
         </div>
 
         <BaseDatable :columns="columns" :data="rowFilter" :loading="loading">
+            <template #actions="{ row }">
+                <div class="flex  gap-2">
+                    <BaseButton label="Detail" :icon="FolderDetails" @click="navigateToDetail(row.id)" :tertiary="true"
+                        type="primary" />
+                </div>
+            </template>
         </BaseDatable>
 
         <div class="flex justify-end mt-4">
@@ -31,6 +37,7 @@ import { ref, computed } from 'vue';
 import { SearchOutline, Create } from "@vicons/ionicons5";
 import { RefreshRound } from "@vicons/material";
 import type { LineApi } from '@/modules/lines/schemas/line.api.schema';
+import { FolderDetails } from '@vicons/carbon';
 
 
 const search = ref<string>('');
@@ -65,6 +72,11 @@ const columns: DataTableColumns<any> = [
             return row.latestStockin?.color ?? '-'
         }
     },
+    {
+        title: "Actions",
+        key: "actions",
+        width: 150,
+    },
 ]
 
 const rowFilter = computed(() => {
@@ -88,6 +100,7 @@ const {
     meta,
     handlePageChange,
     handlePageSizeChange,
-    handleRefresh
+    handleRefresh,
+    navigateToDetail
 } = useLineTable()
 </script>
