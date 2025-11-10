@@ -5,8 +5,8 @@ import qs from 'qs';
 const apiPrefix = import.meta.env.VITE_API_PREFIX || ''
 
 export const attendancesApi = {
-    getAttendances: (params: LineFilterRequest) =>
-        api.get(`${apiPrefix}/attendance`, {
+    getAttendanceByLine: (id: string | number, params: LineFilterRequest) =>
+        api.get(`${apiPrefix}/attendance/group/line/${id}`, {
             params: params,
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
         }).then(r => r.data),

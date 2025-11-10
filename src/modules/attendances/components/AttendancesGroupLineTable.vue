@@ -1,0 +1,79 @@
+<template>
+    <div class="flex flex-col gap-3">
+        <div class="flex justify-between items-center">
+            <p class="font-semibold">Attendance List | {{ date }}</p>
+            <div class="flex gap-2 justify-end">
+                <BaseInput :icon="SearchOutline" placeholder="Search" v-model="search" />
+                <BaseButton label="Refresh" :icon="RefreshRound" @click="" />
+            </div>
+        </div>
+        <n-table>
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Check-in Time</th>
+                    <th>Check-out Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template v-if="!isLoading">
+                    <tr v-for="i in data" :key="i.id">
+                        <td>{{ i.employeeCode }}</td>
+                        <td>{{ i.userName }}</td>
+                        <td>{{ i.attendanceDate }}</td>
+                        <td>{{ i.status }}</td>
+                        <td>{{ i.checkInTime || 'N/A' }}</td>
+                        <td>{{ i.checkOutTime || 'N/A' }}</td>
+                    </tr>
+                </template>
+                <template v-else>
+                    <tr>
+                        <td colspan="6" class="!text-center py-5">
+                            Loading...
+                        </td>
+                    </tr>
+                </template>
+
+            </tbody>
+        </n-table>
+    </div>
+</template>
+<script lang="ts" setup>
+import BaseButton from "@/components/BaseButton.vue";
+import { RefreshRound } from "@vicons/material";
+import BaseInput from "@/components/BaseInput.vue";
+import { SearchOutline } from "@vicons/ionicons5";
+import { computed, onMounted, ref } from "vue";
+import dayjs from 'dayjs';
+import { useAttendancePage } from "@/modules/attendances/composables/attendances.page";
+
+const date = dayjs(new Date()).format('MMMM DD, YYYY');
+const search = ref<string>('');
+
+const data = computed(() => {
+    if (!search.value) {
+        return groupLine.value;
+    }
+    return groupLine.value.filter((item) =>
+        item.userName.toLowerCase().includes(search.value.toLowerCase()) ||
+        item.employeeCode.toLowerCase().includes(search.value.toLowerCase())
+    );
+});
+
+
+const {
+    groupLine,
+    isLoading,
+    handleFetch
+} = useAttendancePage();
+
+onMounted(() => {
+    // Example lineId, replace with actual value as needed
+    const lineId = 11;
+    handleFetch(lineId);
+});
+
+</script>

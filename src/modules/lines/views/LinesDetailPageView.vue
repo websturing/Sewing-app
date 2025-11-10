@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-5">
-                    <EmployeeAttendanceTable />
+                    <AttendancesGroupLineTable />
                 </div>
             </div>
         </n-card>
@@ -66,8 +66,8 @@
 </template>
 <script lang="ts" setup>
 import BaseButton from '@/components/BaseButton.vue';
+import AttendancesGroupLineTable from '@/modules/attendances/components/AttendancesGroupLineTable.vue';
 import EmployeeAttendanceCard from '@/modules/employee/components/EmployeeAttendanceCard.vue';
-import EmployeeAttendanceTable from '@/modules/employee/components/EmployeeAttendanceTable.vue';
 import EmployeeLeaderCard from '@/modules/employee/components/EmployeeLeaderCard.vue';
 import LineGlSummary from '@/modules/lines/components/LineGlSummary.vue';
 import { useLinePage } from '@/modules/lines/composables/line.page';
