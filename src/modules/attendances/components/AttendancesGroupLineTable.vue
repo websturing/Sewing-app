@@ -49,31 +49,28 @@ import { SearchOutline } from "@vicons/ionicons5";
 import { computed, onMounted, ref } from "vue";
 import dayjs from 'dayjs';
 import { useAttendancePage } from "@/modules/attendances/composables/attendances.page";
+import type { attendanceGroupLine } from "@/modules/attendances/schemas/attendances.api";
+
+interface Props {
+    groupLine: attendanceGroupLine[],
+    isLoading: boolean
+}
 
 const date = dayjs(new Date()).format('MMMM DD, YYYY');
 const search = ref<string>('');
 
+const props = withDefaults(defineProps<Props>(), {
+    isLoading: true
+})
+
 const data = computed(() => {
     if (!search.value) {
-        return groupLine.value;
+        return props.groupLine;
     }
-    return groupLine.value.filter((item) =>
+    return props.groupLine.filter((item) =>
         item.userName.toLowerCase().includes(search.value.toLowerCase()) ||
         item.employeeCode.toLowerCase().includes(search.value.toLowerCase())
     );
-});
-
-
-const {
-    groupLine,
-    isLoading,
-    handleFetch
-} = useAttendancePage();
-
-onMounted(() => {
-    // Example lineId, replace with actual value as needed
-    const lineId = 11;
-    handleFetch(lineId);
 });
 
 </script>

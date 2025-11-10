@@ -2,6 +2,11 @@ import { useAttendanceStore } from "@/modules/attendances/stores/attendances.sto
 import { useMessage } from 'naive-ui'
 import { storeToRefs } from "pinia"
 
+
+type OptionNotify = {
+    notify?: boolean  // default: false
+}
+
 export function useAttendancePage() {
 
     // 1️⃣ Local state & composables
@@ -11,10 +16,12 @@ export function useAttendancePage() {
 
     // 2️⃣  Methods (local functions, event handlers, dsb.)
 
-    const handleFetch = async (lineId: number) => {
+    const handleFetch = async (options: OptionNotify = { notify: true }, lineId: number | string) => {
         const { success, message } = await store.fetchGroupLine(lineId);
 
-        success ? toast.success(message) : toast.error(message)
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
+        }
     }
 
 

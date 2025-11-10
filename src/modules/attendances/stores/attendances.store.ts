@@ -14,7 +14,7 @@ export const useAttendanceStore = defineStore('attendance', {
         error: null
     }),
     actions: {
-        async fetchGroupLine(lineId: number) {
+        async fetchGroupLine(lineId: number | string) {
             this.isLoading = true;
             this.error = null;
             try {

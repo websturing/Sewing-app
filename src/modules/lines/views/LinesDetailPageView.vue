@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-5">
-                    <AttendancesGroupLineTable />
+                    <AttendancesGroupLineTable :groupLine="groupLine" :isLoading="isLoading" />
                 </div>
             </div>
         </n-card>
@@ -67,6 +67,7 @@
 <script lang="ts" setup>
 import BaseButton from '@/components/BaseButton.vue';
 import AttendancesGroupLineTable from '@/modules/attendances/components/AttendancesGroupLineTable.vue';
+import { useAttendancePage } from '@/modules/attendances/composables/attendances.page';
 import EmployeeAttendanceCard from '@/modules/employee/components/EmployeeAttendanceCard.vue';
 import EmployeeLeaderCard from '@/modules/employee/components/EmployeeLeaderCard.vue';
 import LineGlSummary from '@/modules/lines/components/LineGlSummary.vue';
@@ -81,6 +82,7 @@ const route = useRoute();
 const lineId = route.params.id;
 
 const { line, lineStockInSummary, handleFetchById } = useLinePage();
+const { groupLine, isLoading, handleFetch: handleFetchAttendanceByLine } = useAttendancePage();
 
 onMounted(() => {
     if (lineId) {
@@ -88,10 +90,13 @@ onMounted(() => {
             { notify: true },
             {
                 id: lineId as string,
-                startDate: "2025-11-01",
+                startDate: "2025-01-01",
                 endDate: "2025-11-07"
             }
         );
+        handleFetchAttendanceByLine({
+            notify: false
+        }, lineId as string);
     }
 });
 
