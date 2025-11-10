@@ -76,6 +76,7 @@ import { Devices, LocationFilled } from '@vicons/carbon';
 import { ChartPerson20Filled, ShiftsActivity20Filled } from '@vicons/fluent';
 import { OnlinePredictionFilled } from '@vicons/material';
 import { BrandAirtable, History, SmartHome } from '@vicons/tabler';
+import dayjs from 'dayjs';
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
@@ -86,12 +87,14 @@ const { groupLine, isLoading, handleFetch: handleFetchAttendanceByLine } = useAt
 
 onMounted(() => {
     if (lineId) {
+        const endDate = dayjs().format('YYYY-MM-DD')
+        const startDate = dayjs().subtract(14, 'day').format('YYYY-MM-DD')
         handleFetchById(
             { notify: true },
             {
                 id: lineId as string,
-                startDate: "2025-01-01",
-                endDate: "2025-11-07"
+                startDate,
+                endDate
             }
         );
         handleFetchAttendanceByLine({
