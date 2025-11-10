@@ -4,7 +4,7 @@
             <p class="font-semibold">Attendance List | {{ date }}</p>
             <div class="flex gap-2 justify-end">
                 <BaseInput :icon="SearchOutline" placeholder="Search" v-model="search" />
-                <BaseButton label="Refresh" :icon="RefreshRound" @click="" />
+                <BaseButton label="Refresh" :icon="RefreshRound" @click="emit('click:refresh')" />
             </div>
         </div>
         <n-table>
@@ -43,13 +43,12 @@
 </template>
 <script lang="ts" setup>
 import BaseButton from "@/components/BaseButton.vue";
-import { RefreshRound } from "@vicons/material";
 import BaseInput from "@/components/BaseInput.vue";
-import { SearchOutline } from "@vicons/ionicons5";
-import { computed, onMounted, ref } from "vue";
-import dayjs from 'dayjs';
-import { useAttendancePage } from "@/modules/attendances/composables/attendances.page";
 import type { attendanceGroupLine } from "@/modules/attendances/schemas/attendances.api";
+import { SearchOutline } from "@vicons/ionicons5";
+import { RefreshRound } from "@vicons/material";
+import dayjs from 'dayjs';
+import { computed, ref } from "vue";
 
 interface Props {
     groupLine: attendanceGroupLine[],
@@ -62,6 +61,12 @@ const search = ref<string>('');
 const props = withDefaults(defineProps<Props>(), {
     isLoading: true
 })
+
+const emit = defineEmits<{
+    (e: 'click:refresh'): void
+}>()
+
+
 
 const data = computed(() => {
     if (!search.value) {

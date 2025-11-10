@@ -57,7 +57,8 @@
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-5">
-                    <AttendancesGroupLineTable :groupLine="groupLine" :isLoading="isLoading" />
+                    <AttendancesGroupLineTable :groupLine="groupLine" :isLoading="isLoading"
+                        @click:refresh="handleRefreshAttendance" />
                 </div>
             </div>
         </n-card>
@@ -84,6 +85,16 @@ const lineId = route.params.id;
 
 const { line, lineStockInSummary, handleFetchById } = useLinePage();
 const { groupLine, isLoading, handleFetch: handleFetchAttendanceByLine } = useAttendancePage();
+
+
+const handleRefreshAttendance = () => {
+    console.log(lineId)
+    if (lineId) {
+        handleFetchAttendanceByLine({
+            notify: true
+        }, lineId as string);
+    }
+};
 
 onMounted(() => {
     if (lineId) {
