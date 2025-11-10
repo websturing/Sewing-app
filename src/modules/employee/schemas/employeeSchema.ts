@@ -5,13 +5,13 @@ export const EmployeeSchema = z.object({
     id: z.number().optional(),
     userId: z.number().nullable().optional(),
     name: z.string().min(1, "Employee Name is required").nullable(),
-    gender: z.enum(['male', 'female']),
+    gender: z.enum(['male', 'female']).nullable(),
     employeeCode: z.string().min(1, "Employee Code is required."),
     position: z.string().min(1, "Position is required."),
     department: z.string().min(1, "Department is required."),
     dateBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
         message: "join_date must be in YYYY-MM-DD format"
-    }),
+    }).nullable(),
     joinDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
         message: "join_date must be in YYYY-MM-DD format"
     }),
