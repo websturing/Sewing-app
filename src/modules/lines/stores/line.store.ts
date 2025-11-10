@@ -1,7 +1,7 @@
 
 
 import { linesApi } from '@/modules/lines/api/linesApi';
-import { LineApiResponseSchema, LineDetailApiResponseSchema, type LineApi, type LineDetail, type LineStockInSummary } from '@/modules/lines/schemas/line.api.schema';
+import { LineApiResponseSchema, LineDetailApiResponseSchema, LineDevicesApiResponseSchema, type LineApi, type LineDetail, type LineDeviceApi, type LineStockInSummary } from '@/modules/lines/schemas/line.api.schema';
 import type { LineFilterRequest } from '@/modules/lines/schemas/line.request.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
@@ -12,6 +12,7 @@ import { defineStore } from 'pinia';
 export const useLineStore = defineStore('lines', {
     state: () => ({
         data: [] as LineApi[],
+        lineDevices: [] as LineDeviceApi[],
         meta: {} as Meta,
         links: {} as Links,
         loading: false,
@@ -56,6 +57,26 @@ export const useLineStore = defineStore('lines', {
                 return ApiResponseSchema.parse({
                     success: true,
                     message: validate.message ?? "Lines loaded",
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
+        async fetchLineDevices(lineId: string | number) {
+            this.loading = true;
+            this.error = null;
+            try {
+                const data = await linesApi.getLineDevices(lineId)
+                const results = LineDevicesApiResponseSchema.parse(data);
+                this.lineDevices = results.data
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: results.message ?? "Lines loaded",
                 });
             } catch (error: any) {
                 const message = error?.response?.data?.message || "Something went wrong";

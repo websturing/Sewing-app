@@ -72,3 +72,29 @@ export const LineApiResponseSchema = z.object({
 export type LineApi = z.infer<typeof LineApiSchema>
 export type LineApiList = z.infer<typeof LineApiListSchema>
 export type LineApiResponse = z.infer<typeof LineApiResponseSchema>
+
+
+/**
+    * LINES DEVICES 
+    *
+    * Relation Lines Devices and Devices
+**/
+
+export const LineDeviceApiSchema = z.object({
+    id: z.number().optional(),
+    lineName: z.string().nullable().optional(),
+    deviceId: z.number().nullable().optional(),
+    deviceName: z.string().nullable().optional(),
+    deviceMacAddress: z.string().nullable().optional(),
+    deviceDescription: z.string().nullable().optional(),
+    updatedAt: z.string().nullable().optional(),
+})
+
+export const LineDevicesApiResponseSchema = z.object({
+    message: z.string(),
+    data: z.array(LineDeviceApiSchema),
+    status: z.boolean()
+})
+
+export type LineDeviceApi = z.infer<typeof LineDeviceApiSchema>
+export type LineDevicesApiResponse = z.infer<typeof LineDevicesApiResponseSchema>

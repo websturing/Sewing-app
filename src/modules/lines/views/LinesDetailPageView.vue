@@ -40,10 +40,11 @@
                     <BaseButton :icon="ShiftsActivity20Filled">Attendances</BaseButton>
                     <BaseButton :icon="ChartPerson20Filled">Leaders</BaseButton>
                     <BaseButton :icon="History">History GL Numbers</BaseButton>
-                    <BaseButton :icon="Devices">Devices</BaseButton>
+                    <BaseButton :icon="Devices" @click="isModalDevicesOpen = true">Devices</BaseButton>
                 </div>
             </div>
         </n-card>
+
         <n-card class="shadow-sm">
             <div class=" flex flex-col gap-5">
                 <div class="flex gap-5 items-end">
@@ -63,6 +64,12 @@
             </div>
         </n-card>
 
+        <!-- Modal  -->
+        <n-modal v-model:show="isModalDevicesOpen" title="Line Devices" :closable="true" preset="card"
+            :style="{ width: '600px' }">
+            <LineDeviceCard :lineDevices="lineDevices" />
+        </n-modal>
+
     </div>
 </template>
 <script lang="ts" setup>
@@ -71,6 +78,7 @@ import AttendancesGroupLineTable from '@/modules/attendances/components/Attendan
 import { useAttendancePage } from '@/modules/attendances/composables/attendances.page';
 import EmployeeAttendanceCard from '@/modules/employee/components/EmployeeAttendanceCard.vue';
 import EmployeeLeaderCard from '@/modules/employee/components/EmployeeLeaderCard.vue';
+import LineDeviceCard from '@/modules/lines/components/LineDeviceCard.vue';
 import LineGlSummary from '@/modules/lines/components/LineGlSummary.vue';
 import { useLinePage } from '@/modules/lines/composables/line.page';
 import { Devices, LocationFilled } from '@vicons/carbon';
@@ -78,12 +86,13 @@ import { ChartPerson20Filled, ShiftsActivity20Filled } from '@vicons/fluent';
 import { OnlinePredictionFilled } from '@vicons/material';
 import { BrandAirtable, History, SmartHome } from '@vicons/tabler';
 import dayjs from 'dayjs';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
+const isModalDevicesOpen = ref<boolean>(false);
 const lineId = route.params.id;
 
-const { line, lineStockInSummary, handleFetchById } = useLinePage();
+const { line, lineDevices, loading, lineStockInSummary, handleFetchById, handleFetchLineDevices } = useLinePage();
 const { groupLine, isLoading, handleFetch: handleFetchAttendanceByLine } = useAttendancePage();
 
 
@@ -93,6 +102,12 @@ const handleRefreshAttendance = () => {
         handleFetchAttendanceByLine({
             notify: true
         }, lineId as string);
+    }
+};
+
+const fetchLineDevices = (notify: boolean) => {
+    if (lineId) {
+        handleFetchLineDevices(lineId as string, { notify: notify });
     }
 };
 
@@ -111,6 +126,9 @@ onMounted(() => {
         handleFetchAttendanceByLine({
             notify: false
         }, lineId as string);
+
+        fetchLineDevices(false);
+
     }
 });
 

@@ -11,10 +11,18 @@ export function useLinePage() {
     const toast = useMessage()
     const store = useLineStore()
 
-    const { line, lineStockInSummary } = storeToRefs(store)
+    const { line, lineStockInSummary, loading, lineDevices } = storeToRefs(store)
 
     const handleFetch = async (options: OptionNotify = { notify: true }, payload: LineFilterRequest) => {
         const { success, message } = await store.fetchLines(payload)
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
+        }
+        return { success, message }
+    }
+
+    const handleFetchLineDevices = async (lineId: string | number, options: OptionNotify = { notify: true }) => {
+        const { success, message } = await store.fetchLineDevices(lineId)
         if (options.notify) {
             success ? toast.success(message) : toast.error(message)
         }
@@ -32,7 +40,10 @@ export function useLinePage() {
     return {
         line,
         lineStockInSummary,
+        loading,
+        lineDevices,
         handleFetch,
-        handleFetchById
+        handleFetchById,
+        handleFetchLineDevices
     }
 }
