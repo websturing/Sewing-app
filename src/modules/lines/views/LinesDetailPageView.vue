@@ -45,14 +45,30 @@
             </div>
         </n-card>
         <n-card class="shadow-sm">
-            <p>Current GL Number</p>
-            <LineGlSummary :data="lineStockInSummary" />
+            <div class=" flex flex-col gap-5">
+                <div class="flex gap-5 items-end">
+                    <div class="flex-1">
+                        <LineGlSummary :data="lineStockInSummary" />
+                    </div>
+                    <div class="lg:w-80 xl:w-96 flex flex-col gap-2">
+                        <EmployeeLeaderCard />
+                        <EmployeeAttendanceCard />
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-5">
+                    <EmployeeAttendanceTable />
+                </div>
+            </div>
         </n-card>
 
     </div>
 </template>
 <script lang="ts" setup>
 import BaseButton from '@/components/BaseButton.vue';
+import EmployeeAttendanceCard from '@/modules/employee/components/EmployeeAttendanceCard.vue';
+import EmployeeAttendanceTable from '@/modules/employee/components/EmployeeAttendanceTable.vue';
+import EmployeeLeaderCard from '@/modules/employee/components/EmployeeLeaderCard.vue';
 import LineGlSummary from '@/modules/lines/components/LineGlSummary.vue';
 import { useLinePage } from '@/modules/lines/composables/line.page';
 import { Devices, LocationFilled } from '@vicons/carbon';
