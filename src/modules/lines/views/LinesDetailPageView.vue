@@ -37,8 +37,10 @@
                     </div>
                 </div>
                 <div class="flex gap-1">
-                    <BaseButton :icon="ShiftsActivity20Filled">Attendances</BaseButton>
-                    <BaseButton :icon="ChartPerson20Filled">Leaders</BaseButton>
+                    <BaseButton :icon="ShiftsActivity20Filled" @click="isAttendanceLighted = Date.now()">Attendances
+                    </BaseButton>
+                    <BaseButton :icon="ChartPerson20Filled" @click="isLeaderCardLighted = Date.now()">Leaders
+                    </BaseButton>
                     <BaseButton :icon="History">History GL Numbers</BaseButton>
                     <BaseButton :icon="Devices" @click="isModalDevicesOpen = true">Devices</BaseButton>
                 </div>
@@ -47,19 +49,19 @@
 
         <n-card class="shadow-sm">
             <div class=" flex flex-col gap-5">
-                <div class="flex gap-5 items-end">
+                <div :class="['flex', lineStockInSummary.length > 0 ? 'items-end' : 'items-center', 'gap-5']">
                     <div class="flex-1">
                         <LineGlSummary :data="lineStockInSummary" />
                     </div>
                     <div class="lg:w-80 xl:w-96 flex flex-col gap-2">
-                        <EmployeeLeaderCard />
-                        <EmployeeAttendanceCard />
+                        <EmployeeLeaderCard :highlight-trigger="isLeaderCardLighted" />
+                        <EmployeeAttendanceCard :EmployeeAttendCount="groupLine.length" />
                     </div>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-5">
-                    <AttendancesGroupLineTable :groupLine="groupLine" :isLoading="isLoading"
-                        @click:refresh="handleRefreshAttendance" />
+                    <AttendancesGroupLineTable :highlight-trigger="isAttendanceLighted" :groupLine="groupLine"
+                        :isLoading="isLoading" @click:refresh="handleRefreshAttendance" />
                 </div>
             </div>
         </n-card>
@@ -91,6 +93,12 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const isModalDevicesOpen = ref<boolean>(false);
 const lineId = route.params.id;
+
+const isAttendanceLighted = ref(0);
+const isLeaderCardLighted = ref(0);
+
+
+
 
 const { line, lineDevices, loading, lineStockInSummary, handleFetchById, handleFetchLineDevices } = useLinePage();
 const { groupLine, isLoading, handleFetch: handleFetchAttendanceByLine } = useAttendancePage();

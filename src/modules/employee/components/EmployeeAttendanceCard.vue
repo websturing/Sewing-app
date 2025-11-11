@@ -5,7 +5,7 @@
                 <n-icon :component="GroupAccess" size="24" />
                 <p>Employee Attend</p>
             </div>
-            <p class="text-3xl font-bold mt-2">125</p>
+            <p class="text-3xl font-bold mt-2">{{ props.EmployeeAttendCount }}</p>
 
             <div class="flex items-center gap-5">
                 <p>Last Week</p>
@@ -20,4 +20,12 @@
 <script setup lang="ts">
 import { GroupAccess } from '@vicons/carbon';
 import { IosTrendingUp } from '@vicons/ionicons4';
+
+interface Props {
+    EmployeeAttendCount: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    EmployeeAttendCount: 0
+})
 </script>

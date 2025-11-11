@@ -7,7 +7,10 @@
                 <BaseButton label="Refresh" :icon="RefreshRound" @click="emit('click:refresh')" />
             </div>
         </div>
-        <n-table>
+        <n-table :class="{
+            'bg-yellow-200 ring-2 ring-yellow-400': isHighlighted,
+            'bg-white': !isHighlighted,
+        }">
             <thead>
                 <tr>
                     <th>Employee ID</th>
@@ -48,11 +51,12 @@ import type { attendanceGroupLine } from "@/modules/attendances/schemas/attendan
 import { SearchOutline } from "@vicons/ionicons5";
 import { RefreshRound } from "@vicons/material";
 import dayjs from 'dayjs';
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface Props {
     groupLine: attendanceGroupLine[],
-    isLoading: boolean
+    isLoading: boolean,
+    highlightTrigger?: number | boolean
 }
 
 const date = dayjs(new Date()).format('MMMM DD, YYYY');
@@ -77,5 +81,18 @@ const data = computed(() => {
         item.employeeCode.toLowerCase().includes(search.value.toLowerCase())
     );
 });
+
+const isHighlighted = ref(false)
+watch(
+    () => props.highlightTrigger,
+    () => {
+        // setiap kali trigger berubah (meskipun nilainya sama)
+        isHighlighted.value = true
+        setTimeout(() => {
+            isHighlighted.value = false
+        }, 800)
+    },
+    { immediate: false }
+)
 
 </script>
