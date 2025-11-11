@@ -47,6 +47,7 @@
             </div>
         </n-card>
 
+        <LineGLHistoryTimeline />
         <n-card class="shadow-sm">
             <div class=" flex flex-col gap-5">
                 <div :class="['flex', lineStockInSummary.length > 0 ? 'items-end' : 'items-center', 'gap-5']">
@@ -81,6 +82,7 @@ import { useAttendancePage } from '@/modules/attendances/composables/attendances
 import EmployeeAttendanceCard from '@/modules/employee/components/EmployeeAttendanceCard.vue';
 import EmployeeLeaderCard from '@/modules/employee/components/EmployeeLeaderCard.vue';
 import LineDeviceCard from '@/modules/lines/components/LineDeviceCard.vue';
+import LineGLHistoryTimeline from '@/modules/lines/components/LineGLHistoryTimeline.vue';
 import LineGlSummary from '@/modules/lines/components/LineGlSummary.vue';
 import { useLinePage } from '@/modules/lines/composables/line.page';
 import { Devices, LocationFilled } from '@vicons/carbon';
