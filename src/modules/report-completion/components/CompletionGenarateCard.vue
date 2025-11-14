@@ -30,15 +30,22 @@
 </template>
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue';
+import { useGlStore } from "@/modules/gls/stores/gls.store";
 import { BorderLeft24Filled } from '@vicons/fluent';
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
+const store = useGlStore()
 const glNumber = ref(null)
 const isDateRange = ref<boolean>(true)
 const glNumberList = [
     { label: "1", value: "1" },
     { label: "2", value: "2" }
 ]
+
+
+onMounted(() => {
+    store.fetchGLList()
+})
 
 
 </script>

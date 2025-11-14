@@ -11,4 +11,12 @@ export const glsApi = {
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
         }).then(r => r.data),
 
+    getList: (glNumber?: string) =>
+        api.get(`${apiPrefix}/gls/list`, {
+            params: { gl_number: glNumber },
+            paramsSerializer: (params) =>
+                qs.stringify(params, { arrayFormat: 'brackets' })
+        }).then(r => r.data),
+
+
 }

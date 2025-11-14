@@ -182,6 +182,26 @@ export const useGlStore = defineStore('gls', {
                 this.loading = false;
             }
         },
+        async fetchGLList(glNumber?: string) {
+            this.loading = true;
+            this.error = null;
+            try {
+
+                const results = await glsApi.getList(glNumber)
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: results.message ?? "GL Number List",
+                    data: results.data
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
 
         async searchOrFetch(term: string) {
             // kalau keyword berubah → reset dulu
