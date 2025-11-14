@@ -41,13 +41,14 @@
                     </BaseButton>
                     <BaseButton :icon="ChartPerson20Filled" @click="isLeaderCardLighted = Date.now()">Leaders
                     </BaseButton>
-                    <BaseButton :icon="History">History GL Numbers</BaseButton>
+                    <BaseButton :icon="History" @click="handleOpenModalHistoryGL">History GL Numbers
+                    </BaseButton>
                     <BaseButton :icon="Devices" @click="isModalDevicesOpen = true">Devices</BaseButton>
                 </div>
             </div>
         </n-card>
 
-        <LineGLHistoryTimeline />
+
         <n-card class="shadow-sm">
             <div class=" flex flex-col gap-5">
                 <div :class="['flex', lineStockInSummary.length > 0 ? 'items-end' : 'items-center', 'gap-5']">
@@ -73,6 +74,15 @@
             <LineDeviceCard :lineDevices="lineDevices" />
         </n-modal>
 
+        <n-modal v-model:show="isModalHistoryGLOpen" title="GL Transaction History" :closable="true" preset="card"
+            :style="{ width: '600px' }">
+            <div class="flex flex-col gap-2">
+                <div class="bg-gray-50 p-5 rounded-lg">
+                    <LineGLHistoryTimeline :lineHistoryGLNumber="lineHistoryGLNumber" />
+                </div>
+            </div>
+        </n-modal>
+
     </div>
 </template>
 <script lang="ts" setup>
@@ -94,6 +104,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute();
 const isModalDevicesOpen = ref<boolean>(false);
+const isModalHistoryGLOpen = ref<boolean>(false);
 const lineId = route.params.id;
 
 const isAttendanceLighted = ref(0);
@@ -102,7 +113,7 @@ const isLeaderCardLighted = ref(0);
 
 
 
-const { line, lineDevices, loading, lineStockInSummary, handleFetchById, handleFetchLineDevices } = useLinePage();
+const { line, lineDevices, loading, lineStockInSummary, lineHistoryGLNumber, handleFetchById, handleFetchLineDevices, handleHistoryGlNumber } = useLinePage();
 const { groupLine, isLoading, handleFetch: handleFetchAttendanceByLine } = useAttendancePage();
 
 
@@ -121,6 +132,13 @@ const fetchLineDevices = (notify: boolean) => {
     }
 };
 
+const handleOpenModalHistoryGL = () => {
+    isModalHistoryGLOpen.value = true;
+    if (lineId) {
+        handleHistoryGlNumber(lineId as string, { notify: true });
+    }
+}
+
 onMounted(() => {
     if (lineId) {
         const endDate = dayjs().format('YYYY-MM-DD')
@@ -138,7 +156,6 @@ onMounted(() => {
         }, lineId as string);
 
         fetchLineDevices(false);
-
     }
 });
 

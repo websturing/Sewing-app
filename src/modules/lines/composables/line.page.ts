@@ -11,7 +11,7 @@ export function useLinePage() {
     const toast = useMessage()
     const store = useLineStore()
 
-    const { line, lineStockInSummary, loading, lineDevices } = storeToRefs(store)
+    const { line, lineStockInSummary, loading, lineDevices, lineHistoryGLNumber } = storeToRefs(store)
 
     const handleFetch = async (options: OptionNotify = { notify: true }, payload: LineFilterRequest) => {
         const { success, message } = await store.fetchLines(payload)
@@ -23,6 +23,14 @@ export function useLinePage() {
 
     const handleFetchLineDevices = async (lineId: string | number, options: OptionNotify = { notify: true }) => {
         const { success, message } = await store.fetchLineDevices(lineId)
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
+        }
+        return { success, message }
+    }
+
+    const handleHistoryGlNumber = async (lineId: string | number, options: OptionNotify = { notify: true }) => {
+        const { success, message } = await store.fetchHistoryGLNumber(lineId)
         if (options.notify) {
             success ? toast.success(message) : toast.error(message)
         }
@@ -42,6 +50,8 @@ export function useLinePage() {
         lineStockInSummary,
         loading,
         lineDevices,
+        handleHistoryGlNumber,
+        lineHistoryGLNumber,
         handleFetch,
         handleFetchById,
         handleFetchLineDevices

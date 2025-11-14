@@ -51,9 +51,24 @@ export const LineDetailApiResponseSchema = z.object({
     status: z.boolean()
 })
 
+export const LinleHistoryGLNumberApiSchema = LineGlSummarySchema.extend({
+    updatedAt: z.string().nullable().optional()
+}).omit({
+    colors: true
+})
+
+export const LineHistoryGLNumberApiResponseSchema = z.object({
+    message: z.string(),
+    data: z.array(LinleHistoryGLNumberApiSchema),
+    status: z.boolean()
+})
+
+
+
 
 export type LineDetail = z.infer<typeof LineDetailApiSchema>
 export type LineStockInSummary = z.infer<typeof LineGlSummarySchema>
+export type LineHistoryGLNumberApi = z.infer<typeof LinleHistoryGLNumberApiSchema>
 
 
 

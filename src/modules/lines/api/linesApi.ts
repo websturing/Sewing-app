@@ -19,5 +19,7 @@ export const linesApi = {
     },
     getLineDevices: (lineId: string | number) =>
         api.get(`${apiPrefix}/lines/${lineId}/devices`).then(r => r.data),
+    getHistoryGLNumber: (lineId: string | number) =>
+        api.get(`${apiPrefix}/lines/${lineId}/history-glnumber`).then(r => r.data),
 
 }
