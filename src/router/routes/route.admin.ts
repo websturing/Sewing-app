@@ -1,5 +1,6 @@
 import { glsRoutes } from '@/modules/gls/routes/gls.route'
 import { lineRoutes } from '@/modules/lines/routes/lines.route'
+import { reportCompletion } from '@/modules/report-completion/routes/reportCompletion.route'
 import { stockInRoutes } from '@/modules/stock-in/routes/stockIn.route'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -57,7 +58,8 @@ export const adminRoutes: RouteRecordRaw[] = [
             },
             ...stockInRoutes,
             ...glsRoutes,
-            ...lineRoutes
+            ...lineRoutes,
+            ...reportCompletion
 
         ]
     }

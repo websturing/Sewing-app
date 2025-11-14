@@ -8,13 +8,15 @@ interface Props {
     clearable?: boolean
     filterable?: boolean
     size?: "tiny" | "small" | "medium" | "large"
+    icon?: any;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     placeholder: "Select option",
     clearable: true,
     filterable: true,
-    size: "medium"
+    size: "medium",
+    icon: null
 })
 
 const emit = defineEmits<{
@@ -26,8 +28,5 @@ const emit = defineEmits<{
     <NSelect :value="props.modelValue" :options="props.options" :placeholder="props.placeholder"
         :clearable="props.clearable" :filterable="props.filterable" :size="props.size"
         @update:value="emit('update:modelValue', $event)">
-        <template #arrow>
-            <slot name="icon" />
-        </template>
     </NSelect>
 </template>
