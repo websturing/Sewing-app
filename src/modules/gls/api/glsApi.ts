@@ -17,6 +17,4 @@ export const glsApi = {
             paramsSerializer: (params) =>
                 qs.stringify(params, { arrayFormat: 'brackets' })
         }).then(r => r.data),
-
-
 }

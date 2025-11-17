@@ -143,3 +143,13 @@ export type LayingPlanning = z.infer<typeof layingPlanningSchema>;
 export type GrandTotalGl = z.infer<typeof grandTotalSchema>;
 export type SizeBreakdown = z.infer<typeof sizeBreakdownSchema>;
 export type SummaryGlMetadata = z.infer<typeof SummaryGlMetadataSchema>;
+
+
+// GL NUMBER LIST 
+
+const glListItemSchema = z.object({
+    glNumber: z.string(),
+    colors: z.array(z.string()),
+    colorCount: z.number()
+})
+export type GlListItem = z.infer<typeof glListItemSchema>;

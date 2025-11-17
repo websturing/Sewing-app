@@ -8,3 +8,12 @@ export const GLMatrixRequestSchema = z.object({
 
 
 export type GLMatrixRequest = z.infer<typeof GLMatrixRequestSchema>
+
+
+export const GLCompletionReportRequestSchema = z.object({
+    glNumber: z.string().min(1, 'GL Number Required'),
+    color: z.string(),
+    startDate: z.string().nullable().optional(),
+    endDate: z.string().nullable().optional()
+})
+export type GLCompletionReportRequest = z.infer<typeof GLCompletionReportRequestSchema>

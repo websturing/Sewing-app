@@ -80,7 +80,6 @@ export function useStockInTable() {
         if (val) {
             const formatted = formatDateRangeYMD(val);
             if (formatted) {
-                alert()
                 store.fetch({
                     page: 2,
                     dateFrom: formatted[0],
