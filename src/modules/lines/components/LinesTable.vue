@@ -38,6 +38,7 @@ import { SearchOutline, Create } from "@vicons/ionicons5";
 import { RefreshRound } from "@vicons/material";
 import type { LineApi } from '@/modules/lines/schemas/line.api.schema';
 import { FolderDetails } from '@vicons/carbon';
+import dayjs from "dayjs";
 
 
 const search = ref<string>('');
@@ -70,6 +71,13 @@ const columns: DataTableColumns<any> = [
         key: 'color',
         render: (row: any) => {
             return row.latestStockin?.color ?? '-'
+        }
+    },
+    {
+        title: 'Last Updated',
+        key: 'updatedAt',
+        render: (row: any) => {
+            return row.latestStockin?.updatedAt ? dayjs(row.latestStockin?.updatedAt).format('MMMM, DD YYYY HH:mm') : '-'
         }
     },
     {
