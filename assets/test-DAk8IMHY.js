@@ -1,0 +1,1 @@
+import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as e,o as c}from"./index-Bj9qeEx5.js";const o={};function r(n,s){return c(),e("div",null,"testing satu")}const f=t(o,[["render",r]]);export{f as default};
