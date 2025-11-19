@@ -1,6 +1,9 @@
 <template>
     <n-tabs v-model:value="activeTab" type="card" animated v-if="props.data.length > 0">
         <n-tab-pane v-for="e in props.data" :key="e.glNo" :name="e.glNo" :tab="`GL-${e.glNo.toString()}`">
+            <template #tab>
+                <p class="text-blue-500 font-semibold">GL-{{ e.glNo }}</p>
+            </template>
             <div class="flex gap-2 flex-wrap">
                 <n-table v-for="i in e.colors" class="flex-1">
                     <thead>
