@@ -1,7 +1,15 @@
 
 
 import { defectApi } from '@/modules/defect/api/defectApi';
-import { defectGroupLineResponseSchema, defectSummaryGroupLineResponse, type DefectGroupLine, type DefectItem, type DefectSummaryGroupLine } from '@/modules/defect/schemas/defect.summaryApi';
+import {
+    defectGroupGlNumberResponseSchema,
+    defectGroupLineResponseSchema,
+    defectSummaryGroupLineResponse,
+    type DefectGroupGlNumber,
+    type DefectGroupLine,
+    type DefectItem,
+    type DefectSummaryGroupLine
+} from '@/modules/defect/schemas/defect.summaryApi';
 import { ApiResponseSchema } from '@/types/api.schema';
 import { defineStore } from 'pinia';
 
@@ -13,6 +21,7 @@ export const useDefectStore = defineStore('defect', {
         error: null,
         defectData: [] as DefectItem[],
         defectGroupLines: [] as DefectGroupLine[],
+        defectGroupGlNumber: [] as DefectGroupGlNumber[],
         summaryGroupLine: {} as DefectSummaryGroupLine
     }),
     actions: {
@@ -47,6 +56,28 @@ export const useDefectStore = defineStore('defect', {
                 const validate = defectGroupLineResponseSchema.parse(results);
 
                 this.defectGroupLines = validate.data
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: validate.message ?? "loaded",
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
+        async fetchGroupGlNumber() {
+            this.loading = true;
+            this.error = null;
+            try {
+
+                const results = await defectApi.getGroupGlNumber()
+                const validate = defectGroupGlNumberResponseSchema.parse(results);
+
+                this.defectGroupGlNumber = validate.data
 
                 return ApiResponseSchema.parse({
                     success: true,

@@ -11,7 +11,11 @@ export function useDefectPage() {
     const store = useDefectStore()
 
 
-    const { summaryGroupLine, defectGroupLines } = storeToRefs(store)
+    const {
+        summaryGroupLine,
+        defectGroupLines,
+        defectGroupGlNumber
+    } = storeToRefs(store)
 
     const handleFetchSummaryGroupLines = async (options: OptionNotify = { notify: true }) => {
         const { success, message } = await store.fetchSummaryGroupLines()
@@ -29,9 +33,19 @@ export function useDefectPage() {
         return { success, message }
     }
 
+    const handleFetchGroupGlNumber = async (options: OptionNotify = { notify: true }) => {
+        const { success, message } = await store.fetchGroupGlNumber()
+        if (options.notify) {
+            success ? toast.success(message) : toast.error(message)
+        }
+        return { success, message }
+    }
+
     return {
         summaryGroupLine,
         defectGroupLines,
+        defectGroupGlNumber,
+        handleFetchGroupGlNumber,
         handleFetchSummaryGroupLines,
         handleFetchGroupLines
     }

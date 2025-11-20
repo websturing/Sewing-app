@@ -1,22 +1,22 @@
 <template>
     <div class="flex flex-col gap-2">
         <DefectSummaryCard />
-        <DefectGroupLineTable />
+        <DefectGroupGlNumberTable />
     </div>
 </template>
 <script setup lang="ts">
-import DefectGroupLineTable from "@/modules/defect/components/DefectGroupLineTable.vue";
+import DefectGroupGlNumberTable from "@/modules/defect/components/DefectGroupGlNumberTable.vue";
 import DefectSummaryCard from '@/modules/defect/components/DefectSummaryCard.vue';
 import { useDefectPage } from '@/modules/defect/composables/defect.page';
 import { onMounted } from 'vue';
 
 const {
     handleFetchSummaryGroupLines,
-    handleFetchGroupLines
+    handleFetchGroupGlNumber
 } = useDefectPage()
 
 onMounted(async () => {
     await handleFetchSummaryGroupLines()
-    await handleFetchGroupLines()
+    await handleFetchGroupGlNumber()
 })
 </script>

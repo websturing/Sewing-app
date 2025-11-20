@@ -7,5 +7,7 @@ export const defectApi = {
         api.get(`${apiPrefix}/defect/summary/lines`).then(r => r.data),
     getGroupLines: () =>
         api.get(`${apiPrefix}/defect`).then(r => r.data),
+    getGroupGlNumber: () =>
+        api.get(`${apiPrefix}/defect/group/gl-number`).then(r => r.data),
 
 }
