@@ -1,5 +1,6 @@
 import { defectRoutes } from '@/modules/defect/routes/defect.route'
 import { glsRoutes } from '@/modules/gls/routes/gls.route'
+import { leaderRoutes } from '@/modules/leaders/routes/leader.route'
 import { lineRoutes } from '@/modules/lines/routes/lines.route'
 import { reportCompletion } from '@/modules/report-completion/routes/reportCompletion.route'
 import { stockInRoutes } from '@/modules/stock-in/routes/stockIn.route'
@@ -61,7 +62,8 @@ export const adminRoutes: RouteRecordRaw[] = [
             ...glsRoutes,
             ...lineRoutes,
             ...reportCompletion,
-            ...defectRoutes
+            ...defectRoutes,
+            ...leaderRoutes
 
         ]
     }
