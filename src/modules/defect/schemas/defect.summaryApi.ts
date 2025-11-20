@@ -31,6 +31,12 @@ export const defectSummaryGroupLineResponse = z.object({
     data: defectSummaryGroupLinesItemSchema
 })
 
+export const defectGroupLineResponseSchema = z.object({
+    status: z.boolean(),
+    message: z.string(),
+    data: z.array(defectGroupLineSchema)
+});
+
 export type DefectItem = z.infer<typeof defectItemSchema>
 export type DefectGroupLine = z.infer<typeof defectGroupLineSchema>
 export type DefectSummaryGroupLine = z.infer<typeof defectSummaryGroupLinesItemSchema>
