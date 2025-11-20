@@ -2,9 +2,9 @@
     <div class="!w-[300px]">
         <n-card class="shadow-xs">
             <div class="flex flex-col gap-1">
-                <p class="text-gray-400 text-xs">TOTAL DEFECT</p>
-                <div class="flex gap-2 justify-start">
-                    <p class="text-3xl font-bold text-red-600">{{ data.totalDefect }}</p>
+                <div class="flex gap-2 items-end justify-between">
+                    <p class="text-gray-400 ">Total Defect</p>
+                    <p class="text-lg font-bold text-red-600">{{ data.totalDefect }}</p>
                 </div>
                 <div class="text-sm">
                     <div class="flex justify-between">
