@@ -12,6 +12,7 @@ export function useDefectPage() {
 
 
     const {
+        loading,
         summaryGroupLine,
         defectGroupLines,
         defectGroupGlNumber
@@ -42,6 +43,7 @@ export function useDefectPage() {
     }
 
     return {
+        loading,
         summaryGroupLine,
         defectGroupLines,
         defectGroupGlNumber,
