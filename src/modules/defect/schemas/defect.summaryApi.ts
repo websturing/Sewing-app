@@ -39,7 +39,7 @@ export const defectSummaryGroupLinesItemSchema = z.object({
 });
 
 // Reusable API Response
-const apiResponse = <T extends z.ZodTypeAny>(schema: T) =>
+export const apiResponse = <T extends z.ZodTypeAny>(schema: T) =>
     z.object({
         status: z.boolean(),
         message: z.string(),
