@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as r,o as c}from"./index-luQSl8x0.js";const o={};function t(a,n){return c(),r("div",null,"keader")}const f=e(o,[["render",t]]);export{f as default};
