@@ -17,6 +17,7 @@ declare module 'vue' {
     BaseInput: typeof import('./src/components/BaseInput.vue')['default']
     BasePageHeader: typeof import('./src/components/BasePageHeader.vue')['default']
     BaseSelect: typeof import('./src/components/BaseSelect.vue')['default']
+    BaseSelectWithError: typeof import('./src/components/BaseSelectWithError.vue')['default']
     ErrorCard: typeof import('./src/components/ErrorCard.vue')['default']
     HeaderBar: typeof import('./src/components/HeaderBar.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
