@@ -11,8 +11,7 @@ export function useLinePage() {
     const toast = useMessage()
     const store = useLineStore()
 
-    const { line, lineStockInSummary, loading, lineDevices, lineHistoryGLNumber } = storeToRefs(store)
-
+    const { data, line, lineStockInSummary, loading, lineDevices, lineHistoryGLNumber } = storeToRefs(store)
     const handleFetch = async (options: OptionNotify = { notify: true }, payload: LineFilterRequest) => {
         const { success, message } = await store.fetchLines(payload)
         if (options.notify) {
@@ -46,6 +45,7 @@ export function useLinePage() {
     }
 
     return {
+        data,
         line,
         lineStockInSummary,
         loading,

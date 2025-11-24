@@ -4,7 +4,7 @@ import { NSelect, type FormValidationStatus, type SelectOption } from "naive-ui"
 import { computed } from "vue";
 
 interface Props {
-    modelValue: string | number | null
+    modelValue: string | number | Array<string | number> | null
     options: SelectOption[]
     placeholder?: string
     clearable?: boolean

@@ -33,7 +33,6 @@ export const useUserStore = defineStore('users', {
         async fetch(query: query = {}) {
             this.loading = true;
             this.error = null;
-            console.log('fetching user data')
             try {
 
                 const params: query = {
@@ -43,16 +42,14 @@ export const useUserStore = defineStore('users', {
                     dateFrom: query.dateFrom,
                     dateTo: query.dateTo,
                 }
-                console.log('fetching user data 1')
 
                 if (query.q) {
                     this.searchResult = [];
                     this.isSearching = true;
                 }
 
-                const res = await api.get(`/api/users`, { params }); console.log(res.data)
+                const res = await api.get(`/api/users`, { params });
                 const validatedData = UserResponseSchema.parse(res.data);
-                console.log(validatedData)
                 this.meta = validatedData.meta;
                 this.links = validatedData.links;
                 this.currentPage = validatedData.meta.currentPage;

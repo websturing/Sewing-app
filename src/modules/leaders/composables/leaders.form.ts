@@ -1,22 +1,46 @@
+import { useFields } from "@/composables/useFieldWrapper";
 import type { AssignLeaderForm } from "@/modules/leaders/schemas/leaders.form.schema";
 import { AssignLeaderFormSchema } from "@/modules/leaders/schemas/leaders.form.schema";
 import { useLeaderStore } from "@/modules/leaders/stores/leaders.store";
-import { toTypedSchema } from '@vee-validate/zod';
+import { useLinePage } from "@/modules/lines/composables/line.page";
+import { useUserTable } from "@/modules/user/composables/user.table";
+import { toTypedSchema } from "@vee-validate/zod";
 import { useMessage } from "naive-ui";
-import { useForm } from 'vee-validate';
-
-type OptionNotify = {
-    notify?: boolean
-}
+import { useForm } from "vee-validate";
+import { computed } from "vue";
 
 export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
-    const toast = useMessage()
-    const store = useLeaderStore()
+    const toast = useMessage();
+    const store = useLeaderStore();
 
+    /** USERS & LINES */
+    const { rows: usersData, handleFetch: fetchUsers } = useUserTable();
+    const { data: linesData, handleFetch: fetchLines } = useLinePage();
+
+    const optionUsers = computed(() =>
+        usersData.value.map((e) => ({ label: e.name, value: e.id }))
+    );
+
+    const optionLines = computed(() =>
+        linesData.value.map((e) => ({ label: e.name, value: e.id }))
+    );
+
+    /** PRELOAD COMBO DATA */
+    const handleUserLineData = async () => {
+        await Promise.all([
+            fetchUsers(),
+            fetchLines({ notify: false }, {}),
+        ]);
+    };
+
+    /** DEFAULT VALUES */
     const getDefaults = (): AssignLeaderForm => ({
-        userId: initialData?.userId ?? 0
-    })
+        userId: initialData?.userId ?? null,
+        lineId: initialData?.lineId ?? [],
+        isActive: initialData?.isActive ?? true, // kamu punya switch, jadi sekalian masukin
+    });
 
+    /** ZOD VALIDATION / FORM */
     const {
         handleSubmit,
         errors,
@@ -25,21 +49,45 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
         validate: veeValidate,
     } = useForm<AssignLeaderForm>({
         validationSchema: toTypedSchema(AssignLeaderFormSchema),
-        initialValues: getDefaults()
-    })
+        initialValues: getDefaults(),
+    });
 
-    // reset form
+    /** FIELD BINDINGS */
+    const { userId, lineId, isActive } = useFields<{
+        userId: number | null;
+        lineId: number[];
+        isActive: boolean
+    }>(["userId", "lineId", "isActive"]);
+
+    /** Validate manually if needed */
+    const validateForm = async () => {
+        const result = await veeValidate();
+        return result.valid
+            ? { valid: true, values: result.values as AssignLeaderForm }
+            : { valid: false };
+    };
+
+    /** Soft reset */
     const resetForm = () => {
-        veeResetForm({
-            values: getDefaults(), errors: {}
-        })
-    }
+        veeResetForm({ values: getDefaults(), errors: {} });
+    };
 
     return {
+        /** Form binding */
+        userId,
+        lineId,
+        isActive,
+
+        /** Combo Data */
+        optionUsers,
+        optionLines,
+        handleUserLineData,
+
+        /** Form Behavior */
         onSubmit: handleSubmit,
         resetForm,
         errors,
         isSubmitting,
-    }
-
+        validateForm,
+    };
 }
