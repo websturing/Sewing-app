@@ -3,6 +3,7 @@ import { z } from "zod";
 
 
 export const AssignmentLineDetailSchema = z.object({
+    assignId: z.number(),
     assignAt: z.string(),
     unassignAt: z.string().nullable(),
     lineId: z.number().nullable(),

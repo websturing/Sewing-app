@@ -1,6 +1,7 @@
 import { useFields } from "@/composables/useFieldWrapper";
 import type { AssignLeaderForm } from "@/modules/leaders/schemas/leaders.form.schema";
 import { AssignLeaderFormSchema } from "@/modules/leaders/schemas/leaders.form.schema";
+import type { UnassignLeaderRequest } from "@/modules/leaders/schemas/leaders.request.schema";
 import { useLeaderStore } from "@/modules/leaders/stores/leaders.store";
 import { useLinePage } from "@/modules/lines/composables/line.page";
 import { useUserTable } from "@/modules/user/composables/user.table";
@@ -29,6 +30,13 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
     const handleCreateAssignLeader = async (payload: AssignLeaderForm) => {
         isLoading.value = true
         await store.createAssignLeader(payload)
+        isLoading.value = false
+    }
+
+    const handleUnassignLeader = async (payload: UnassignLeaderRequest) => {
+        isLoading.value = true
+        const { success, message } = await store.unAssignLeader(payload)
+        success ? toast.success(message) : toast.error(message)
         isLoading.value = false
     }
 
@@ -100,6 +108,7 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
         errors,
         isSubmitting,
         validateForm,
-        handleCreateAssignLeader
+        handleCreateAssignLeader,
+        handleUnassignLeader
     };
 }

@@ -18,16 +18,23 @@
 
         <SummaryLeaderTable @click:unassignLine="handleUnassign" />
 
+
+
+
+
         <n-modal v-model:show="isModalForm" preset="card" :style="'width: 1200px'">
-            <LeaderAssignmentForm v-model:modal="isModalForm" :initialData="initialData" />
+            <LeaderAssignmentForm v-model:modal="isModalForm" />
         </n-modal>
+
+        <LeaderUnassignmentForm :initialData="initialData" />
     </div>
 </template>
 <script setup lang="ts">
 import LeaderAssignmentForm from "@/modules/leaders/components/LeaderAssignmentForm.vue";
+import LeaderUnassignmentForm from "@/modules/leaders/components/LeaderUnassignmentForm.vue";
 import SummaryLeaderTable from "@/modules/leaders/components/SummaryLeaderTable.vue";
 import { useLeadersPage } from "@/modules/leaders/composables/leaders.page";
-import type { AssignLeaderForm } from "@/modules/leaders/schemas/leaders.form.schema";
+import type { AssignmentSummaryByLeader } from "@/modules/leaders/schemas/leaders.api.schema";
 import type { MetaHead } from '@/types/metaHead';
 import { ChartPerson20Filled } from "@vicons/fluent";
 import { SmartHome } from '@vicons/tabler';
@@ -39,19 +46,21 @@ const meta = ref<MetaHead>({
 })
 
 const isModalForm = ref<boolean>(false)
-const initialData = ref<AssignLeaderForm>()
+const initialData = ref<AssignmentSummaryByLeader>()
 
 const {
     fetchSummaryByLeader
 } = useLeadersPage()
 
-const handleUnassign = (val: any) => {
-    isModalForm.value = true
-    initialData.value = {
-        userId: val.leaderId,
-        lineId: val.activeLineIds.split(',').map(Number),
-        isActive: val.isActive
-    }
+const handleUnassign = (val: AssignmentSummaryByLeader) => {
+    // isModalForm.value = true
+    // initialData.value = {
+    //     userId: val.leaderId,
+    //     lineId: val.activeLineIds.split(',').map(Number),
+    //     isActive: val.isActive
+    // }
+
+    initialData.value = val
 }
 
 onMounted(async () => {

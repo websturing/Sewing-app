@@ -1,5 +1,6 @@
 import { leadersApi } from '@/modules/leaders/api/leaders.api';
 import type { AssignLeaderForm } from '@/modules/leaders/schemas/leaders.form.schema';
+import type { UnassignLeaderRequest } from '@/modules/leaders/schemas/leaders.request.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
 import {
     AssignmentSummaryByLeaderResponseSchema,
@@ -39,6 +40,22 @@ export const useLeaderStore = defineStore('leaderStore', {
         async createAssignLeader(payload: AssignLeaderForm) {
             try {
                 const results = await leadersApi.createAssign(payload)
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: results.message ?? "Created",
+                    data: results.data
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                this.error = message;
+                return ApiResponseSchema.parse({ success: false, message });
+            } finally {
+                this.loading = false;
+            }
+        },
+        async unAssignLeader(payload: UnassignLeaderRequest) {
+            try {
+                const results = await leadersApi.createUnassign(payload)
                 return ApiResponseSchema.parse({
                     success: true,
                     message: results.message ?? "Created",
