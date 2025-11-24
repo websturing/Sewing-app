@@ -11,9 +11,9 @@ export function useLeadersPage() {
     const store = useLeaderStore()
 
     const {
+        loading: isLoading,
         AssignmentSummaryByLeader
     } = storeToRefs(store)
-
 
     const fetchSummaryByLeader = async (options: OptionNotify = { notify: true }) => {
         const { success, message } = await store.fetchSummaryByLeader()
@@ -24,6 +24,7 @@ export function useLeadersPage() {
     }
 
     return {
+        isLoading,
         AssignmentSummaryByLeader,
         fetchSummaryByLeader
     }
