@@ -2,9 +2,6 @@ import { apiResponse } from "@/modules/defect/schemas/defect.summaryApi";
 import { z } from "zod";
 
 
-
-
-
 export const AssignmentLineDetailSchema = z.object({
     assignAt: z.string(),
     unassignAt: z.string().nullable(),
@@ -17,7 +14,10 @@ export const AssignmentLineDetailSchema = z.object({
 
 export const AssignmentSummaryByLeaderSchema = z.object({
     leader: z.string(),
+    leaderId: z.number(),
+    isActive: z.boolean(),
     activeLines: z.string(),
+    activeLineIds: z.string(),
     lastUpdated: z.string().nullable(),
     activeDetail: z.array(AssignmentLineDetailSchema),
     inactiveDetail: z.array(AssignmentLineDetailSchema),

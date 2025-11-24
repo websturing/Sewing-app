@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                <template v-if="isLoading">
+                <template v-if="leaderPiniaLoading">
                     <tr v-for="i in 10" :key="i">
                         <td> <n-skeleton text /></td>
                         <td> <n-skeleton text /></td>
@@ -39,8 +39,10 @@
                         <td>{{ i.leader }}</td>
                         <td>{{ i.activeLines }}</td>
                         <td>{{ i.lastUpdated }}</td>
-                        <td>
+                        <td class="flex gap-2">
                             <BaseButton label="Detail" :icon="FolderDetailsReference" @click="" tertiary />
+                            <BaseButton label="Unasssign Line" :icon="PlaylistRemoveFilled" tertiary type="error"
+                                @click="handleUnassignLine(i)" />
                         </td>
                     </tr>
                 </template>
@@ -54,7 +56,7 @@ import { useLeadersPage } from '@/modules/leaders/composables/leaders.page';
 import { FolderDetailsReference } from "@vicons/carbon";
 import { ChartPerson20Filled } from "@vicons/fluent";
 import { SearchOutline } from "@vicons/ionicons5";
-import { RefreshRound } from "@vicons/material";
+import { PlaylistRemoveFilled, RefreshRound } from "@vicons/material";
 import { computed, ref } from "vue";
 const search = ref("")
 
@@ -73,13 +75,22 @@ const dataFilter = computed(() => {
     )
 })
 const {
-    isLoading,
+    leaderPiniaLoading,
     AssignmentSummaryByLeader: data,
     fetchSummaryByLeader
 } = useLeadersPage()
 
 
+const emit = defineEmits<{
+    (e: "click:unassignLine", val: any): void
+}>()
+
 const handleRefresh = async () => {
     await fetchSummaryByLeader()
+}
+
+const handleUnassignLine = async (val: any) => {
+    emit('click:unassignLine', val)
+
 }
 </script>

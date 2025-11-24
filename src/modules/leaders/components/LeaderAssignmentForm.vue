@@ -30,7 +30,7 @@
                 <div class="flex gap-2 justify-end">
                     <BaseButton label="Reset" @click="resetForm" type="error" quaternary />
                     <BaseButton label="Assign Leader" :icon="SaveArrowRight20Filled" icon-placement="right"
-                        type="primary" attrType="submit" />
+                        :loading="isLoading" type="primary" attrType="submit" />
                 </div>
             </div>
         </form>
@@ -40,12 +40,18 @@
 import BaseButton from '@/components/BaseButton.vue';
 import BaseSelectWithError from '@/components/BaseSelectWithError.vue';
 import { useLeadersForm } from '@/modules/leaders/composables/leaders.form';
+import type { AssignLeaderForm } from '@/modules/leaders/schemas/leaders.form.schema';
 import { SaveArrowRight20Filled } from '@vicons/fluent';
 import { onMounted } from 'vue';
 
+const props = defineProps<{
+    modal?: boolean
+    initialData?: AssignLeaderForm
+}>()
 
 
 const {
+    isLoading,
     userId,
     lineId,
     isActive,
@@ -54,12 +60,24 @@ const {
     onSubmit,
     errors,
     resetForm,
-    handleUserLineData
-} = useLeadersForm()
+    handleUserLineData,
+    handleCreateAssignLeader
+} = useLeadersForm(props.initialData)
 
 const onSubmit1 = onSubmit((values) => {
-    alert()
+    handleCreateAssignLeader(values)
+    updateValue(false)
 })
+
+
+const emit = defineEmits<{
+    'update:modal': [value: boolean]
+    // atau jika pakai v-model biasa: 'update:modelValue': [value: boolean]
+}>()
+
+const updateValue = (value: boolean) => {
+    emit('update:modal', value)
+}
 
 
 onMounted(async () => {

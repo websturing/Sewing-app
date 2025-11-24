@@ -7,11 +7,12 @@ import { useUserTable } from "@/modules/user/composables/user.table";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useMessage } from "naive-ui";
 import { useForm } from "vee-validate";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
     const toast = useMessage();
     const store = useLeaderStore();
+    const isLoading = ref<boolean>(false)
 
     /** USERS & LINES */
     const { rows: usersData, handleFetch: fetchUsers } = useUserTable();
@@ -24,6 +25,13 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
     const optionLines = computed(() =>
         linesData.value.map((e) => ({ label: e.name, value: e.id }))
     );
+
+    const handleCreateAssignLeader = async (payload: AssignLeaderForm) => {
+        isLoading.value = true
+        await store.createAssignLeader(payload)
+        isLoading.value = false
+    }
+
 
     /** PRELOAD COMBO DATA */
     const handleUserLineData = async () => {
@@ -73,6 +81,9 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
     };
 
     return {
+        /** base */
+        isLoading,
+
         /** Form binding */
         userId,
         lineId,
@@ -89,5 +100,6 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
         errors,
         isSubmitting,
         validateForm,
+        handleCreateAssignLeader
     };
 }

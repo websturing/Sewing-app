@@ -1,6 +1,7 @@
 import { useLeaderStore } from "@/modules/leaders/stores/leaders.store";
 import { useMessage } from "naive-ui";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
 
 type OptionNotify = {
     notify?: boolean
@@ -9,9 +10,10 @@ type OptionNotify = {
 export function useLeadersPage() {
     const toast = useMessage()
     const store = useLeaderStore()
+    const isLoading = ref<boolean>(false)
 
     const {
-        loading: isLoading,
+        loading,
         AssignmentSummaryByLeader
     } = storeToRefs(store)
 
@@ -23,9 +25,12 @@ export function useLeadersPage() {
         return { success, message }
     }
 
+
+
     return {
+        leaderPiniaLoading: loading,
         isLoading,
         AssignmentSummaryByLeader,
-        fetchSummaryByLeader
+        fetchSummaryByLeader,
     }
 }
