@@ -40,7 +40,8 @@
                         <td>{{ i.activeLines }}</td>
                         <td>{{ i.lastUpdated }}</td>
                         <td class="flex gap-2">
-                            <BaseButton label="Detail" :icon="FolderDetailsReference" @click="" tertiary />
+                            <BaseButton label="Detail" :icon="FolderDetailsReference" @click="handleIsModalHistory(i)"
+                                tertiary />
                             <BaseButton label="Unasssign Line" :icon="PlaylistRemoveFilled" tertiary type="error"
                                 @click="handleUnassignLine(i)" />
                         </td>
@@ -87,6 +88,7 @@ const {
 
 const emit = defineEmits<{
     (e: "click:unassignLine", val: any): void
+    (e: "click:assignHistory", val: any): void
     (e: "update:modal", value: boolean): void
 }>()
 
@@ -102,5 +104,9 @@ const handleUnassignLine = async (val: any) => {
 
 const handleisModalCreate = (value: boolean) => {
     emit('update:modal', value)
+}
+
+const handleIsModalHistory = (value: any) => {
+    emit('click:assignHistory', value)
 }
 </script>

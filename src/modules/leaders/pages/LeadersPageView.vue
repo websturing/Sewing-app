@@ -16,11 +16,8 @@
             </div>
         </div>
 
-        <SummaryLeaderTable @click:unassignLine="handleUnassign" v-model:modal="isModalForm" />
-
-
-
-
+        <SummaryLeaderTable @click:unassignLine="handleUnassign" v-model:modal="isModalForm"
+            v-model:modalDetail="isModalHistory" @click:assignHistory="handleHistory" />
 
         <n-modal v-model:show="isModalForm" preset="card" :style="'width: 1200px'">
             <LeaderAssignmentForm v-model:modal="isModalForm" />
@@ -38,13 +35,26 @@
             </template>
             <LeaderUnassignmentForm :initialData="initialData" v-model:modal="isModalUnassignForm" />
         </n-modal>
-
+        <n-modal v-model:show="isModalHistory" preset="card" :style="'width: 1200px'">
+            <template #header>
+                <p>Leader Assignment History</p>
+                <p class="text-sm font-normal">A comprehensive log displaying historical leader-to-line assignments,
+                    including activation and unassignment records.</p>
+            </template>
+            <template #footer>
+                <div class="flex justify-end">
+                    <BaseButton label="Close" type="primary" tertiary @click="isModalHistory = false" />
+                </div>
+            </template>
+            <LeaderAssignmentHistory :initialData="initialData" />
+        </n-modal>
 
     </div>
 </template>
 <script setup lang="ts">
 import BaseButton from "@/components/BaseButton.vue";
 import LeaderAssignmentForm from "@/modules/leaders/components/LeaderAssignmentForm.vue";
+import LeaderAssignmentHistory from "@/modules/leaders/components/LeaderAssignmentHistory.vue";
 import LeaderUnassignmentForm from "@/modules/leaders/components/LeaderUnassignmentForm.vue";
 import SummaryLeaderTable from "@/modules/leaders/components/SummaryLeaderTable.vue";
 import { useLeadersPage } from "@/modules/leaders/composables/leaders.page";
@@ -61,6 +71,7 @@ const meta = ref<MetaHead>({
 
 const isModalForm = ref<boolean>(false)
 const isModalUnassignForm = ref<boolean>(false)
+const isModalHistory = ref<boolean>(false)
 const initialData = ref<AssignmentSummaryByLeader>()
 
 const {
@@ -70,6 +81,11 @@ const {
 const handleUnassign = (val: AssignmentSummaryByLeader) => {
     initialData.value = val
     isModalUnassignForm.value = true
+}
+
+const handleHistory = (val: AssignmentSummaryByLeader) => {
+    initialData.value = val
+    isModalHistory.value = true
 }
 
 onMounted(async () => {
