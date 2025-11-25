@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <SummaryLeaderTable @click:unassignLine="handleUnassign" />
+        <SummaryLeaderTable @click:unassignLine="handleUnassign" v-model:modal="isModalForm" />
 
 
 
@@ -25,11 +25,25 @@
         <n-modal v-model:show="isModalForm" preset="card" :style="'width: 1200px'">
             <LeaderAssignmentForm v-model:modal="isModalForm" />
         </n-modal>
+        <n-modal v-model:show="isModalUnassignForm" preset="card" :style="'width: 1200px'">
+            <template #header>
+                <p>Leader Unassignment</p>
+                <p class="text-sm font-normal">An operational interface for removing a leader from a designated
+                    production line.</p>
+            </template>
+            <template #footer>
+                <div class="flex justify-end">
+                    <BaseButton label="Close" type="primary" tertiary @click="isModalUnassignForm = false" />
+                </div>
+            </template>
+            <LeaderUnassignmentForm :initialData="initialData" v-model:modal="isModalUnassignForm" />
+        </n-modal>
 
-        <LeaderUnassignmentForm :initialData="initialData" />
+
     </div>
 </template>
 <script setup lang="ts">
+import BaseButton from "@/components/BaseButton.vue";
 import LeaderAssignmentForm from "@/modules/leaders/components/LeaderAssignmentForm.vue";
 import LeaderUnassignmentForm from "@/modules/leaders/components/LeaderUnassignmentForm.vue";
 import SummaryLeaderTable from "@/modules/leaders/components/SummaryLeaderTable.vue";
@@ -46,6 +60,7 @@ const meta = ref<MetaHead>({
 })
 
 const isModalForm = ref<boolean>(false)
+const isModalUnassignForm = ref<boolean>(false)
 const initialData = ref<AssignmentSummaryByLeader>()
 
 const {
@@ -53,14 +68,8 @@ const {
 } = useLeadersPage()
 
 const handleUnassign = (val: AssignmentSummaryByLeader) => {
-    // isModalForm.value = true
-    // initialData.value = {
-    //     userId: val.leaderId,
-    //     lineId: val.activeLineIds.split(',').map(Number),
-    //     isActive: val.isActive
-    // }
-
     initialData.value = val
+    isModalUnassignForm.value = true
 }
 
 onMounted(async () => {

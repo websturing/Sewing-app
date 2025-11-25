@@ -40,6 +40,7 @@
 import BaseButton from '@/components/BaseButton.vue';
 import BaseSelectWithError from '@/components/BaseSelectWithError.vue';
 import { useLeadersForm } from '@/modules/leaders/composables/leaders.form';
+import { useLeadersPage } from "@/modules/leaders/composables/leaders.page";
 import type { AssignLeaderForm } from '@/modules/leaders/schemas/leaders.form.schema';
 import { SaveArrowRight20Filled } from '@vicons/fluent';
 import { onMounted } from 'vue';
@@ -64,15 +65,19 @@ const {
     handleCreateAssignLeader
 } = useLeadersForm(props.initialData)
 
-const onSubmit1 = onSubmit((values) => {
-    handleCreateAssignLeader(values)
+const {
+    fetchSummaryByLeader
+} = useLeadersPage()
+
+const onSubmit1 = onSubmit(async (values) => {
+    await handleCreateAssignLeader(values)
+    await fetchSummaryByLeader()
     updateValue(false)
 })
 
 
 const emit = defineEmits<{
     'update:modal': [value: boolean]
-    // atau jika pakai v-model biasa: 'update:modelValue': [value: boolean]
 }>()
 
 const updateValue = (value: boolean) => {

@@ -6,8 +6,8 @@
             </div>
             <div class="flex gap-3 items-center">
                 <BaseButton label="Refresh" :icon="RefreshRound" @click="handleRefresh" />
-                <BaseButton label="Create Leader Assignment" :icon="ChartPerson20Filled" @click="handleRefresh"
-                    type="primary" />
+                <BaseButton label="Create Leader Assignment" :icon="ChartPerson20Filled"
+                    @click="handleisModalCreate(true)" type="primary" />
             </div>
         </div>
         <n-table>
@@ -60,6 +60,10 @@ import { PlaylistRemoveFilled, RefreshRound } from "@vicons/material";
 import { computed, ref } from "vue";
 const search = ref("")
 
+const props = defineProps<{
+    modal?: boolean
+}>()
+
 
 const dataFilter = computed(() => {
     const searchTerm = search.value.toLowerCase().trim()
@@ -83,6 +87,7 @@ const {
 
 const emit = defineEmits<{
     (e: "click:unassignLine", val: any): void
+    (e: "update:modal", value: boolean): void
 }>()
 
 const handleRefresh = async () => {
@@ -92,5 +97,10 @@ const handleRefresh = async () => {
 const handleUnassignLine = async (val: any) => {
     emit('click:unassignLine', val)
 
+}
+
+
+const handleisModalCreate = (value: boolean) => {
+    emit('update:modal', value)
 }
 </script>
