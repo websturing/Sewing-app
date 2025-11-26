@@ -16,10 +16,11 @@
             </div>
         </div>
 
-        Replacement
+        <ReplacementForm />
     </div>
 </template>
 <script setup lang="ts">
+import ReplacementForm from '@/modules/Replacement/components/ReplacementForm.vue';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { Forms, SmartHome } from '@vicons/tabler';

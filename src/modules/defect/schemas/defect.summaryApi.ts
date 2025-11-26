@@ -16,7 +16,12 @@ const defectGroupBaseSchema = z.object({
     totalSize: z.number(),
     totalDefect: z.number(),
     totalPcs: z.number(),
-    items: z.array(defectItemSchema),
+    items: z.array(z.object({
+        color: z.string(),
+        totalDefect: z.number(),
+        totalPcs: z.number(),
+        items: z.array(defectItemSchema)
+    })),
 });
 
 // Group by Line

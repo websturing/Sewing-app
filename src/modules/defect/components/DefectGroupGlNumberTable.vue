@@ -58,48 +58,50 @@
         </n-table>
         <n-modal v-model:show="isDetailModal" preset="card" :style="'width: 1200px'"
             :title="`GL-${glDetail?.glNumber.toString()} | ${glDetail?.lineNames}`">
-            <n-table>
-                <thead>
-                    <tr>
-                        <th class="!bg-white">Color</th>
-                        <th :colspan="(glDetail?.items.length ?? 0) + 1"
-                            class="!text-center !bg-white !text-blue-600 !font-semibold">
-                            {{ glDetail?.color }}
-                        </th>
-                    </tr>
-                    <tr>
-                        <th class="!bg-white">Size</th>
-                        <th v-for="s in glDetail?.items" class="!text-center !bg-white">{{ s.size }}
-                        </th>
-                        <th class="!bg-white !text-center ">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Cut Piece</td>
-                        <td v-for="s in glDetail?.items" class="!text-center">{{ s.totalPcs }}</td>
-                        <td class="!text-center">
-                            {{ glDetail?.totalPcs }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Defect</td>
-                        <td v-for="s in glDetail?.items" class="!text-center !text-red-400">{{ s.totalDefect }}</td>
-                        <td class="!text-center">
-                            {{ glDetail?.totalDefect }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="!bg-gray-50">Balance</td>
-                        <td v-for="s in glDetail?.items" class="!bg-gray-50 !text-center !font-semibold">
-                            {{ s.totalPcs - s.totalDefect }}
-                        </td>
-                        <td class="!bg-gray-50 !text-center">
-                            {{ (glDetail?.totalPcs ?? 0) - (glDetail?.totalDefect ?? 0) }}
-                        </td>
-                    </tr>
-                </tbody>
-            </n-table>
+            <div class="flex flex-col gap-5">
+                <n-table v-for="e in glDetail?.items">
+                    <thead>
+                        <tr>
+                            <th class="!bg-white">Color</th>
+                            <th :colspan="(e.items.length ?? 0) + 1"
+                                class="!text-center !bg-white !text-blue-600 !font-semibold">
+                                {{ e.color }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="!bg-white">Size</th>
+                            <th v-for="s in e.items" class="!text-center !bg-white">{{ s.size }}
+                            </th>
+                            <th class="!bg-white !text-center ">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cut Piece</td>
+                            <td v-for="s in e.items" class="!text-center">{{ s.totalPcs }}</td>
+                            <td class="!text-center !font-bold">
+                                {{ e.totalPcs }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Defect</td>
+                            <td v-for="s in e.items" class="!text-center !text-red-400">{{ s.totalDefect }}</td>
+                            <td class="!text-center !font-bold !text-red-400">
+                                {{ e.totalDefect }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="!bg-gray-50">Balance</td>
+                            <td v-for="s in e.items" class="!bg-gray-50 !text-center !font-semibold">
+                                {{ s.totalPcs - s.totalDefect }}
+                            </td>
+                            <td class="!bg-gray-50 !text-center !font-bold">
+                                {{ (e.totalPcs ?? 0) - (e.totalDefect ?? 0) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </n-table>
+            </div>
         </n-modal>
 
     </div>
