@@ -1,6 +1,4 @@
 import { useDefectStore } from "@/modules/defect/stores/defect.store";
-import type { MetaHead } from '@/types/metaHead';
-import { useHead } from '@unhead/vue';
 import { useMessage } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -12,17 +10,7 @@ export function useReplacementForm() {
     const defectColorSizeDetail = ref<any | null>(null)
     const { defectGroupGlNumber } = storeToRefs(storeDefect)
 
-    const meta = ref<MetaHead>({
-        title: "Defect Replacement Ticket Form",
-        description: "A streamlined form interface for issuing replacement tickets tied to defective GL numbers identified during stock-in or sewing operations."
-    })
 
-    useHead({
-        title: meta.value.title,
-        meta: [
-            { name: 'description', content: meta.value.description }
-        ]
-    })
 
     // Computed Properties
     const optionGlnumbers = computed(() => {
@@ -62,7 +50,6 @@ export function useReplacementForm() {
     }
 
     return {
-        meta,
         defectColorSizeDetail,
         optionGlnumbers,
         handleFetchGlNumberDefect,

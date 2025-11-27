@@ -6,4 +6,9 @@ export const replacementRoutes: RouteRecordRaw[] = [
         name: 'replacement',
         component: () => import('@/modules/Replacement/pages/ReplacementPageView.vue'),
     },
+    {
+        path: 'replacement/form',
+        name: 'replacement-form',
+        component: () => import('@/modules/Replacement/pages/ReplacementPageFormView.vue'),
+    },
 ]

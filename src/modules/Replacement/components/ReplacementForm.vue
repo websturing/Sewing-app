@@ -1,24 +1,14 @@
 <template>
     <div class="flex flex-col gap-10">
-        <div class="flex justify-between items-center">
-            <div class="w-84 flex-auto">
-                <h2 class="text-xl font-bold mb-1">{{ meta.title }}</h2>
-                <p>{{ meta.description }}</p>
-            </div>
-            <div class="w-16 flex-auto text-right">
-                <n-breadcrumb>
-                    <n-breadcrumb-item><n-icon :component="SmartHome" /> Home</n-breadcrumb-item>
-                    <n-breadcrumb-item>
-                        <n-icon :component="Forms" />
-                        Replacement Form
-                    </n-breadcrumb-item>
-                </n-breadcrumb>
-            </div>
-        </div>
 
         <div>
             <BaseSelectWithError name="glNumber" :options="optionGlnumbers" label="GL Numbers" v-model="glNumber"
                 placeholder="Select GL Number" />
+        </div>
+
+        <div class="mt-2 p-10 bg-gray-50 border border-gray-200 rounded-lg" v-if="!defectDetail">
+            <n-empty description="GL Number not selected" size="huge">
+            </n-empty>
         </div>
         <div class="flex flex-col gap-5 border border-gray-200 rounded-lg p-5" v-if="defectDetail">
             <div>
@@ -112,7 +102,6 @@ import type { summaryGLDataApiResponse } from '@/modules/gls/schemas/gls.api.sch
 import { useGlStore } from '@/modules/gls/stores/gls.store';
 import { useReplacementForm } from '@/modules/Replacement/composables/replacement.form';
 import { SaveAnnotation } from '@vicons/carbon';
-import { Forms, SmartHome } from '@vicons/tabler';
 import { computed, onMounted, ref, watch } from "vue";
 
 const glNumber = ref<string | null>(null)
@@ -121,7 +110,6 @@ const activeTab = ref<string | null>('')
 const defectList = ref<any>([]);
 
 const {
-    meta,
     optionGlnumbers,
     defectColorSizeDetail: defectDetail,
     handleFetchGlNumberDefect,
