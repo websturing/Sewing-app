@@ -42,6 +42,15 @@ export function useReplacementForm() {
     const handleFilterDefectGlNumber = (val: string | null) => {
         const filter = defectGroupGlNumber.value.find((e) => e.glNumber == val)
         defectColorSizeDetail.value = filter
+        defectColorSizeDetail.value.items = filter?.items.map((e: any) => {
+            return {
+                ...e,
+                items: e.items.map((s: any) => ({
+                    ...s,
+                    maxDefect: s.totalDefect   // clone original
+                }))
+            }
+        })
     }
 
     const handleFetchGlNumberDefect = async (notify: boolean = false) => {
