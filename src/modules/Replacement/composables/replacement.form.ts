@@ -1,4 +1,5 @@
 import { useDefectStore } from "@/modules/defect/stores/defect.store";
+import { useReplacementStore } from "@/modules/Replacement/stores/replacement.store";
 import { useMessage } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -6,6 +7,7 @@ import { computed, ref } from "vue";
 export function useReplacementForm() {
     const toast = useMessage()
     const storeDefect = useDefectStore()
+    const store = useReplacementStore()
 
     const defectColorSizeDetail = ref<any | null>(null)
     const { defectGroupGlNumber } = storeToRefs(storeDefect)
@@ -49,10 +51,18 @@ export function useReplacementForm() {
         return { success, message }
     }
 
+    const handleCreateReplacement = async (payload: any) => {
+        const { message } = await store.createTicketReplacement(payload)
+        toast.success(message)
+        return message
+    }
+
+
     return {
         defectColorSizeDetail,
         optionGlnumbers,
         handleFetchGlNumberDefect,
-        handleFilterDefectGlNumber
+        handleFilterDefectGlNumber,
+        handleCreateReplacement
     }
 }

@@ -89,9 +89,9 @@
                     </n-tab-pane>
                 </n-tabs>
             </div>
-            {{ defectList }}
             <div class="flex justify-end">
-                <BaseButton label="Save Changes" type="primary" @click="handleSaveChanges" :icon="SaveAnnotation" />
+                <BaseButton label="Save Changes" type="primary" @click="handleSaveChanges" :icon="SaveAnnotation"
+                    :loading="isLoading" />
             </div>
         </div>
 
@@ -104,17 +104,21 @@ import { useGlStore } from '@/modules/gls/stores/gls.store';
 import { useReplacementForm } from '@/modules/Replacement/composables/replacement.form';
 import { SaveAnnotation } from '@vicons/carbon';
 import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from 'vue-router';
 
+
+const isLoading = ref<boolean>(false)
 const glNumber = ref<string | null>(null)
 const glSummary = ref<any>([])
 const activeTab = ref<string | null>('')
 const defectList = ref<any>([]);
-
+const router = useRouter();
 const {
     optionGlnumbers,
     defectColorSizeDetail: defectDetail,
     handleFetchGlNumberDefect,
-    handleFilterDefectGlNumber
+    handleFilterDefectGlNumber,
+    handleCreateReplacement
 } = useReplacementForm()
 
 const grandTotal = computed(() =>
@@ -149,7 +153,7 @@ const handleKeydown = (e: any) => {
     }
 }
 
-const handleSaveChanges = () => {
+const handleSaveChanges = async () => {
     const defects = defectDetail.value?.items.map((e: any) => {
         const sizes = e.items.filter((f: any) => {
             return f.totalDefect > 0
@@ -169,6 +173,11 @@ const handleSaveChanges = () => {
     })
 
     defectList.value = merged
+    isLoading.value = true
+    await handleCreateReplacement(defectList.value);
+    isLoading.value = false
+    router.push({ name: 'replacement' })
+
 }
 
 onMounted(() => {
