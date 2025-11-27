@@ -2,7 +2,7 @@
 
 import api from '@/lib/api';
 import { glsApi } from '@/modules/gls/api/glsApi';
-import { GlApiResponseSchema, summaryGlApiResponseSchema, type GlApi, type GlApiList, type GrandTotalGl, type SummaryByColor, type SummaryByGl, type SummaryGlMetadata } from '@/modules/gls/schemas/gls.api.schema';
+import { GlApiResponseSchema, type GlApi, type GlApiList, type GrandTotalGl, type SummaryByColor, type SummaryByGl, type SummaryGlMetadata } from '@/modules/gls/schemas/gls.api.schema';
 import { matrixResponseSchema, type matrixGlSummary, type matrixItem } from "@/modules/gls/schemas/gls.matrix.schema";
 import type { GLMatrixRequest } from '@/modules/gls/schemas/gls.request.schema';
 import { GLCombineResponseSchema } from '@/modules/gls/schemas/glsCombine.api';
@@ -108,12 +108,13 @@ export const useGlStore = defineStore('gls', {
             }
         },
 
-        async fetchSummaryGl(glNumber: string) {
+        async fetchSummaryGl(glNumber: string | null) {
             this.loading = true;
             this.error = null;
             try {
                 const res = await api.get(`/api/gls/cutting-summary`, { params: { glNumber } });
-                const validatedData = summaryGlApiResponseSchema.parse(res.data)
+                // const validatedData = summaryGlApiResponseSchema.parse(res.data)
+                const validatedData = res.data
                 this.summaryGl = validatedData.data.summaryByGl
                 this.summaryByColor = validatedData.data.summaryByColor
                 this.metaSummary = validatedData.data.metadata
@@ -122,6 +123,7 @@ export const useGlStore = defineStore('gls', {
                 return ApiResponseSchema.parse({
                     success: true,
                     message: res.data.message ?? "Gl Numbers loaded",
+                    data: res.data.data
                 });
             } catch (error: any) {
                 const message = error?.response?.data?.message || "Something went wrong";

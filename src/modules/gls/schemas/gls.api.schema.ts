@@ -123,20 +123,23 @@ const SummaryGlMetadataSchema = z.object({
     filtersApplied: filtersAppliedSchema,
 });
 
+const summaryGLDataApiRepsonseSchema = z.object({
+    summaryByGl: z.array(summaryByGlSchema),
+    summaryByColor: z.array(summaryByColorSchema),
+    grandTotal: grandTotalSchema,
+    metadata: SummaryGlMetadataSchema,
+});
+
 // Main response schema
 export const summaryGlApiResponseSchema = z.object({
     message: z.string(),
     status: z.number(),
-    data: z.object({
-        summaryByGl: z.array(summaryByGlSchema),
-        summaryByColor: z.array(summaryByColorSchema),
-        grandTotal: grandTotalSchema,
-        metadata: SummaryGlMetadataSchema,
-    }),
+    data: summaryGLDataApiRepsonseSchema
 });
 
 // Type inference dari schema
 export type SummaryGlApiResponse = z.infer<typeof summaryGlApiResponseSchema>;
+export type summaryGLDataApiResponse = z.infer<typeof summaryGLDataApiRepsonseSchema>;
 export type SummaryByGl = z.infer<typeof summaryByGlSchema>;
 export type SummaryByColor = z.infer<typeof summaryByColorSchema>;
 export type LayingPlanning = z.infer<typeof layingPlanningSchema>;

@@ -24,32 +24,35 @@
             <div>
                 <p class="mb-2 text-gray-400">GL Number Detail</p>
                 <table class="!text-md">
-                    <tr>
-                        <td>GL Number</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!font-bold">{{ defectDetail.glNumber }}</td>
-                    </tr>
-                    <tr>
-                        <td>Color</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!font-bold">
-                            {{ defectDetail.color }}
-                            ({{ defectDetail.items.length }} Color)</td>
-                    </tr>
-                    <tr>
-                        <td>Total Defect</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!font-bold !text-red-400">
-                            {{ defectDetail.totalDefect }}
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>GL Number</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td class="!font-bold">{{ defectDetail.glNumber }}</td>
+                        </tr>
+                        <tr>
+                            <td>Color</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td class="!font-bold">
+                                {{ defectDetail.color }}
+                                ({{ defectDetail.items.length }} Color)</td>
+                        </tr>
+                        <tr>
+                            <td>Total Defect</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td class="!font-bold !text-red-400">
+                                {{ defectDetail.totalDefect }}
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <n-divider />
             <p class="text-gray-400">Request Form Replacement Detail</p>
             <div>
                 <n-tabs v-model:value="activeTab" type="card" animated pane-class="!bg-blue-50 rounded-lg !p-3">
-                    <n-tab-pane v-for="e in defectDetail?.items" :name="e.color" :tab="e.color">
+                    <n-tab-pane v-for="e in defectDetail?.items.filter((e: any) => e.totalDefect > 0)" :name="e.color"
+                        :tab="e.color">
                         <n-table class="!shadow-sm" :single-line="false">
                             <thead>
                                 <tr>
@@ -71,8 +74,9 @@
                                     <td>Defect</td>
                                     <td v-for="s in e.items" class="!text-center">
                                         <div class="flex justify-center">
-                                            <n-input-number min="0" class="!w-[110px]" v-model:value="s.totalDefect"
-                                                @keydown="handleKeydown" button-placement="both" />
+                                            <n-input-number min="0" :max="s.maxDefect" class="!w-[110px]"
+                                                v-model:value="s.totalDefect" @keydown="handleKeydown"
+                                                button-placement="both" />
                                         </div>
                                     </td>
                                     <td class="!text-center !font-bold !text-red-400">
@@ -83,18 +87,20 @@
                         </n-table>
                         <div class="mt-3">
                             <table>
-                                <tr>
-                                    <td>Grand Total Defect</td>
-                                    <td>&nbsp; : &nbsp;</td>
-                                    <td>{{ grandTotal }}</td>
-                                </tr>
+                                <tbody>
+                                    <tr>
+                                        <td>Grand Total Defect</td>
+                                        <td>&nbsp; : &nbsp;</td>
+                                        <td>{{ grandTotal }}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </n-tab-pane>
                 </n-tabs>
             </div>
             <div class="flex justify-end">
-                <BaseButton label="Save Changes" type="primary" :icon="SaveAnnotation" />
+                <BaseButton label="Save Changes" type="primary" @click="handleSaveChanges" :icon="SaveAnnotation" />
             </div>
         </div>
 
@@ -102,14 +108,18 @@
 </template>
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue';
+import type { summaryGLDataApiResponse } from '@/modules/gls/schemas/gls.api.schema';
+import { useGlStore } from '@/modules/gls/stores/gls.store';
 import { useReplacementForm } from '@/modules/Replacement/composables/replacement.form';
 import { SaveAnnotation } from '@vicons/carbon';
 import { Forms, SmartHome } from '@vicons/tabler';
 import { computed, onMounted, ref, watch } from "vue";
 
 const glNumber = ref<string | null>(null)
+const glSummary = ref<any>([])
 const activeTab = ref<string | null>('')
-const tabColor = ref<string | null>('!bg-gray-200')
+const defectList = ref<any>([]);
+
 const {
     meta,
     optionGlnumbers,
@@ -131,14 +141,13 @@ const grandTotal = computed(() =>
 )
 
 
-
-watch(glNumber, (newValue) => {
+watch(glNumber, async (newValue) => {
     handleFilterDefectGlNumber(newValue);
-    activeTab.value = defectDetail.value?.items[0]?.color ?? '';
-});
-
-watch(activeTab, (newValue) => {
-    tabColor.value = newValue;
+    activeTab.value = defectDetail.value?.items.find((e: any) => e.totalDefect > 0)?.color ?? '';
+    if (newValue) {
+        const { data } = await useGlStore().fetchSummaryGl(newValue) as { data: summaryGLDataApiResponse }
+        glSummary.value = data.summaryByGl[0].layingPlannings
+    }
 });
 
 
@@ -151,7 +160,27 @@ const handleKeydown = (e: any) => {
     }
 }
 
+const handleSaveChanges = () => {
+    const defects = defectDetail.value?.items.map((e: any) => {
+        const sizes = e.items.filter((f: any) => {
+            return f.totalDefect > 0
+        })
 
+        return sizes
+    }).filter((a: any) => a.length > 0)                                      // buang kosong
+        .flat();
+
+    const merged = defects.map((d: any) => {
+        const match = glSummary.value.find((g: any) => g.color === d.color)
+
+        return {
+            ...d,
+            layingPlanningId: match?.id ?? null // or undefined, your call
+        }
+    })
+
+    defectList.value = merged
+}
 
 onMounted(() => {
     handleFetchGlNumberDefect()
