@@ -89,6 +89,7 @@
                     </n-tab-pane>
                 </n-tabs>
             </div>
+            {{ defectList }}
             <div class="flex justify-end">
                 <BaseButton label="Save Changes" type="primary" @click="handleSaveChanges" :icon="SaveAnnotation" />
             </div>
