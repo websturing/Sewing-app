@@ -32,10 +32,15 @@ const normalizedColumns = computed(() => {
 
         return {
             ...col,
+            ellipsis: props.loading ? false : col.ellipsis,
             render(row: any, index: number) {
                 // LOADING MODE → override semuanya dengan skeleton
                 if (props.loading) {
-                    return h(NSkeleton, { text: true, });
+                    return h(
+                        "div",
+                        { style: "width:100%; display:flex;" },
+                        h(NSkeleton, { text: true, style: "width:100%", height: 20 })
+                    )
                 }
 
                 // NORMAL MODE → pakai slot atau original render

@@ -11,8 +11,8 @@
                     type="primary" v-if="isExport" />
 
                 <BaseButton label="Refresh" :icon="RefreshRound" @click="emit('click:refresh')" :tertiary="true"
-                    type="warning" />
-
+                    type="primary" />
+                <slot name="actions"></slot>
             </div>
         </div>
     </div>

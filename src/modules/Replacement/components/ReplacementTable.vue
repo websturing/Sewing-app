@@ -1,7 +1,13 @@
 <template>
     <div class="flex flex-col gap-5">
         <BaseFilter v-model:modelValue="search" @update:model-value="" @click:export=""
-            @click:refresh=" handleFetchReplacementListPagination(true, {})" @input="handleInput" />
+            @click:refresh=" handleFetchReplacementListPagination(true, {})" @input="handleInput">
+
+            <template #actions>
+                <BaseButton label="Create Request Replacement" :icon="Repeat" type="primary" />
+            </template>
+        </BaseFilter>
+
 
         <BaseDatable :columns="columns" :data="rows" :loading="isLoading">
             <template #actions="{ row }">
@@ -11,15 +17,19 @@
 
         <div class="flex justify-end mt-4">
             <n-pagination :page="meta.currentPage" :page-size="meta.perPage" :page-count="meta.lastPage"
-                show-size-picker :page-sizes="[5, 10, 20, 50]" @update:page="" @update:page-size="" />
+                show-size-picker :page-sizes="[5, 10, 20, 50]"
+                @update:page="(val: any) => handleFetchReplacementListPagination(false, { page: val, perPage: meta.perPage })"
+                @update:page-size="(val: any) => handleFetchReplacementListPagination(false, { perPage: val })" />
         </div>
 
 
     </div>
 </template>
 <script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue';
 import BaseFilter from '@/components/BaseFilter.vue';
 import BaseDatable from '@/components/BaseDatable.vue';
+import { Repeat, SearchOutline } from "@vicons/ionicons5";
 import { useReplacementPage } from "@/modules/Replacement/composables/replacement.page";
 import { FolderDetails } from "@vicons/carbon";
 import type { DataTableColumns } from 'naive-ui';
@@ -38,12 +48,23 @@ const columns: DataTableColumns<any> = [
     {
         title: 'Serial Number',
         key: 'serialNumber',
+        width: 150,
+        ellipsis: {
+            tooltip: true
+        },
     },
     {
         title: 'GL Number',
         key: 'glNo',
         width: 100,
         align: 'center',
+    },
+    {
+        title: 'Colors',
+        key: 'colors',
+        ellipsis: {
+            tooltip: true
+        }
     },
     {
         title: 'Line',

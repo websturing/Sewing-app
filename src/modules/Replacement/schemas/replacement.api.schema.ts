@@ -15,6 +15,7 @@ export const ReplacementItemSchema = z.object({
     serialNumber: z.string().nullable().optional(),
     glNo: z.string().nullable().optional(),
     lineNames: z.array(z.string()),
+    colors: z.string(),
     defectTotal: z.number(),
     defectList: z.array(ReplacementDefectListSchema),
     createdAt: z.string(),
