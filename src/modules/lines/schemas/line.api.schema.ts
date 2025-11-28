@@ -12,7 +12,6 @@ export const LineApiSchema = z.object({
 })
 
 
-
 export const LineDetailApiSchema = z.object({
     id: z.number().optional(),
     name: z.string().min(1, 'Line name is required'),
