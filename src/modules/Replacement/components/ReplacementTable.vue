@@ -1,7 +1,9 @@
 <template>
     <div class="flex flex-col gap-5">
-        <BaseFilter :model-value="search" @update:model-value="" @click:export="" @click:refresh="" />
-        <BaseDatable :columns="columns" :data="rows" :loading="true">
+        <BaseFilter v-model:modelValue="search" @update:model-value="" @click:export=""
+            @click:refresh=" handleFetchReplacementListPagination(true, {})" @input="handleInput" />
+
+        <BaseDatable :columns="columns" :data="rows" :loading="isLoading">
             <template #actions="{ row }">
                 <BaseButton label="Detail" :icon="FolderDetails" :tertiary="true" type="primary" @click="" />
             </template>
@@ -17,15 +19,11 @@
 </template>
 <script setup lang="ts">
 import BaseFilter from '@/components/BaseFilter.vue';
-import BaseTableSkeleton from '@/components/BaseTableSkeleton.vue';
 import BaseDatable from '@/components/BaseDatable.vue';
 import { useReplacementPage } from "@/modules/Replacement/composables/replacement.page";
 import { FolderDetails } from "@vicons/carbon";
 import type { DataTableColumns } from 'naive-ui';
 import { onMounted, ref } from "vue";
-
-const isLoading = ref<boolean>(false)
-const search = ref<string>("")
 
 const columns: DataTableColumns<any> = [
     {
@@ -83,12 +81,19 @@ const columns: DataTableColumns<any> = [
 
 const {
     meta,
-    replacementList: rows,
-    handleFetchReplacementListPagination
+    isLoading,
+    searchReplacementList: search,
+    replacementListFilter: rows,
+    handleFetchReplacementListPagination,
+    handleSearchReplacementList
 } = useReplacementPage()
 
+const handleInput = () => {
+    handleSearchReplacementList()
+}
+
 onMounted(() => {
-    handleFetchReplacementListPagination(true, {})
+    handleFetchReplacementListPagination(false, {})
 })
 </script>
 <style lang="css" scooped>

@@ -3,12 +3,12 @@
         <div class="flex justify-between gap-2">
             <div class="">
                 <BaseInput :icon="SearchOutline" placeholder="Search" :model-value="props.modelValue"
-                    @update:modelValue="(val) => emit('update:modelValue', val)" />
+                    @update:modelValue="(val) => emit('update:modelValue', val)" @input="emit('input', $event)" />
 
             </div>
             <div class="flex gap-2">
                 <BaseButton label="Export" :icon="DocumentExport" @click="emit('click:export')" :tertiary="true"
-                    type="primary" />
+                    type="primary" v-if="isExport" />
 
                 <BaseButton label="Refresh" :icon="RefreshRound" @click="emit('click:refresh')" :tertiary="true"
                     type="warning" />
@@ -26,15 +26,21 @@ import { SearchOutline } from "@vicons/ionicons5";
 import { RefreshRound } from "@vicons/material";
 
 
-
-const props = defineProps<{
+interface Props {
     modelValue: string
-}>()
+    isExport?: boolean
+}
+
+
+const props = withDefaults(defineProps<Props>(), {
+    isExport: false
+})
 
 const emit = defineEmits<{
     (e: 'update:modelValue', value: string): void
     (e: 'click:export'): void
     (e: 'click:refresh'): void
+    (e: "input", value: string): void
 }>()
 
 

@@ -8,6 +8,7 @@ import { defineStore } from 'pinia';
 export const useReplacementStore = defineStore('replacementStore', {
     state: () => ({
         replacementList: [] as ReplacementItem[],
+        remoteSearchResult: [] as ReplacementItem[] | null,
         meta: {} as Meta,
         links: {} as Links
     }),
@@ -30,9 +31,14 @@ export const useReplacementStore = defineStore('replacementStore', {
                 const results = await replacementApi.getReplacementListPagination(params)
                 const validate = ReplacementPaginationResponseSchema.parse(results);
 
-                this.replacementList = validate.data
-                this.meta = validate.meta
-                this.links = validate.links
+                if (params?.search) {
+                    this.remoteSearchResult = validate.data
+                } else {
+                    this.replacementList = validate.data
+                    this.meta = validate.meta
+                    this.links = validate.links
+                    this.remoteSearchResult = null
+                }
 
                 return ApiResponseSchema.parse({
                     success: true,
@@ -43,5 +49,8 @@ export const useReplacementStore = defineStore('replacementStore', {
                 return ApiResponseSchema.parse({ success: false, message });
             }
         },
+        clearRemoteSearchResult() {
+            this.remoteSearchResult = null
+        }
     }
 });
