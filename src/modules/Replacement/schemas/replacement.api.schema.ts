@@ -12,10 +12,13 @@ export const ReplacementDefectListSchema = z.object({
 });
 
 export const ReplacementItemSchema = z.object({
-    serialNumber: z.number().nullable().optional(),
-    glNo: z.number().nullable().optional(),
-    lineName: z.array(z.string()),
+    serialNumber: z.string().nullable().optional(),
+    glNo: z.string().nullable().optional(),
+    lineNames: z.array(z.string()),
+    defectTotal: z.number(),
     defectList: z.array(ReplacementDefectListSchema),
+    createdAt: z.string(),
+    updatedAt: z.string(),
     isApproval: z.boolean()
 })
 
@@ -28,7 +31,7 @@ export const ReplacementPaginationResponseSchema = z.object({
 })
 
 export type ReplacementItem = z.infer<typeof ReplacementItemSchema>
-export type ReplacementDefectList = z.infer<typeof ReplacementDefectListSchema>
+export type ReplacementItemDefectList = z.infer<typeof ReplacementDefectListSchema>
 
 
 

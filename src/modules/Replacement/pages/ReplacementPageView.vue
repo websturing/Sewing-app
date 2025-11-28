@@ -16,11 +16,11 @@
             </div>
         </div>
 
-        <ReplacementForm />
+        <ReplacementTable />
     </div>
 </template>
 <script setup lang="ts">
-import ReplacementForm from '@/modules/Replacement/components/ReplacementForm.vue';
+import ReplacementTable from '@/modules/Replacement/components/ReplacementTable.vue';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { Forms, SmartHome } from '@vicons/tabler';
@@ -31,7 +31,6 @@ const meta = ref<MetaHead>({
     title: "Defect Replacement Ticket",
     description: "Generates replacement tickets for defective GL numbers detected during stock-in or sewing operations, providing a streamlined and traceable defect-handling workflow."
 })
-
 
 useHead({
     title: meta.value.title,

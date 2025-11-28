@@ -2,11 +2,14 @@ import { replacementApi } from '@/modules/Replacement/api/ReplacementApi';
 import { ReplacementPaginationResponseSchema, type ReplacementItem } from '@/modules/Replacement/schemas/replacement.api.schema';
 import { type ReplacementPaginationRequest } from '@/modules/Replacement/schemas/replacement.request.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
+import type { Links, Meta } from '@/types/metaPagination';
 import { defineStore } from 'pinia';
 
 export const useReplacementStore = defineStore('replacementStore', {
     state: () => ({
-        replacement: [] as ReplacementItem[],
+        replacementList: [] as ReplacementItem[],
+        meta: {} as Meta,
+        links: {} as Links
     }),
     actions: {
         async createTicketReplacement(params: any) {
@@ -22,12 +25,14 @@ export const useReplacementStore = defineStore('replacementStore', {
                 return ApiResponseSchema.parse({ success: false, message });
             }
         },
-        async getReplacementListPagination(params: ReplacementPaginationRequest) {
+        async fetchReplacementListPagination(params: ReplacementPaginationRequest) {
             try {
                 const results = await replacementApi.getReplacementListPagination(params)
                 const validate = ReplacementPaginationResponseSchema.parse(results);
 
-                this.replacement = validate.data
+                this.replacementList = validate.data
+                this.meta = validate.meta
+                this.links = validate.links
 
                 return ApiResponseSchema.parse({
                     success: true,

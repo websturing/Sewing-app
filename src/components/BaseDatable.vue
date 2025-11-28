@@ -1,14 +1,14 @@
 <template>
     <n-space vertical :size="12">
         <n-data-table :bordered="true" :single-line="false" :columns="normalizedColumns" :data="props.data"
-            :pagination="false" :loading="props.loading" />
+            :pagination="false" />
     </n-space>
 </template>
 
 <script setup lang="ts">
 import type { DataTableColumns } from "naive-ui";
+import { NSkeleton } from "naive-ui";
 import { computed, h, useSlots } from "vue";
-
 interface Props<T = any> {
     columns: DataTableColumns<T>;
     data: T[];
@@ -27,15 +27,30 @@ const slots = useSlots();
  *   maka col.render di-overwrite dengan slot tersebut.
  */
 const normalizedColumns = computed(() => {
-    return props.columns.map((col) => {
-        if ("key" in col && col.key && slots[col.key]) {
-            return {
-                ...col,
-                render: (row: any, index: number) =>
-                    h("div", {}, slots[col.key]?.({ row, index })),
-            };
-        }
-        return col;
+    return props.columns.map((col: any) => {
+        const originalRender = col.render;
+
+        return {
+            ...col,
+            render(row: any, index: number) {
+                // LOADING MODE → override semuanya dengan skeleton
+                if (props.loading) {
+                    return h(NSkeleton, { text: true, });
+                }
+
+                // NORMAL MODE → pakai slot atau original render
+                if (slots[col.key]) {
+                    return h("div", {}, slots[col.key]?.({ row, index }));
+                }
+
+                if (originalRender) {
+                    return originalRender(row, index);
+                }
+
+                return row[col.key] ?? "";
+            }
+        };
     });
 });
+
 </script>
