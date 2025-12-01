@@ -1,6 +1,7 @@
 import type { ReplacementItem } from "@/modules/Replacement/schemas/replacement.api.schema";
 import type { ReplacementPaginationRequest } from "@/modules/Replacement/schemas/replacement.request.schema";
 import { useReplacementStore } from "@/modules/Replacement/stores/replacement.store";
+import { useWorkflowPage } from "@/modules/Workflow/composables/Workflow.pages";
 import { useMessage } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -13,6 +14,7 @@ export function useReplacementPage() {
     const selectedReplacementItem = ref<ReplacementItem | null>(null)
 
     const { replacementList, remoteSearchResult, meta, links } = storeToRefs(store)
+    const { isLoading: loadingWorkflow, fetchWorkFlowById } = useWorkflowPage()
 
     const replacementListFilter = computed(() =>
         searchReplacementList.value
@@ -65,6 +67,7 @@ export function useReplacementPage() {
 
     const selectReplacementItem = (index: number) => {
         selectedReplacementItem.value = localFiltered.value[index]
+        fetchWorkFlowById(false, selectedReplacementItem.value?.workflow?.id ?? 0)
     }
 
 
@@ -76,8 +79,10 @@ export function useReplacementPage() {
         searchReplacementList,
         replacementListFilter,
         replacementList,
+        loadingWorkflow,
         handleFetchReplacementListPagination,
         handleSearchReplacementList,
-        selectReplacementItem
+        selectReplacementItem,
+        fetchWorkFlowById
     }
 }

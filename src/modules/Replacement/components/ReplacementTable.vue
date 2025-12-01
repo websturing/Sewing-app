@@ -103,7 +103,7 @@
                     </tbody>
                 </n-table>
                 <div>
-                    <p class="mb-5 font-bold">Workflow Replacement</p>
+                    <p class="mb-5 font-bold">Workflow Replacement {{ loadingWorkflow }}</p>
                     <n-timeline>
                         <n-timeline-item content="Oops" />
                         <n-timeline-item type="success" title="Success" content="success content"
@@ -204,13 +204,15 @@ const {
     searchReplacementList: search,
     replacementListFilter: rows,
     selectedReplacementItem,
+    loadingWorkflow,
     handleFetchReplacementListPagination,
     handleSearchReplacementList,
-    selectReplacementItem
+    selectReplacementItem,
 } = useReplacementPage()
 
 const handleInput = () => {
     handleSearchReplacementList()
+
 }
 
 onMounted(() => {
