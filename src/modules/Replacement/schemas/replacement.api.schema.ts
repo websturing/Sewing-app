@@ -5,6 +5,7 @@ export const ReplacementDefectListSchema = z.object({
     color: z.string(),
     layingPlanningId: z.number(),
     totalDefect: z.number(),
+    totalSize: z.number(),
     sizeList: z.array(z.object({
         size: z.string(),
         defectQty: z.number()
@@ -18,6 +19,8 @@ export const ReplacementItemSchema = z.object({
     colors: z.string(),
     defectTotal: z.number(),
     defectList: z.array(ReplacementDefectListSchema),
+    totalSize: z.number(),
+    requestedBy: z.string(),
     createdAt: z.string(),
     updatedAt: z.string(),
     isApproval: z.boolean()

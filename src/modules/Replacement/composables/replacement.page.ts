@@ -10,6 +10,7 @@ export function useReplacementPage() {
     const store = useReplacementStore()
     const isLoading = ref<boolean>(false)
     const searchReplacementList = ref<string>("")
+    const selectedReplacementItem = ref<ReplacementItem | null>(null)
 
     const { replacementList, remoteSearchResult, meta, links } = storeToRefs(store)
 
@@ -62,7 +63,13 @@ export function useReplacementPage() {
     };
 
 
+    const selectReplacementItem = (index: number) => {
+        selectedReplacementItem.value = localFiltered.value[index]
+    }
+
+
     return {
+        selectedReplacementItem,
         isLoading,
         meta,
         links,
@@ -70,6 +77,7 @@ export function useReplacementPage() {
         replacementListFilter,
         replacementList,
         handleFetchReplacementListPagination,
-        handleSearchReplacementList
+        handleSearchReplacementList,
+        selectReplacementItem
     }
 }

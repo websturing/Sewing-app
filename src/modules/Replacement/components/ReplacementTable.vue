@@ -10,8 +10,9 @@
 
 
         <BaseDatable :columns="columns" :data="rows" :loading="isLoading">
-            <template #actions="{ row }">
-                <BaseButton label="Detail" :icon="FolderDetails" :tertiary="true" type="primary" @click="" />
+            <template #actions="{ row, index }">
+                <BaseButton label="Detail" :icon="FolderDetails" :tertiary="true" type="primary"
+                    @click="selectReplacementItem(index)" />
             </template>
         </BaseDatable>
 
@@ -22,6 +23,76 @@
                 @update:page-size="(val: any) => handleFetchReplacementListPagination(false, { perPage: val })" />
         </div>
 
+        <div class="flex flex-col gap-5">
+            <p class="font-bold text-2xl">GL-{{ selectedReplacementItem?.glNo }}</p>
+            <div>
+                <table class="!w-[100%]">
+                    <tr>
+                        <td>Request By</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
+
+                        <td>Line Names</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.lineNames.join(',') }}
+                        </td>
+
+                        <td>-</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
+                    </tr>
+                    <tr>
+                        <td>Request Date</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td>{{ selectedReplacementItem?.createdAt }}</td>
+
+                        <td>Total Defect</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td class="!font-semibold text-red-600">{{ selectedReplacementItem?.defectTotal }}</td>
+
+                    </tr>
+                    <tr>
+                        <td>Last Updated</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td>{{ selectedReplacementItem?.updatedAt }}</td>
+
+
+                        <td>Total size</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td class="!text-semibold">{{ selectedReplacementItem?.totalSize }}</td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg"> <n-table
+                    v-for="e in selectedReplacementItem?.defectList">
+                    <thead>
+                        <tr>
+                            <th class="!bg-white">Color</th>
+                            <th :colspan="(e.sizeList.length ?? 0) + 1"
+                                class="!text-center !bg-white !text-blue-600 !font-semibold">
+                                {{ e.color }}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="!bg-white">Size</th>
+                            <th v-for="s in e.sizeList" class="!text-center !bg-white">{{ s.size }}
+                            </th>
+                            <th class="!bg-white !text-center ">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Defect</td>
+                            <td v-for="s in e.sizeList" class="!text-center !text-red-400">{{ s.defectQty }}</td>
+                            <td class="!text-center !font-bold !text-red-400">
+                                {{ e.totalDefect }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </n-table>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -105,8 +176,10 @@ const {
     isLoading,
     searchReplacementList: search,
     replacementListFilter: rows,
+    selectedReplacementItem,
     handleFetchReplacementListPagination,
-    handleSearchReplacementList
+    handleSearchReplacementList,
+    selectReplacementItem
 } = useReplacementPage()
 
 const handleInput = () => {
