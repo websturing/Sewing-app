@@ -4,7 +4,8 @@
             @click:refresh=" handleFetchReplacementListPagination(true, {})" @input="handleInput">
 
             <template #actions>
-                <BaseButton label="Create Request Replacement" :icon="Repeat" type="primary" />
+                <BaseButton label="Create Request Replacement" :icon="Repeat" type="primary"
+                    @click="handleCreateRoute" />
             </template>
         </BaseFilter>
 
@@ -115,8 +116,11 @@ import { Repeat, SearchOutline } from "@vicons/ionicons5";
 import { useReplacementPage } from "@/modules/Replacement/composables/replacement.page";
 import { FolderDetails } from "@vicons/carbon";
 import type { DataTableColumns } from 'naive-ui';
-import { onMounted, ref } from "vue";
+import { onMounted, ref, h } from "vue";
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter()
 const isDetailModal = ref<boolean>(false)
 const columns: DataTableColumns<any> = [
     {
@@ -150,6 +154,15 @@ const columns: DataTableColumns<any> = [
         }
     },
     {
+        title: 'Status',
+        key: 'statusName',
+        width: 170,
+        cellProps: (row: any) => ({
+            class: row.statusClass
+        }),
+        render: (row: any) => row.statusName
+    }
+    , {
         title: 'Line',
         key: 'lineNames',
         width: 100,
@@ -198,17 +211,17 @@ const {
 
 const handleInput = () => {
     handleSearchReplacementList()
-
 }
+
+const handleCreateRoute = () => {
+    router.push({
+        name: 'replacement-form'
+    })
+}
+
+
 
 onMounted(() => {
     handleFetchReplacementListPagination(false, {})
 })
 </script>
-<style lang="css" scooped>
-.n-tabs .n-tabs-nav.n-tabs-nav--card-type .n-tabs-tab.n-tabs-tab--active {
-    background-color: #eff6ff !important;
-    font-weight: var(--n-tab-font-weight-active);
-    color: var(--n-tab-text-color-active);
-}
-</style>
