@@ -45,7 +45,9 @@ export function useLeadersForm(initialData: AssignLeaderForm | null = null) {
     const handleUserLineData = async () => {
         await Promise.all([
             fetchUsers(),
-            fetchLines({ notify: false }, {}),
+            fetchLines({ notify: false }, {
+                perPage: 200
+            }),
         ]);
     };
 
