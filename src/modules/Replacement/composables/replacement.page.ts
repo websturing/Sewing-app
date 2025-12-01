@@ -14,7 +14,7 @@ export function useReplacementPage() {
     const selectedReplacementItem = ref<ReplacementItem | null>(null)
 
     const { replacementList, remoteSearchResult, meta, links } = storeToRefs(store)
-    const { isLoading: loadingWorkflow, fetchWorkFlowById } = useWorkflowPage()
+    const { isLoading: loadingWorkflow, workflowWithSteps, fetchWorkFlowById } = useWorkflowPage()
 
     const replacementListFilter = computed(() =>
         searchReplacementList.value
@@ -67,7 +67,7 @@ export function useReplacementPage() {
 
     const selectReplacementItem = (index: number) => {
         selectedReplacementItem.value = localFiltered.value[index]
-        fetchWorkFlowById(false, selectedReplacementItem.value?.workflow?.id ?? 0)
+        fetchWorkFlowById(true, selectedReplacementItem.value?.workflow?.id ?? 0)
     }
 
 
@@ -80,6 +80,7 @@ export function useReplacementPage() {
         replacementListFilter,
         replacementList,
         loadingWorkflow,
+        workflowWithSteps,
         handleFetchReplacementListPagination,
         handleSearchReplacementList,
         selectReplacementItem,

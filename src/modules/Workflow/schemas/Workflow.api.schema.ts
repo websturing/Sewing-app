@@ -13,6 +13,7 @@ export const WorkFlowStepsSchema = z.object({
     id: z.number(),
     name: z.string(),
     role: z.string(),
+    step: z.number(),
     isFinal: z.boolean()
 })
 

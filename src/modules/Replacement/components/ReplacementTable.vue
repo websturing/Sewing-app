@@ -12,7 +12,7 @@
         <BaseDatable :columns="columns" :data="rows" :loading="isLoading">
             <template #actions="{ row, index }">
                 <BaseButton label="Detail" :icon="FolderDetails" :tertiary="true" type="primary"
-                    @click="selectReplacementItem(index)" />
+                    @click="isDetailModal = true, selectReplacementItem(index)" />
             </template>
         </BaseDatable>
 
@@ -23,107 +23,91 @@
                 @update:page-size="(val: any) => handleFetchReplacementListPagination(false, { perPage: val })" />
         </div>
 
-        <div class="flex flex-col gap-5">
-            <p class="font-bold text-2xl">GL-{{ selectedReplacementItem?.glNo }}</p>
-            <div>
-                <table class="!w-[100%]">
-                    <tr>
-                        <td class="!w-[100px]">Request By</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
-
-                        <td class="!w-[100px]">Line Names</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!text-blue-600 font-semibold !w-[400px]">{{
-                            selectedReplacementItem?.lineNames.join(',') }}
-                        </td>
-
-                        <td>Current Location</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!text-blue-600 font-semibold">{{
-                            selectedReplacementItem?.workflow?.next }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="!w-[100px]">Request Date</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td>{{ selectedReplacementItem?.createdAt }}</td>
-
-                        <td>Total Defect</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!font-semibold text-red-600">{{ selectedReplacementItem?.defectTotal }}</td>
-
-                        <td>Status</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!font-semibold text-red-600">
-                            <n-tag :type="selectedReplacementItem?.statusType" size="small">{{
-                                selectedReplacementItem?.statusName }}</n-tag>
-                        </td>
-
-
-                    </tr>
-                    <tr>
-                        <td class="!w-[100px]">Last Updated</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td>{{ selectedReplacementItem?.updatedAt }}</td>
-
-
-                        <td>Total size</td>
-                        <td>&nbsp; : &nbsp;</td>
-                        <td class="!text-semibold">{{ selectedReplacementItem?.totalSize }}</td>
-                    </tr>
-
-                </table>
-            </div>
-            <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg flex flex-col gap-10">
-                <n-table v-for="e in selectedReplacementItem?.defectList">
-                    <thead>
+        <n-modal v-model:show="isDetailModal" preset="card" :style="'width: 1200px'"
+            :title="`GL-${selectedReplacementItem?.glNo?.toString()}`">
+            <div class="flex flex-col gap-5">
+                <div>
+                    <table class="!w-[100%]">
                         <tr>
-                            <th class="!bg-white">Color</th>
-                            <th :colspan="(e.sizeList.length ?? 0) + 1"
-                                class="!text-center !bg-white !text-blue-600 !font-semibold">
-                                {{ e.color }}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th class="!bg-white">Size</th>
-                            <th v-for="s in e.sizeList" class="!text-center !bg-white">{{ s.size }}
-                            </th>
-                            <th class="!bg-white !text-center ">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Defect</td>
-                            <td v-for="s in e.sizeList" class="!text-center !text-red-400">{{ s.defectQty }}</td>
-                            <td class="!text-center !font-bold !text-red-400">
-                                {{ e.totalDefect }}
+                            <td class="!w-[100px]">Request By</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
+
+                            <td>Current Location</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td class="!text-blue-600 font-semibold">{{
+                                selectedReplacementItem?.workflow?.next }}
                             </td>
                         </tr>
-                    </tbody>
-                </n-table>
-                <div>
-                    <p class="mb-5 font-bold">Workflow Replacement {{ loadingWorkflow }}</p>
-                    <n-timeline>
-                        <n-timeline-item content="Oops" />
-                        <n-timeline-item type="success" title="Success" content="success content"
-                            time="2018-04-03 20:46" />
-                        <n-timeline-item type="error" content="Error content" time="2018-04-03 20:46" />
-                        <n-timeline-item type="warning" title="Warning" content="warning content"
-                            time="2018-04-03 20:46" />
-                        <n-timeline-item type="info" title="Info" content="info content" time="2018-04-03 20:46"
-                            line-type="dashed" />
-                        <n-timeline-item content="Oops" />
-                    </n-timeline>
+                        <tr>
+                            <td class="!w-[100px]">Request Date</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td>{{ selectedReplacementItem?.createdAt }}</td>
+
+                            <td>Status</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td class="!font-semibold text-red-600">
+                                <n-tag :type="selectedReplacementItem?.statusType" size="small">{{
+                                    selectedReplacementItem?.statusName }}</n-tag>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <td class="!w-[100px]">Last Updated</td>
+                            <td>&nbsp; : &nbsp;</td>
+                            <td>{{ selectedReplacementItem?.updatedAt }}</td>
+
+                        </tr>
+
+                    </table>
                 </div>
+                <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg flex flex-col gap-10">
+                    <n-table v-for="e in selectedReplacementItem?.defectList">
+                        <thead>
+                            <tr>
+                                <th class="!bg-white">Color</th>
+                                <th :colspan="(e.sizeList.length ?? 0) + 1"
+                                    class="!text-center !bg-white !text-blue-600 !font-semibold">
+                                    {{ e.color }}
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="!bg-white">Size</th>
+                                <th v-for="s in e.sizeList" class="!text-center !bg-white">{{ s.size }}
+                                </th>
+                                <th class="!bg-white !text-center ">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Defect</td>
+                                <td v-for="s in e.sizeList" class="!text-center !text-red-400">{{ s.defectQty }}</td>
+                                <td class="!text-center !font-bold !text-red-400">
+                                    {{ e.totalDefect }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </n-table>
+
+                </div>
+
+                <div v-if="selectedReplacementItem">
+                    <n-scrollbar style="max-height: 320px">
+                        <WorkflowTimeline :workflow="workflowWithSteps"
+                            :currentStep="selectedReplacementItem.currentStep" :isLoading="loadingWorkflow" />
+
+                    </n-scrollbar>
+
+                </div>
+
+
             </div>
-
-
-        </div>
-
+        </n-modal>
     </div>
 </template>
 <script setup lang="ts">
+import WorkflowTimeline from '@/modules/Workflow/components/WorkflowTimeline.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseFilter from '@/components/BaseFilter.vue';
 import BaseDatable from '@/components/BaseDatable.vue';
@@ -133,6 +117,7 @@ import { FolderDetails } from "@vicons/carbon";
 import type { DataTableColumns } from 'naive-ui';
 import { onMounted, ref } from "vue";
 
+const isDetailModal = ref<boolean>(false)
 const columns: DataTableColumns<any> = [
     {
         title: 'No',
@@ -205,6 +190,7 @@ const {
     replacementListFilter: rows,
     selectedReplacementItem,
     loadingWorkflow,
+    workflowWithSteps,
     handleFetchReplacementListPagination,
     handleSearchReplacementList,
     selectReplacementItem,

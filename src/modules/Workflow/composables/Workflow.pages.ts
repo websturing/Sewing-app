@@ -1,5 +1,6 @@
 import { useWorkflowStore } from "@/modules/Workflow/stores/Workflow.store";
 import { useMessage } from "naive-ui";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 
 export function useWorkflowPage() {
@@ -7,6 +8,7 @@ export function useWorkflowPage() {
     const store = useWorkflowStore();
 
     const isLoading = ref<boolean>(false)
+    const { workflowWithSteps } = storeToRefs(store)
 
 
 
@@ -25,6 +27,7 @@ export function useWorkflowPage() {
 
     return {
         isLoading,
+        workflowWithSteps,
         fetchWorkFlowById
     }
 
