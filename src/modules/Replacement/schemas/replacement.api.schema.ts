@@ -1,3 +1,4 @@
+import { WorkFlowStepCurrentSchema } from "@/modules/Workflow/schemas/Workflow.api.schema";
 import { LinksSchema, MetaSchema } from "@/types/metaPagination";
 import { z } from "zod";
 
@@ -23,7 +24,10 @@ export const ReplacementItemSchema = z.object({
     requestedBy: z.string(),
     createdAt: z.string(),
     updatedAt: z.string(),
-    isApproval: z.boolean()
+    isApproval: z.boolean(),
+    statusName: z.string(),
+    statusType: z.string(),
+    workflow: WorkFlowStepCurrentSchema.nullable().optional()
 })
 
 export const ReplacementPaginationResponseSchema = z.object({

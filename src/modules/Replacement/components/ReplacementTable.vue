@@ -28,21 +28,24 @@
             <div>
                 <table class="!w-[100%]">
                     <tr>
-                        <td>Request By</td>
+                        <td class="!w-[100px]">Request By</td>
                         <td>&nbsp; : &nbsp;</td>
                         <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
 
-                        <td>Line Names</td>
+                        <td class="!w-[100px]">Line Names</td>
                         <td>&nbsp; : &nbsp;</td>
-                        <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.lineNames.join(',') }}
+                        <td class="!text-blue-600 font-semibold !w-[400px]">{{
+                            selectedReplacementItem?.lineNames.join(',') }}
                         </td>
 
-                        <td>-</td>
+                        <td>Current Location</td>
                         <td>&nbsp; : &nbsp;</td>
-                        <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
+                        <td class="!text-blue-600 font-semibold">{{
+                            selectedReplacementItem?.workflow?.next }}
+                        </td>
                     </tr>
                     <tr>
-                        <td>Request Date</td>
+                        <td class="!w-[100px]">Request Date</td>
                         <td>&nbsp; : &nbsp;</td>
                         <td>{{ selectedReplacementItem?.createdAt }}</td>
 
@@ -50,9 +53,17 @@
                         <td>&nbsp; : &nbsp;</td>
                         <td class="!font-semibold text-red-600">{{ selectedReplacementItem?.defectTotal }}</td>
 
+                        <td>Status</td>
+                        <td>&nbsp; : &nbsp;</td>
+                        <td class="!font-semibold text-red-600">
+                            <n-tag :type="selectedReplacementItem?.statusType" size="small">{{
+                                selectedReplacementItem?.statusName }}</n-tag>
+                        </td>
+
+
                     </tr>
                     <tr>
-                        <td>Last Updated</td>
+                        <td class="!w-[100px]">Last Updated</td>
                         <td>&nbsp; : &nbsp;</td>
                         <td>{{ selectedReplacementItem?.updatedAt }}</td>
 
@@ -64,8 +75,8 @@
 
                 </table>
             </div>
-            <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg"> <n-table
-                    v-for="e in selectedReplacementItem?.defectList">
+            <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg flex flex-col gap-10">
+                <n-table v-for="e in selectedReplacementItem?.defectList">
                     <thead>
                         <tr>
                             <th class="!bg-white">Color</th>
@@ -91,7 +102,23 @@
                         </tr>
                     </tbody>
                 </n-table>
+                <div>
+                    <p class="mb-5 font-bold">Workflow Replacement</p>
+                    <n-timeline>
+                        <n-timeline-item content="Oops" />
+                        <n-timeline-item type="success" title="Success" content="success content"
+                            time="2018-04-03 20:46" />
+                        <n-timeline-item type="error" content="Error content" time="2018-04-03 20:46" />
+                        <n-timeline-item type="warning" title="Warning" content="warning content"
+                            time="2018-04-03 20:46" />
+                        <n-timeline-item type="info" title="Info" content="info content" time="2018-04-03 20:46"
+                            line-type="dashed" />
+                        <n-timeline-item content="Oops" />
+                    </n-timeline>
+                </div>
             </div>
+
+
         </div>
 
     </div>
