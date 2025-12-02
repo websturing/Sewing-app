@@ -4,8 +4,7 @@
             @click:refresh=" handleFetchReplacementApprovalPagination(true, {})" @input="handleInput">
 
             <template #actions>
-                <BaseButton label="Create Request Replacement" :icon="Repeat" type="primary"
-                    @click="handleCreateRoute" />
+
             </template>
         </BaseFilter>
 
