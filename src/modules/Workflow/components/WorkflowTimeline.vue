@@ -61,16 +61,16 @@ const resolveStatus = (step: any, index: number) => {
     // the active step
     if (props.currentStep === step.step) {
         return {
-            type: 'success',
-            done: true,
-            titleClass: 'font-semibold',
-            roleClass: 'text-sm text-green-500',
+            type: 'warning',
+            done: false,
+            titleClass: 'font-semibold text-orange-400',
+            roleClass: 'text-sm text-orange-400'
 
         }
     }
 
     // next pending step becomes warning (step + 1)
-    if (props.currentStep + 1 === step.step && !isLastStep) {
+    if (props.currentStep === step.step && !isLastStep) {
         return {
             type: 'warning',
             done: false,
