@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-5">
         <BaseFilter v-model:modelValue="search" @update:model-value="" @click:export=""
-            @click:refresh=" handleFetchReplacementListPagination(true, {})" @input="handleInput">
+            @click:refresh=" handleFetchReplacementApprovalPagination(true, {})" @input="handleInput">
 
             <template #actions>
                 <BaseButton label="Create Request Replacement" :icon="Repeat" type="primary"
@@ -20,8 +20,8 @@
         <div class="flex justify-end mt-4">
             <n-pagination :page="meta.currentPage" :page-size="meta.perPage" :page-count="meta.lastPage"
                 show-size-picker :page-sizes="[5, 10, 20, 50]"
-                @update:page="(val: any) => handleFetchReplacementListPagination(false, { page: val, perPage: meta.perPage })"
-                @update:page-size="(val: any) => handleFetchReplacementListPagination(false, { perPage: val })" />
+                @update:page="(val: any) => handleFetchReplacementApprovalPagination(false, { page: val, perPage: meta.perPage })"
+                @update:page-size="(val: any) => handleFetchReplacementApprovalPagination(false, { perPage: val })" />
         </div>
 
         <n-modal v-model:show="isDetailModal" preset="card" :style="'width: 1200px'"
@@ -154,29 +154,6 @@ const columns: DataTableColumns<any> = [
         ellipsis: {
             tooltip: true
         }
-    },
-    {
-        title: 'Status',
-        key: 'statusName',
-        width: 100,
-        align: 'center',
-        cellProps: (row: any) => ({
-            class: row.statusClass
-        }),
-        render: (row: any) => {
-            return h(
-                NTag,
-                {
-                    type: row.statusType,
-                    bordered: true,
-                    strong: true,
-                    size: 'small'
-                },
-                {
-                    default: () => row.statusName
-                }
-            )
-        }
     }, {
         title: 'Line',
         key: 'lineNames',
@@ -198,10 +175,18 @@ const columns: DataTableColumns<any> = [
         align: 'center',
     },
     {
-        title: 'Last Updated',
-        key: 'updatedAt',
-        width: 200,
-        align: 'center',
+        title: 'Requested By',
+        key: 'requestedBy',
+        width: 250,
+    },
+    {
+        title: 'Location',
+        key: 'workflow',
+        className: 'text-blue-600 font-semibold',
+        width: 250,
+        render: (_row: any) => {
+            return _row.workflow.current
+        }
     },
     {
         title: 'Actions',
@@ -220,13 +205,13 @@ const {
     selectedReplacementItem,
     loadingWorkflow,
     workflowWithSteps,
-    handleFetchReplacementListPagination,
-    handleSearchReplacementList,
+    handleSearchReplacementApprovalList,
+    handleFetchReplacementApprovalPagination,
     selectReplacementItem,
 } = useReplacementPage()
 
 const handleInput = () => {
-    handleSearchReplacementList()
+    handleSearchReplacementApprovalList()
 }
 
 const handleCreateRoute = () => {
@@ -238,6 +223,6 @@ const handleCreateRoute = () => {
 
 
 onMounted(() => {
-    handleFetchReplacementListPagination(false, {})
+    handleFetchReplacementApprovalPagination(true, {})
 })
 </script>

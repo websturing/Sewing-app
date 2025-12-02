@@ -16,9 +16,11 @@
             </div>
         </div>
 
+        <ReplacementApprovalTable />
     </div>
 </template>
 <script setup lang="ts">
+import ReplacementApprovalTable from '@/modules/Replacement/components/ReplacementApprovalTable.vue';
 import type { MetaHead } from '@/types/metaHead';
 import { useHead } from '@unhead/vue';
 import { DesignIdeas16Filled } from '@vicons/fluent';

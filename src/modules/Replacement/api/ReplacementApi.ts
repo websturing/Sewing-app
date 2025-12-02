@@ -15,4 +15,10 @@ export const replacementApi = {
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
         }).then(r => r.data),
 
+    getReplacementApprovalPagination: (params: ReplacementPaginationRequest) =>
+        api.get(`${apiPrefix}/replacement-request/role/pagination`, {
+            params: params,
+            paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
+        }).then(r => r.data),
+
 }

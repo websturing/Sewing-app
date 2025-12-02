@@ -49,6 +49,29 @@ export const useReplacementStore = defineStore('replacementStore', {
                 return ApiResponseSchema.parse({ success: false, message });
             }
         },
+        async fetchReplacementApprovalPagination(params: ReplacementPaginationRequest) {
+            try {
+                const results = await replacementApi.getReplacementApprovalPagination(params)
+                const validate = ReplacementPaginationResponseSchema.parse(results);
+
+                if (params?.search) {
+                    this.remoteSearchResult = validate.data
+                } else {
+                    this.replacementList = validate.data
+                    this.meta = validate.meta
+                    this.links = validate.links
+                    this.remoteSearchResult = null
+                }
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: results.message ?? "Succesfully Retrived Data",
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                return ApiResponseSchema.parse({ success: false, message });
+            }
+        },
         clearRemoteSearchResult() {
             this.remoteSearchResult = null
         }

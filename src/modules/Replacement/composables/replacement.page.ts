@@ -70,6 +70,33 @@ export function useReplacementPage() {
         fetchWorkFlowById(true, selectedReplacementItem.value?.workflow?.id ?? 0)
     }
 
+    const handleFetchReplacementApprovalPagination = async (
+        notify: boolean = false,
+        params: ReplacementPaginationRequest
+    ) => {
+        isLoading.value = true
+        const { success, message } = await store.fetchReplacementApprovalPagination(params)
+        if (notify) {
+            success ? toast.success(message) : toast.error(message)
+        }
+        isLoading.value = false
+        return { success, message }
+    }
+
+    const handleSearchReplacementApprovalList = async () => {
+        if (!searchReplacementList.value.trim()) {
+            store.clearRemoteSearchResult();
+            return;
+        }
+
+        if (localFiltered.value.length > 0) return;
+
+        await handleFetchReplacementApprovalPagination(false, {
+            search: searchReplacementList.value,
+        });
+    };
+
+
 
     return {
         selectedReplacementItem,
@@ -84,6 +111,8 @@ export function useReplacementPage() {
         handleFetchReplacementListPagination,
         handleSearchReplacementList,
         selectReplacementItem,
-        fetchWorkFlowById
+        fetchWorkFlowById,
+        handleFetchReplacementApprovalPagination,
+        handleSearchReplacementApprovalList
     }
 }
