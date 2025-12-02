@@ -156,7 +156,8 @@ const columns: DataTableColumns<any> = [
     {
         title: 'Status',
         key: 'statusName',
-        width: 170,
+        width: 100,
+        align: 'center',
         cellProps: (row: any) => ({
             class: row.statusClass
         }),
@@ -166,6 +167,7 @@ const columns: DataTableColumns<any> = [
         title: 'Line',
         key: 'lineNames',
         width: 100,
+        align: 'center',
         render: (row: any) => {
             // Pastikan row.lineNames adalah array sebelum di-join
             if (Array.isArray(row.lineNames)) {
