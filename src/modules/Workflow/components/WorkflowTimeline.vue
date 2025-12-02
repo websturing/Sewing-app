@@ -18,7 +18,9 @@
                         <n-skeleton width="10%" text />
                     </div>
                     <div v-else>
-                        <p :class="resolveStatus(step, idx).titleClass">{{ step.name }}</p>
+                        <p :class="resolveStatus(step, idx).titleClass">{{
+                            step.name
+                        }}</p>
                         <p :class="resolveStatus(step, idx).roleClass">{{ step.role }}</p>
                     </div>
                 </div>
@@ -52,7 +54,7 @@ const resolveStatus = (step: any, index: number) => {
             type: 'success',
             done: true,
             titleClass: 'font-semibold text-black',
-            roleClass: 'text-sm text-black'
+            roleClass: 'text-sm text-black',
         }
     }
 
@@ -62,7 +64,8 @@ const resolveStatus = (step: any, index: number) => {
             type: 'success',
             done: true,
             titleClass: 'font-semibold',
-            roleClass: 'text-sm text-green-500'
+            roleClass: 'text-sm text-green-500',
+
         }
     }
 
