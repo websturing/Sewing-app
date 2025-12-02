@@ -5,26 +5,28 @@
 
             <n-space vertical class="mt-5">
                 <p class="text-gray-400">Manage Permission</p>
-                <n-table :single-line="false">
-                    <thead>
-                        <tr>
-                            <th class="!text-center" width="20px">No</th>
-                            <th>Module Name</th>
-                            <th class="!text-center">View</th>
-                            <th class="!text-center">Create</th>
-                            <th class="!text-center">Update</th>
-                            <th class="!text-center">Delete</th>
-                            <th class="!text-center">Upload</th>
-                            <th class="!text-center">Download</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template v-for="(item, index) in permissionData">
-                            <RolesPermissionRowTable :item="item" :index="index + 1" :level="0"
-                                v-model:permissionCheckBox="permissionCheckBox" />
-                        </template>
-                    </tbody>
-                </n-table>
+                <n-scrollbar style="max-height: 320px">
+                    <n-table :single-line="false">
+                        <thead>
+                            <tr>
+                                <th class="!text-center" width="20px">No</th>
+                                <th>Module Name</th>
+                                <th class="!text-center">View</th>
+                                <th class="!text-center">Create</th>
+                                <th class="!text-center">Update</th>
+                                <th class="!text-center">Delete</th>
+                                <th class="!text-center">Upload</th>
+                                <th class="!text-center">Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="(item, index) in permissionData">
+                                <RolesPermissionRowTable :item="item" :index="index + 1" :level="0"
+                                    v-model:permissionCheckBox="permissionCheckBox" />
+                            </template>
+                        </tbody>
+                    </n-table>
+                </n-scrollbar>
                 <n-card content-class="bg-red-100" v-if="errors.permissions">
                     {{ errors.permissions }}
                 </n-card>
