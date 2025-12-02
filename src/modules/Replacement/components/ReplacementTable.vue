@@ -37,7 +37,7 @@
                             <td>Current Location</td>
                             <td>&nbsp; : &nbsp;</td>
                             <td class="!text-blue-600 font-semibold">{{
-                                selectedReplacementItem?.workflow?.next }}
+                                selectedReplacementItem?.workflow?.current }}
                             </td>
                         </tr>
                         <tr>
