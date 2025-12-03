@@ -46,6 +46,7 @@ export const useReplacementStore = defineStore('replacementStore', {
                 });
             } catch (error: any) {
                 const message = error?.response?.data?.message || "Something went wrong";
+                this.replacementList = []
                 return ApiResponseSchema.parse({ success: false, message });
             }
         },
@@ -69,6 +70,7 @@ export const useReplacementStore = defineStore('replacementStore', {
                 });
             } catch (error: any) {
                 const message = error?.response?.data?.message || "Something went wrong";
+                this.replacementList = []
                 return ApiResponseSchema.parse({ success: false, message });
             }
         },

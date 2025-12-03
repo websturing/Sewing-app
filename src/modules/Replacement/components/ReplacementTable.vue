@@ -48,9 +48,9 @@
                             <td>Status</td>
                             <td>&nbsp; : &nbsp;</td>
                             <td class="!font-semibold text-red-600">
-                                <n-tag :type="selectedReplacementItem?.statusType ? 'warning' : 'default'"
+                                <n-tag :type="selectedReplacementItem?.status.type ? 'warning' : 'default'"
                                     size="small">{{
-                                        selectedReplacementItem?.statusName }}</n-tag>
+                                        selectedReplacementItem?.status.name }}</n-tag>
                             </td>
 
 
@@ -157,23 +157,20 @@ const columns: DataTableColumns<any> = [
     },
     {
         title: 'Status',
-        key: 'statusName',
+        key: 'status.name',
         width: 100,
         align: 'center',
-        cellProps: (row: any) => ({
-            class: row.statusClass
-        }),
         render: (row: any) => {
             return h(
                 NTag,
                 {
-                    type: row.statusType,
+                    type: row.status.type,
                     bordered: true,
                     strong: true,
                     size: 'small'
                 },
                 {
-                    default: () => row.statusName
+                    default: () => row.status.name
                 }
             )
         }

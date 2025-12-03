@@ -25,9 +25,10 @@ export const ReplacementItemSchema = z.object({
     createdAt: z.string(),
     updatedAt: z.string(),
     isApproval: z.boolean(),
-    statusName: z.string(),
-    statusType: z.string(),
-    statusClass: z.string(),
+    status: z.object({
+        name: z.string(),
+        type: z.string(),
+    }),
     currentStep: z.number(),
     workflow: WorkFlowStepCurrentSchema.nullable().optional()
 })
