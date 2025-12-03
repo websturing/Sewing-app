@@ -67,7 +67,7 @@ export function useReplacementPage() {
 
     const selectReplacementItem = (index: number) => {
         selectedReplacementItem.value = localFiltered.value[index]
-        fetchWorkFlowById(true, selectedReplacementItem.value?.workflow?.id ?? 0)
+        // fetchWorkFlowById(true, selectedReplacementItem.value?.workflow?.id ?? 0)
     }
 
     const handleFetchReplacementApprovalPagination = async (

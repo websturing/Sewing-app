@@ -24,91 +24,18 @@
                 @update:page-size="(val: any) => handleFetchReplacementListPagination(false, { perPage: val })" />
         </div>
 
+
+
         <n-modal v-model:show="isDetailModal" preset="card" :style="'width: 1200px'"
-            :title="`GL-${selectedReplacementItem?.glNo?.toString()}`">
-            <div class="flex flex-col gap-5">
-                <div>
-                    <table class="!w-[100%]">
-                        <tr>
-                            <td class="!w-[100px]">Request By</td>
-                            <td>&nbsp; : &nbsp;</td>
-                            <td class="!text-blue-600 font-semibold">{{ selectedReplacementItem?.requestedBy }}</td>
-
-                            <td>Current Location</td>
-                            <td>&nbsp; : &nbsp;</td>
-                            <td class="!text-blue-600 font-semibold">{{
-                                selectedReplacementItem?.workflow?.current }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="!w-[100px]">Request Date</td>
-                            <td>&nbsp; : &nbsp;</td>
-                            <td>{{ selectedReplacementItem?.createdAt }}</td>
-
-                            <td>Status</td>
-                            <td>&nbsp; : &nbsp;</td>
-                            <td class="!font-semibold text-red-600">
-                                <n-tag :type="selectedReplacementItem?.status.type ? 'warning' : 'default'"
-                                    size="small">{{
-                                        selectedReplacementItem?.status.name }}</n-tag>
-                            </td>
-
-
-                        </tr>
-                        <tr>
-                            <td class="!w-[100px]">Last Updated</td>
-                            <td>&nbsp; : &nbsp;</td>
-                            <td>{{ selectedReplacementItem?.updatedAt }}</td>
-
-                        </tr>
-
-                    </table>
-                </div>
-                <div class="bg-gray-50 border border-gray-200 p-3 rounded-lg flex flex-col gap-10">
-                    <n-table v-for="e in selectedReplacementItem?.defectList">
-                        <thead>
-                            <tr>
-                                <th class="!bg-white">Color</th>
-                                <th :colspan="(e.sizeList.length ?? 0) + 1"
-                                    class="!text-center !bg-white !text-blue-600 !font-semibold">
-                                    {{ e.color }}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th class="!bg-white">Size</th>
-                                <th v-for="s in e.sizeList" class="!text-center !bg-white">{{ s.size }}
-                                </th>
-                                <th class="!bg-white !text-center ">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Defect</td>
-                                <td v-for="s in e.sizeList" class="!text-center !text-red-400">{{ s.defectQty }}</td>
-                                <td class="!text-center !font-bold !text-red-400">
-                                    {{ e.totalDefect }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </n-table>
-
-                </div>
-
-                <div v-if="selectedReplacementItem">
-                    <n-scrollbar style="max-height: 320px">
-                        <WorkflowTimeline :workflow="workflowWithSteps"
-                            :currentStep="selectedReplacementItem.currentStep" :isLoading="loadingWorkflow" />
-
-                    </n-scrollbar>
-
-                </div>
-
-
+            :title="`TICKET NO  : ${selectedReplacementItem?.serialNumber?.toString()}`">
+            <div v-if="selectedReplacementItem">
+                <ReplacementTicketDetail :data="selectedReplacementItem" />
             </div>
         </n-modal>
     </div>
 </template>
 <script setup lang="ts">
+import ReplacementTicketDetail from '@/modules/Replacement/components/ReplacementTicketDetail.vue';
 import WorkflowTimeline from '@/modules/Workflow/components/WorkflowTimeline.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseFilter from '@/components/BaseFilter.vue';
@@ -133,14 +60,6 @@ const columns: DataTableColumns<any> = [
         render: (_row: any, index: number) => {
             return (meta.value.currentPage - 1) * meta.value.perPage + index + 1
         }
-    },
-    {
-        title: 'Serial Number',
-        key: 'serialNumber',
-        width: 150,
-        ellipsis: {
-            tooltip: true
-        },
     },
     {
         title: 'GL Number',
@@ -174,19 +93,6 @@ const columns: DataTableColumns<any> = [
                 }
             )
         }
-    }, {
-        title: 'Line',
-        key: 'lineNames',
-        width: 100,
-        align: 'center',
-        render: (row: any) => {
-            // Pastikan row.lineNames adalah array sebelum di-join
-            if (Array.isArray(row.lineNames)) {
-                return row.lineNames.join(", ")
-            }
-            // Jika bukan array, kembalikan nilai aslinya atau string kosong
-            return row.lineNames || '-'
-        }
     },
     {
         title: 'Defect Qty',
@@ -195,10 +101,29 @@ const columns: DataTableColumns<any> = [
         align: 'center',
     },
     {
-        title: 'Last Updated',
-        key: 'updatedAt',
+        title: 'Location',
+        key: 'workflow',
+        className: 'text-blue-600 font-semibold',
         width: 200,
-        align: 'center',
+        ellipsis: {
+            tooltip: true
+        },
+        render: (row: any) => {
+            return h(
+                'div',
+                {
+                    class: "text-xs",
+                    style: {
+                        background: row.workflow.color,
+                        padding: '4px 8px',
+                        borderRadius: '3px'
+                    }
+                },
+                {
+                    default: () => row.workflow.current
+                }
+            )
+        }
     },
     {
         title: 'Actions',

@@ -5,6 +5,7 @@ export const WorkFlowStepCurrentSchema = z.object({
     current: z.string().nullable(),
     previous: z.string().nullable(),
     next: z.string().nullable(),
+    color: z.string(),
     id: z.number()
 
 });

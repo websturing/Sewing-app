@@ -14,6 +14,7 @@ declare module 'vue' {
     BaseDataTableButton: typeof import('./src/components/BaseDataTableButton.vue')['default']
     BaseDropdown: typeof import('./src/components/BaseDropdown.vue')['default']
     BaseFilter: typeof import('./src/components/BaseFilter.vue')['default']
+    BaseIconWithLabel: typeof import('./src/components/BaseIconWithLabel.vue')['default']
     BaseInput: typeof import('./src/components/BaseInput.vue')['default']
     BasePageHeader: typeof import('./src/components/BasePageHeader.vue')['default']
     BaseSelect: typeof import('./src/components/BaseSelect.vue')['default']
