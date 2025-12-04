@@ -20,5 +20,7 @@ export const replacementApi = {
             params: params,
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' })
         }).then(r => r.data),
+    getHistoriesByReplacementId: (id: number) =>
+        api.get(`${apiPrefix}/replacement-request/histories/replacement/${id}`).then(r => r.data),
 
 }

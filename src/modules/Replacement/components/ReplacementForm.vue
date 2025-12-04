@@ -113,7 +113,7 @@ import { useRouter } from 'vue-router';
 
 const isLoading = ref<boolean>(false)
 const glNumber = ref<string | null>(null)
-const note = ref<string | null>(null)
+const note = ref<string | null>(" ")
 const glSummary = ref<any>([])
 const activeTab = ref<string | null>('')
 const defectList = ref<any>([]);

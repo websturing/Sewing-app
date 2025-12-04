@@ -1,3 +1,4 @@
+import { apiResponse } from "@/modules/defect/schemas/defect.summaryApi";
 import { WorkFlowStepCurrentSchema } from "@/modules/Workflow/schemas/Workflow.api.schema";
 import { LinksSchema, MetaSchema } from "@/types/metaPagination";
 import { z } from "zod";
@@ -14,6 +15,7 @@ export const ReplacementDefectListSchema = z.object({
 });
 
 export const ReplacementItemSchema = z.object({
+    id: z.number().optional(),
     serialNumber: z.string().nullable().optional(),
     glNo: z.string().nullable().optional(),
     lineNames: z.array(z.string()),
@@ -41,8 +43,26 @@ export const ReplacementPaginationResponseSchema = z.object({
     data: z.array(ReplacementItemSchema)
 })
 
+export const ReplacementHistoriesWorkflowSchema =
+    z.object({
+        workflowName: z.string(),
+        createdBy: z.string(),
+        stepOrder: z.number(),
+        note: z.string().nullable(),
+        role: z.string(),
+        isFinal: z.boolean(),
+        isApproved: z.boolean(),
+        createdAt: z.string().nullable(),
+        updatedAt: z.string().nullable()
+    })
+
+
+export const ReplacementHistoriesWorkflowResponseSchema = apiResponse(z.array(ReplacementHistoriesWorkflowSchema))
+
+
 export type ReplacementItem = z.infer<typeof ReplacementItemSchema>
 export type ReplacementItemDefectList = z.infer<typeof ReplacementDefectListSchema>
+export type ReplacementHistoriesWorkflow = z.infer<typeof ReplacementHistoriesWorkflowSchema>
 
 
 

@@ -96,9 +96,9 @@
         </n-card>
 
         <n-modal v-model:show="isProcessHistoryModal" preset="card" :style="'width: 600px'"
-            :title="`GL-${props.data.glNo?.toString()} | History ${workflowWithSteps.name}`">
-            <WorkflowTimeline :workflow="workflowWithSteps" :currentStep="props.data.currentStep"
-                :isLoading="loadingWorkflow" />
+            :title="`GL-${props.data.glNo?.toString()}`">
+            <WorkflowTimeline :workflow="timelineHistories" :currentStep="props.data.currentStep"
+                :isLoading="isLoading" />
         </n-modal>
     </div>
 </template>
@@ -122,17 +122,20 @@ const props = withDefaults(defineProps<Props>(), {
     isLoading: false
 })
 
+
 const isProcessHistoryModal = ref<boolean>(false)
 
 const {
-    loadingWorkflow,
-    workflowWithSteps,
-    fetchWorkFlowById
+    timelineHistories,
+    isLoading,
+    handleFetchHistoriesByReplacementId
 } = useReplacementPage()
 
 
-const handleProcessHistory = () => {
+const handleProcessHistory = async () => {
     isProcessHistoryModal.value = true
-    fetchWorkFlowById(true, props.data.workflow?.id ?? 0)
+    handleFetchHistoriesByReplacementId(true, props.data.id as number)
+
 }
+
 </script>

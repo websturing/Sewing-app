@@ -11,7 +11,7 @@ import type { Component } from 'vue';
 
 interface Props {
     icon: Component
-    label: string
+    label: string | null
     size?: number
     labelClass?: string
     textColor?: string

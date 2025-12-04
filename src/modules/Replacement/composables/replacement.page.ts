@@ -1,7 +1,6 @@
-import type { ReplacementItem } from "@/modules/Replacement/schemas/replacement.api.schema";
+import type { ReplacementHistoriesWorkflow, ReplacementItem } from "@/modules/Replacement/schemas/replacement.api.schema";
 import type { ReplacementPaginationRequest } from "@/modules/Replacement/schemas/replacement.request.schema";
 import { useReplacementStore } from "@/modules/Replacement/stores/replacement.store";
-import { useWorkflowPage } from "@/modules/Workflow/composables/Workflow.pages";
 import { useMessage } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
@@ -12,9 +11,9 @@ export function useReplacementPage() {
     const isLoading = ref<boolean>(false)
     const searchReplacementList = ref<string>("")
     const selectedReplacementItem = ref<ReplacementItem | null>(null)
+    const timelineHistories = ref<ReplacementHistoriesWorkflow[]>([])
 
     const { replacementList, remoteSearchResult, meta, links } = storeToRefs(store)
-    const { isLoading: loadingWorkflow, workflowWithSteps, fetchWorkFlowById } = useWorkflowPage()
 
     const replacementListFilter = computed(() =>
         searchReplacementList.value
@@ -96,6 +95,20 @@ export function useReplacementPage() {
         });
     };
 
+    const handleFetchHistoriesByReplacementId = async (
+        notify: boolean = false,
+        id: number
+    ) => {
+        isLoading.value = true
+        const { success, message, data } = await store.fetchHistoriesByReplacementId(id)
+        if (notify) {
+            success ? toast.success(message) : toast.error(message)
+        }
+        isLoading.value = false
+        timelineHistories.value = data as ReplacementHistoriesWorkflow[]
+        return { success, message }
+    }
+
 
 
     return {
@@ -106,13 +119,12 @@ export function useReplacementPage() {
         searchReplacementList,
         replacementListFilter,
         replacementList,
-        loadingWorkflow,
-        workflowWithSteps,
+        timelineHistories,
         handleFetchReplacementListPagination,
         handleSearchReplacementList,
         selectReplacementItem,
-        fetchWorkFlowById,
         handleFetchReplacementApprovalPagination,
-        handleSearchReplacementApprovalList
+        handleSearchReplacementApprovalList,
+        handleFetchHistoriesByReplacementId
     }
 }
