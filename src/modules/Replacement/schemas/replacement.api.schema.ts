@@ -14,6 +14,14 @@ export const ReplacementDefectListSchema = z.object({
     }))
 });
 
+export const ReplacementNotesSchema = z.object({
+    id: z.number(),
+    createdBy: z.string(),
+    note: z.string().nullable(),
+    createdAt: z.string().nullable(),
+    updatedAt: z.string().nullable()
+});
+
 export const ReplacementItemSchema = z.object({
     id: z.number().optional(),
     serialNumber: z.string().nullable().optional(),
@@ -31,6 +39,7 @@ export const ReplacementItemSchema = z.object({
         name: z.string(),
         type: z.string(),
     }),
+    notes: z.array(ReplacementNotesSchema),
     currentStep: z.number(),
     workflow: WorkFlowStepCurrentSchema.nullable().optional()
 })
@@ -55,7 +64,6 @@ export const ReplacementHistoriesWorkflowSchema =
         createdAt: z.string().nullable(),
         updatedAt: z.string().nullable()
     })
-
 
 export const ReplacementHistoriesWorkflowResponseSchema = apiResponse(z.array(ReplacementHistoriesWorkflowSchema))
 

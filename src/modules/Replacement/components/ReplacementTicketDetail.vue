@@ -92,6 +92,22 @@
                         </n-table>
                     </div>
                 </div>
+                <div>
+                    <p class="font-semibold mb-5">Notes</p>
+                    <div v-for="(i, idx) in props.data.notes">
+                        <n-blockquote v-if="i.note">
+                            <div class="flex flex-col text-xs gap-1">
+                                <ProfileHeader :email="i.createdBy" />
+                                <p class="text-gray-400">{{ i.createdAt }}</p>
+                            </div>
+                            <p class="mt-2">{{ i.note }}</p>
+                        </n-blockquote>
+
+                        <p class="text-gray-400" v-if="idx == (props.data.notes.length - 1) && i.note == null">
+                            Notes are not available for this request.
+                        </p>
+                    </div>
+                </div>
             </div>
         </n-card>
 
@@ -105,6 +121,7 @@
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue';
 import BaseIconWithLabel from '@/components/BaseIconWithLabel.vue';
+import ProfileHeader from '@/modules/Profile/components/ProfileHeader.vue';
 import { useReplacementPage } from "@/modules/Replacement/composables/replacement.page";
 import type { ReplacementItem } from '@/modules/Replacement/schemas/replacement.api.schema';
 import WorkflowTimeline from '@/modules/Workflow/components/WorkflowTimeline.vue';
@@ -134,7 +151,7 @@ const {
 
 const handleProcessHistory = async () => {
     isProcessHistoryModal.value = true
-    handleFetchHistoriesByReplacementId(true, props.data.id as number)
+    handleFetchHistoriesByReplacementId(false, props.data.id as number)
 
 }
 
