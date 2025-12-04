@@ -1,9 +1,13 @@
 <template>
     <div class="flex flex-col gap-10">
 
-        <div>
+        <div class="flex flex-col gap-2">
             <BaseSelectWithError name="glNumber" :options="optionGlnumbers" label="GL Numbers" v-model="glNumber"
-                placeholder="Select GL Number" />
+                placeholder="Select GL Number" classContent="!w-[300px]" />
+            <div>
+                <label class="font-semibold">Note</label>
+                <n-input v-model:value="note" type="textarea" placeholder="Basic Textarea" />
+            </div>
         </div>
 
         <div class="mt-2 p-10 bg-gray-50 border border-gray-200 rounded-lg" v-if="!defectDetail">
@@ -109,6 +113,7 @@ import { useRouter } from 'vue-router';
 
 const isLoading = ref<boolean>(false)
 const glNumber = ref<string | null>(null)
+const note = ref<string | null>(null)
 const glSummary = ref<any>([])
 const activeTab = ref<string | null>('')
 const defectList = ref<any>([]);
@@ -168,11 +173,14 @@ const handleSaveChanges = async () => {
 
         return {
             ...d,
-            layingPlanningId: match?.id ?? null // or undefined, your call
+            layingPlanningId: match?.id ?? null,
         }
     })
 
-    defectList.value = merged
+    defectList.value = {
+        defectList: merged,
+        note: note.value
+    }
     isLoading.value = true
     await handleCreateReplacement(defectList.value);
     isLoading.value = false
