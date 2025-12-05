@@ -28,6 +28,7 @@ export const ReplacementItemSchema = z.object({
     glNo: z.string().nullable().optional(),
     lineNames: z.array(z.string()),
     colors: z.string(),
+    defectSizes: z.string(),
     defectTotal: z.number(),
     defectList: z.array(ReplacementDefectListSchema),
     totalSize: z.number(),
@@ -38,6 +39,7 @@ export const ReplacementItemSchema = z.object({
     status: z.object({
         name: z.string(),
         type: z.string(),
+        class: z.string()
     }),
     notes: z.array(ReplacementNotesSchema),
     currentStep: z.number(),

@@ -42,10 +42,22 @@ export function useReplacementPage() {
         params: ReplacementPaginationRequest
     ) => {
         isLoading.value = true
+
+        const startTime = Date.now()
         const { success, message } = await store.fetchReplacementListPagination(params)
+
+        // Hitung waktu eksekusi dan enforce delay minimal
+        const elapsed = Date.now() - startTime
+        const minimumDelay = 400
+
+        if (elapsed < minimumDelay) {
+            await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsed))
+        }
+
         if (notify) {
             success ? toast.success(message) : toast.error(message)
         }
+
         isLoading.value = false
         return { success, message }
     }

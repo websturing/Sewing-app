@@ -15,18 +15,18 @@
                         <n-skeleton width="30%" text />
                         <n-skeleton width="10%" text />
                     </div>
-                    <div class="flex flex-col gap-1" v-else>
+                    <div class="flex flex-col gap-2" v-else>
                         <div class="flex justify-between">
-                            <p :class="resolveStatus(step).titleClass">{{
-                                step.workflowName
-                            }}</p>
-
+                            <p :class="resolveStatus(step).titleClass">
+                                {{ step.workflowName }}
+                            </p>
                         </div>
                         <div class="flex gap-2 items-center text-sm text-gray-400">
-
                             <BaseIconWithLabel :icon="CalendarRtl12Regular" :label="step.createdAt ?? '-'" :size="14" />
                             <BaseIconWithLabel :icon="FolderPerson16Regular" :label="step.createdBy" :size="16" />
                         </div>
+                        <BaseIconWithLabel :icon="FolderPerson16Regular"
+                            :label="step.isApproved ? 'Approved' : 'Rejected'" :size="16" />
 
                     </div>
                 </div>

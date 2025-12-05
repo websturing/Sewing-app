@@ -8,125 +8,67 @@
             </template>
         </BaseFilter>
 
-
-        <BaseDatable :columns="columns" :data="rows" :loading="isLoading">
-            <template #actions="{ row, index }">
-                <BaseButton label="Detail" :icon="FolderDetails" :tertiary="true" type="primary"
-                    @click="isDetailModal = true, selectReplacementItem(index)" />
+        <BaseTable :isLoading="isLoading" :columns="columns" :rows="rows" :meta="meta" size="small"
+            @update:page="(page, perPage) => handleFetchReplacementApprovalPagination(false, { page, perPage })"
+            @update:page-size="(page, perPage) => handleFetchReplacementApprovalPagination(false, { page, perPage })">
+            <template #requestItem="{ row }">
+                <div class="flex flex-col ">
+                    <p
+                        class="inline-flex items-center bg-teal-500 px-2 py-0.5 rounded font-semibold text-gray-50 text-xs w-fit">
+                        {{ row.glNo }}
+                    </p>
+                    <p>{{ row.colors }}</p>
+                </div>
             </template>
-        </BaseDatable>
-
-        <div class="flex justify-end mt-4">
-            <n-pagination :page="meta.currentPage" :page-size="meta.perPage" :page-count="meta.lastPage"
-                show-size-picker :page-sizes="[5, 10, 20, 50]"
-                @update:page="(val: any) => handleFetchReplacementApprovalPagination(false, { page: val, perPage: meta.perPage })"
-                @update:page-size="(val: any) => handleFetchReplacementApprovalPagination(false, { perPage: val })" />
-        </div>
-
-
+            <template #actions>
+                <BaseButton label="Review Request" :icon="FolderDetails" :tertiary="true" type="primary" @click="" />
+            </template>
+        </BaseTable>
     </div>
 </template>
 <script setup lang="ts">
-import WorkflowTimeline from '@/modules/Workflow/components/WorkflowTimeline.vue';
+import BaseTable from '@/components/BaseTable.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseFilter from '@/components/BaseFilter.vue';
-import BaseDatable from '@/components/BaseDatable.vue';
-import { Repeat } from "@vicons/ionicons5";
 import { useReplacementPage } from "@/modules/Replacement/composables/replacement.page";
 import { FolderDetails } from "@vicons/carbon";
-import type { DataTableColumns } from 'naive-ui';
-import { NTag } from 'naive-ui';
-import { onMounted, ref, h } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
 
 
 const router = useRouter()
 const isDetailModal = ref<boolean>(false)
-const columns: DataTableColumns<any> = [
+const columns = [
     {
-        title: 'No',
-        key: 'index',
-        align: 'center',
-        width: 50,
-        render: (_row: any, index: number) => {
-            return (meta.value.currentPage - 1) * meta.value.perPage + index + 1
-        }
+        key: "no",
+        title: "No",
+        classTh: "!text-center bg-red-200"
     },
     {
-        title: 'Serial Number',
-        key: 'serialNumber',
-        width: 150,
-        ellipsis: {
-            tooltip: true
-        },
+        key: "requestItem",
+        title: "Request Item"
     },
     {
-        title: 'GL Number',
-        key: 'glNo',
-        width: 100,
-        align: 'center',
+        key: "defectSizes",
+        title: "Sizes"
     },
     {
-        title: 'Colors',
-        key: 'colors',
-        ellipsis: {
-            tooltip: true
-        }
-    }, {
-        title: 'Line',
-        key: 'lineNames',
-        width: 100,
-        align: 'center',
-        render: (row: any) => {
-            // Pastikan row.lineNames adalah array sebelum di-join
-            if (Array.isArray(row.lineNames)) {
-                return row.lineNames.join(", ")
-            }
-            // Jika bukan array, kembalikan nilai aslinya atau string kosong
-            return row.lineNames || '-'
-        }
+        key: "defectTotal",
+        title: "Defect Qty",
+        width: 30,
+        classTh: "text-center",
+        classRow: "text-center bg-red-400 px-2 py-0.5 rounded font-semibold text-gray-50"
     },
     {
-        title: 'Defect Qty',
-        key: 'defectTotal',
-        width: 100,
-        align: 'center',
+        key: "lineNames",
+        title: "Lines",
+        isJoinArray: true,
+        classTh: "!text-center",
+        classRow: "text-center"
     },
     {
-        title: 'Requested By',
-        key: 'requestedBy',
-        width: 250,
-    },
-    {
-        title: 'Location',
-        key: 'workflow',
-        className: 'text-blue-600 font-semibold',
-        width: 250,
-        ellipsis: {
-            tooltip: true
-        },
-        render: (row: any) => {
-            return h(
-                'div',
-                {
-                    class: "text-xs",
-                    style: {
-                        background: row.workflow.color,
-                        padding: '4px 8px',
-                        borderRadius: '3px'
-                    }
-                },
-                {
-                    default: () => row.workflow.current
-                }
-            )
-        }
-    },
-    {
-        title: 'Actions',
-        key: 'actions',
-        width: 150,
-
+        key: "actions",
+        title: "Actions"
     }
 ]
 
@@ -136,9 +78,6 @@ const {
     isLoading,
     searchReplacementList: search,
     replacementListFilter: rows,
-    selectedReplacementItem,
-    loadingWorkflow,
-    workflowWithSteps,
     handleSearchReplacementApprovalList,
     handleFetchReplacementApprovalPagination,
     selectReplacementItem,

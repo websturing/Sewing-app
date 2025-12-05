@@ -5,11 +5,19 @@
                 <div class="flex justify-between">
                     <div class="flex flex-col gap-1">
                         <p class="text-xl font-bold">GL-{{ props.data.glNo }}</p>
-                        <div
-                            :style="{ background: props.data.workflow?.color, padding: '4px 8px', borderRadius: '3px' }">
-                            <p class="text-sm">
-                                Location : {{ props.data.workflow?.current }}
-                            </p>
+                        <div class="flex gap-2">
+                            <div class="shadow-sm border border-gray-200 rounded"
+                                :style="{ background: props.data.workflow?.color, padding: '4px 8px', borderRadius: '3px' }">
+                                <p class="text-sm">
+                                    Location : {{ props.data.workflow?.current }}
+                                </p>
+                            </div>
+                            <div
+                                :class="['shadow-sm border border-gray-300  rounded px-2 py-0.5 items-center inline-flex', props.data.status.class]">
+                                <p class="text-sm">
+                                    Status : {{ props.data.status.name }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
