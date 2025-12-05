@@ -18,7 +18,7 @@
                             </td>
 
                             <td v-else>
-                                <slot :name="col.key" :row="row" :value="row[col.key]">
+                                <slot :name="col.key" :row="row" :index="rowIndex" :value="row[col.key]">
                                     <div v-if="col.isJoinArray" :class="col.classRow">
                                         {{ row[col.key]?.join(" · ") }}
                                     </div>

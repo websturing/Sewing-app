@@ -20,13 +20,39 @@
                     <p>{{ row.colors }}</p>
                 </div>
             </template>
-            <template #actions>
-                <BaseButton label="Review Request" :icon="FolderDetails" :tertiary="true" type="primary" @click="" />
+            <template #actions="{ index }">
+                <BaseButton label="Review Request" :icon="FolderDetails" :tertiary="true" type="primary"
+                    @click="isDetailModal = true, selectReplacementItem(index), note = null" />
             </template>
         </BaseTable>
+
+        <n-modal v-model:show="isDetailModal" preset="card" :style="'width: 1200px'"
+            :title="`Approval Replacement Request`">
+            <div class="flex flex-col gap-3">
+                <n-card class="!shadow !border !border-gray-300">
+                    <div class="flex flex-col gap-5">
+                        <div class="flex flex-col gap-2">
+                            <label class="font-semibold">Note</label>
+                            <n-input v-model:value="note" type="textarea"
+                                placeholder="Provide additional details if needed" />
+                        </div>
+                        <div class="flex gap-2">
+                            <BaseButton label="Reject" :icon="Close" type="error" />
+                            <BaseButton label="Approve" :icon="CheckmarkDone" type="success" />
+                        </div>
+                    </div>
+                </n-card>
+                <n-scrollbar style="max-height: 450px">
+                    <div v-if="selectedReplacementItem">
+                        <ReplacementTicketDetail :data="selectedReplacementItem" />
+                    </div>
+                </n-scrollbar>
+            </div>
+        </n-modal>
     </div>
 </template>
 <script setup lang="ts">
+import ReplacementTicketDetail from '@/modules/Replacement/components/ReplacementTicketDetail.vue';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseFilter from '@/components/BaseFilter.vue';
@@ -34,9 +60,11 @@ import { useReplacementPage } from "@/modules/Replacement/composables/replacemen
 import { FolderDetails } from "@vicons/carbon";
 import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
+import { CheckmarkDone, Close } from '@vicons/ionicons5';
 
 
 const router = useRouter()
+const note = ref<string | null>(null)
 const isDetailModal = ref<boolean>(false)
 const columns = [
     {
@@ -74,10 +102,12 @@ const columns = [
 
 
 const {
+
     meta,
     isLoading,
     searchReplacementList: search,
     replacementListFilter: rows,
+    selectedReplacementItem,
     handleSearchReplacementApprovalList,
     handleFetchReplacementApprovalPagination,
     selectReplacementItem,

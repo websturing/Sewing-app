@@ -6,7 +6,7 @@
                 placeholder="Select GL Number" classContent="!w-[300px]" />
             <div>
                 <label class="font-semibold">Note</label>
-                <n-input v-model:value="note" type="textarea" placeholder="Basic Textarea" />
+                <n-input v-model:value="note" type="textarea" placeholder="	Provide additional details if needed" />
             </div>
         </div>
 

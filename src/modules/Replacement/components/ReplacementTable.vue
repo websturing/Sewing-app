@@ -36,7 +36,6 @@
 </template>
 <script setup lang="ts">
 import ReplacementTicketDetail from '@/modules/Replacement/components/ReplacementTicketDetail.vue';
-import WorkflowTimeline from '@/modules/Workflow/components/WorkflowTimeline.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import BaseFilter from '@/components/BaseFilter.vue';
 import BaseDatable from '@/components/BaseDatable.vue';
@@ -140,8 +139,6 @@ const {
     searchReplacementList: search,
     replacementListFilter: rows,
     selectedReplacementItem,
-    loadingWorkflow,
-    workflowWithSteps,
     handleFetchReplacementListPagination,
     handleSearchReplacementList,
     selectReplacementItem,

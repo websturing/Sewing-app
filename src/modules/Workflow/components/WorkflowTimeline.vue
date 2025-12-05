@@ -25,8 +25,11 @@
                             <BaseIconWithLabel :icon="CalendarRtl12Regular" :label="step.createdAt ?? '-'" :size="14" />
                             <BaseIconWithLabel :icon="FolderPerson16Regular" :label="step.createdBy" :size="16" />
                         </div>
-                        <BaseIconWithLabel :icon="FolderPerson16Regular"
-                            :label="step.isApproved ? 'Approved' : 'Rejected'" :size="16" />
+                        <div class="flex">
+                            <div :class="['text-xs text-gray-500', resolveStatus(step).class]">
+                                {{ resolveStatus(step).title }}
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -43,8 +46,9 @@
 
                 <div class="flex flex-col ">
                     <div class="flex flex-col gap-2">
-                        <n-skeleton width="30%" text />
-                        <n-skeleton width="10%" text />
+                        <n-skeleton width="40%" text />
+                        <n-skeleton width="15%" text />
+                        <n-skeleton width="5%" text />
                     </div>
                 </div>
             </n-timeline-item>
@@ -72,11 +76,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
 
-
     // completed
     if (data.isApproved && props.currentStep > data.stepOrder) {
         return {
             type: 'success',
+            title: 'Approved',
+            class: 'inline-flex px-2 py-0.5 items-center bg-green-100',
             done: true,
             titleClass: 'font-semibold text-black',
             roleClass: 'text-sm text-black',
@@ -87,6 +92,8 @@ const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
     if (data.stepOrder === props.currentStep) {
         return {
             type: 'warning',
+            title: 'Progress',
+            class: 'inline-flex px-2 py-0.5 items-center bg-yellow-100',
             done: false,
             titleClass: 'font-semibold text-orange-400',
             roleClass: 'text-sm text-orange-400'
@@ -95,9 +102,12 @@ const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
     }
 
 
+
     // default
     return {
-        type: '',
+        type: 'Waiting',
+        title: 'Waiting',
+        class: 'inline-flex px-2 py-0.5 items-center bg-gray-100',
         done: false,
         titleClass: 'font-regular text-gray-400',
         roleClass: 'text-sm text-gray-400'
