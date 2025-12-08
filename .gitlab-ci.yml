@@ -73,8 +73,12 @@ mirror_to_github:
     # Push initial main branch
     - git push github refs/remotes/origin/main:refs/heads/main
 
-    # Push all other branches except main
-    - for branch in $(git for-each-ref --format='%(refname:strip=2)' refs/remotes/origin | grep -v 'main'); do
+    # Push all other branches except main using a cleaner filter
+    - |
+      git for-each-ref --format='%(refname:strip=2)' refs/remotes/origin \
+      | grep -v '^main$' \
+      | grep -v '^HEAD$' \
+      | while read branch; do
         git push github "refs/remotes/origin/${branch}:refs/heads/${branch}";
       done
 
