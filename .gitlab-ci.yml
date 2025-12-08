@@ -69,7 +69,14 @@ mirror_to_github:
     - git remote rm github || true
     - git remote add github https://${GITHUB_TOKEN}@github.com/websturing/Sewing-app.git
     - git fetch --all
-    - git push github --mirror
+
+    # push one main branch first
+    - git push github origin/main:main
+
+    # after initial push, push all branches and tags
+    - git push github --force --prune "refs/heads/*:refs/heads/*"
+    - git push github --force --prune "refs/tags/*:refs/tags/*"
   only:
     - branches
     - tags
+
