@@ -70,24 +70,10 @@ mirror_to_github:
     - git remote add github https://${GITHUB_TOKEN}@github.com/websturing/Sewing-app.git
     - git fetch --all
 
-    # Push initial main branch
-    - git push github refs/remotes/origin/main:refs/heads/main
-
-   # Push all other branches except main using a cleaner filter
-    - |
-      # Ambil semua nama branch dari origin (tanpa prefix refs/remotes/origin/)
-      git for-each-ref --format='%(refname:lstrip=3)' refs/remotes/origin \
-      | grep -v '^main$' \
-      | grep -v '^HEAD$' \
-      | while read branch; do
-        if [ -n "$branch" ]; then # Cek apakah nama branch tidak kosong
-          # Kita push refs/remotes/origin/NAMA_BRANCH ke refs/heads/NAMA_BRANCH
-          git push github "refs/remotes/origin/${branch}:refs/heads/${branch}";
-        fi
-      done
+    - git push --mirror github
 
     # push tags
-    - git push github --tags
+    #- git push github --tags
   only:
     - branches
     - tags
