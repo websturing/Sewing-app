@@ -67,11 +67,14 @@ import { CheckmarkDoneCircle } from '@vicons/ionicons5';
 interface Props {
     workflow: ReplacementHistoriesWorkflow[],
     currentStep: number,
-    isLoading: boolean
+    isLoading: boolean,
+    statusTicket?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    isLoading: true
+    isLoading: true,
+    statusTicket: 'In Progress'
+
 })
 
 const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
@@ -98,8 +101,10 @@ const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
 
         }
     }
+
+
     // the active step
-    if (data.stepOrder === props.currentStep) {
+    if (data.stepOrder === props.currentStep && props.statusTicket === 'In Progress') {
         return {
             type: 'warning',
             title: 'Progress',
@@ -111,7 +116,17 @@ const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
         }
     }
 
+    if (data.stepOrder === props.currentStep && props.statusTicket === 'Rejected') {
+        return {
+            type: 'error',
+            title: 'Rejected',
+            class: 'inline-flex px-2 py-0.5 items-center bg-red-100',
+            done: false,
+            titleClass: 'font-semibold text-red-400',
+            roleClass: 'text-sm text-red-400'
 
+        }
+    }
 
 
 

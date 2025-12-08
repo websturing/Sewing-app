@@ -121,10 +121,11 @@
             </div>
         </n-card>
 
+
         <n-modal v-model:show="isProcessHistoryModal" preset="card" :style="'width: 600px'"
             :title="`GL-${props.data.glNo?.toString()}`">
-            <WorkflowTimeline :workflow="timelineHistories" :currentStep="props.data.currentStep"
-                :isLoading="isLoading" />
+            <WorkflowTimeline :workflow="timelineHistories" :currentStep="props.data.currentStep" :isLoading="isLoading"
+                :statusTicket="props.data.status.name" />
         </n-modal>
     </div>
 </template>
