@@ -1,0 +1,1 @@
+import{o as e,n as a,s}from"./types-CVZIcfwR.js";const o=e({}).passthrough(),r=e({currentPage:a(),from:a().nullable(),lastPage:a(),path:s(),perPage:a(),to:a().nullable(),total:a()}).passthrough();export{o as L,r as M};
