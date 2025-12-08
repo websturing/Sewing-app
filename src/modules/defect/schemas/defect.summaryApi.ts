@@ -40,7 +40,6 @@ export const defectGroupGlNumberSchema = defectGroupBaseSchema.extend({
 export const defectSummaryGroupLinesItemSchema = z.object({
     totalLines: z.number(),
     totalDefect: z.number(),
-    lines: z.array(defectGroupLineSchema),
 });
 
 // Reusable API Response
