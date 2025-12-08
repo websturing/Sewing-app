@@ -101,20 +101,22 @@
                     </div>
                 </div>
                 <div>
-                    <p class="font-semibold mb-5">Notes</p>
-                    <div v-for="(i, idx) in props.data.notes">
-                        <n-blockquote v-if="i.note">
-                            <div class="flex flex-col text-xs gap-1">
-                                <ProfileHeader :email="i.createdBy" />
-                                <p class="text-gray-400">{{ i.createdAt }}</p>
-                            </div>
-                            <p class="mt-2">{{ i.note }}</p>
-                        </n-blockquote>
+                    <n-scrollbar style="max-height: 350px">
+                        <p class="font-semibold mb-5">Notes</p>
+                        <div v-for="(i, idx) in props.data.notes">
+                            <n-blockquote v-if="i.note">
+                                <div class="flex flex-col text-xs gap-1">
+                                    <ProfileHeader :email="i.createdBy" />
+                                    <p class="text-gray-400">{{ i.createdAt }}</p>
+                                </div>
+                                <p class="mt-2">{{ i.note }}</p>
+                            </n-blockquote>
 
-                        <p class="text-gray-400" v-if="idx == (props.data.notes.length - 1) && i.note == null">
-                            Notes are not available for this request.
-                        </p>
-                    </div>
+                            <p class="text-gray-400" v-if="idx == (props.data.notes.length - 1) && i.note == null">
+                                Notes are not available for this request.
+                            </p>
+                        </div>
+                    </n-scrollbar>
                 </div>
             </div>
         </n-card>

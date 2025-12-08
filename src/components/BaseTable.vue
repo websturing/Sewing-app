@@ -11,26 +11,36 @@
 
             <tbody>
                 <template v-if="!props.isLoading">
-                    <tr v-for="(row, rowIndex) in props.rows" :key="rowIndex">
-                        <template v-for="col in props.columns" :key="col.key">
-                            <td v-if="col.key === 'no'" width="40" class="text-center font-semibold">
-                                {{ (props.meta.currentPage - 1) * props.meta.perPage + rowIndex + 1 }}
+                    <template v-if="props.rows.length == 0">
+                        <tr>
+                            <td :colspan="props.columns.length" class="!p-10">
+                                <n-empty description="Nothing here yet — start by creating a new record">
+                                </n-empty>
                             </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr v-for="(row, rowIndex) in props.rows" :key="rowIndex">
+                            <template v-for="col in props.columns" :key="col.key">
+                                <td v-if="col.key === 'no'" width="40" class="text-center font-semibold">
+                                    {{ (props.meta.currentPage - 1) * props.meta.perPage + rowIndex + 1 }}
+                                </td>
 
-                            <td v-else>
-                                <slot :name="col.key" :row="row" :index="rowIndex" :value="row[col.key]">
-                                    <div v-if="col.isJoinArray" :class="col.classRow">
-                                        {{ row[col.key]?.join(" · ") }}
-                                    </div>
-                                    <div v-else :class="col.classRow">
-                                        {{ row[col.key] }}
-                                    </div>
-                                </slot>
-                            </td>
-                        </template>
-                    </tr>
+                                <td v-else>
+                                    <slot :name="col.key" :row="row" :index="rowIndex" :value="row[col.key]">
+                                        <div v-if="col.isJoinArray" :class="col.classRow">
+                                            {{ row[col.key]?.join(" · ") }}
+                                        </div>
+                                        <div v-else :class="col.classRow">
+                                            {{ row[col.key] }}
+                                        </div>
+                                    </slot>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+
                 </template>
-
                 <template v-else>
                     <tr v-for="i in 10" :key="i">
                         <template v-for="col in props.columns" :key="col.key">

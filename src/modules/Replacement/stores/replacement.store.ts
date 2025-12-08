@@ -1,6 +1,6 @@
 import { replacementApi } from '@/modules/Replacement/api/ReplacementApi';
 import { ReplacementHistoriesWorkflowResponseSchema, ReplacementPaginationResponseSchema, type ReplacementItem } from '@/modules/Replacement/schemas/replacement.api.schema';
-import { type ReplacementPaginationRequest } from '@/modules/Replacement/schemas/replacement.request.schema';
+import { type ReplacementApprovalRequest, type ReplacementPaginationRequest } from '@/modules/Replacement/schemas/replacement.request.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
 import { defineStore } from 'pinia';
@@ -16,6 +16,19 @@ export const useReplacementStore = defineStore('replacementStore', {
         async createTicketReplacement(params: any) {
             try {
                 const results = await replacementApi.createTicketReplacement(params)
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: results.message ?? "Created",
+                    data: results.data
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                return ApiResponseSchema.parse({ success: false, message });
+            }
+        },
+        async createApprovalReplacement(params: ReplacementApprovalRequest) {
+            try {
+                const results = await replacementApi.createApprovalReplacement(params)
                 return ApiResponseSchema.parse({
                     success: true,
                     message: results.message ?? "Created",

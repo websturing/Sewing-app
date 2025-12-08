@@ -87,7 +87,17 @@ const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
             roleClass: 'text-sm text-black',
         }
     }
+    if (data.isFinal && data.stepOrder === props.currentStep) {
+        return {
+            type: 'success',
+            title: 'Completed',
+            class: 'inline-flex px-2 py-0.5 items-center bg-green-100',
+            done: false,
+            titleClass: 'font-semibold text-black',
+            roleClass: 'text-sm text-orange-400'
 
+        }
+    }
     // the active step
     if (data.stepOrder === props.currentStep) {
         return {
@@ -100,6 +110,9 @@ const resolveStatus = (data: ReplacementHistoriesWorkflow) => {
 
         }
     }
+
+
+
 
 
 

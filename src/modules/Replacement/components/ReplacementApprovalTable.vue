@@ -29,19 +29,26 @@
         <n-modal v-model:show="isDetailModal" preset="card" :style="'width: 1200px'"
             :title="`Approval Replacement Request`">
             <div class="flex flex-col gap-3">
-                <n-card class="!shadow !border !border-gray-300">
-                    <div class="flex flex-col gap-5">
-                        <div class="flex flex-col gap-2">
-                            <label class="font-semibold">Note</label>
-                            <n-input v-model:value="note" type="textarea"
-                                placeholder="Provide additional details if needed" />
+                <n-spin :show="isLoadingApproval">
+                    <n-card class="!shadow !border !border-gray-300">
+                        <div class="flex flex-col gap-5">
+                            <div class="flex flex-col gap-2">
+                                <label class="font-semibold">Note</label>
+                                <n-input v-model:value="note" type="textarea"
+                                    placeholder="Provide additional details if needed" />
+                            </div>
+                            <div class="flex gap-2">
+                                <BaseButton label="Reject" :icon="Close" type="error"
+                                    @click="handleApproval('rejected')" />
+                                <BaseButton label="Approve" :icon="CheckmarkDone" type="success"
+                                    @click="handleApproval('approved')" />
+                            </div>
                         </div>
-                        <div class="flex gap-2">
-                            <BaseButton label="Reject" :icon="Close" type="error" />
-                            <BaseButton label="Approve" :icon="CheckmarkDone" type="success" />
-                        </div>
-                    </div>
-                </n-card>
+                    </n-card>
+                    <template #description>
+                        Please wait, processing your request ...
+                    </template>
+                </n-spin>
                 <n-scrollbar style="max-height: 450px">
                     <div v-if="selectedReplacementItem">
                         <ReplacementTicketDetail :data="selectedReplacementItem" />
@@ -61,10 +68,12 @@ import { FolderDetails } from "@vicons/carbon";
 import { onMounted, ref } from "vue";
 import { useRouter } from 'vue-router';
 import { CheckmarkDone, Close } from '@vicons/ionicons5';
+import { useReplacementStore } from '@/modules/Replacement/stores/replacement.store';
 
 
 const router = useRouter()
 const note = ref<string | null>(null)
+const isLoadingApproval = ref<boolean>(false)
 const isDetailModal = ref<boolean>(false)
 const columns = [
     {
@@ -102,7 +111,6 @@ const columns = [
 
 
 const {
-
     meta,
     isLoading,
     searchReplacementList: search,
@@ -122,6 +130,27 @@ const handleCreateRoute = () => {
         name: 'replacement-form'
     })
 }
+
+const handleApproval = async (action: string) => {
+    isLoadingApproval.value = true
+    const startTime = Date.now()
+    await useReplacementStore().createApprovalReplacement({
+        replacementRequestId: selectedReplacementItem.value?.id,
+        note: note.value,
+        action: action
+    });
+    const elapsed = Date.now() - startTime
+    const minimumDelay = 400
+
+    if (elapsed < minimumDelay) {
+        await new Promise(resolve => setTimeout(resolve, minimumDelay - elapsed))
+    }
+
+    isLoadingApproval.value = false
+    await handleFetchReplacementApprovalPagination(false, {})
+    isDetailModal.value = false
+}
+
 
 
 
