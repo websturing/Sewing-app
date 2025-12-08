@@ -73,13 +73,17 @@ mirror_to_github:
     # Push initial main branch
     - git push github refs/remotes/origin/main:refs/heads/main
 
-    # Push all other branches except main using a cleaner filter
+   # Push all other branches except main using a cleaner filter
     - |
-      git for-each-ref --format='%(refname:strip=2)' refs/remotes/origin \
+      # Ambil semua nama branch dari origin (tanpa prefix refs/remotes/origin/)
+      git for-each-ref --format='%(refname:lstrip=3)' refs/remotes/origin \
       | grep -v '^main$' \
       | grep -v '^HEAD$' \
       | while read branch; do
-        git push github "refs/remotes/origin/${branch}:refs/heads/${branch}";
+        if [ -n "$branch" ]; then # Cek apakah nama branch tidak kosong
+          # Kita push refs/remotes/origin/NAMA_BRANCH ke refs/heads/NAMA_BRANCH
+          git push github "refs/remotes/origin/${branch}:refs/heads/${branch}";
+        fi
       done
 
     # push tags
