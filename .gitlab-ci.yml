@@ -70,7 +70,7 @@ mirror_to_github:
     - git fetch origin "+refs/heads/*:refs/heads/*" --prune
     - git fetch origin "+refs/tags/*:refs/tags/*" --prune
     - git remote rm github || true
-    - git remote add github https://${GITHUB_TOKEN}@github.com/websturing/Sewing-app-laravel.git
+    - git remote add github https://${GITHUB_TOKEN}@github.com/websturing/Sewing-app.git
     # Push ini sekarang akan berhasil karena GITHUB_TOKEN memiliki cakupan 'workflow'
     - git push github --all --prune
     - git push github --tags --prune
