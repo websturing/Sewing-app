@@ -4,32 +4,52 @@
         <!-- Horizontal Scrollable Cards -->
         <n-scrollbar ref="scrollbarRef" x-scrollable style="max-width: 100%">
             <div class="flex gap-3 pb-3" style="min-width: max-content;">
-                <n-card v-for="step in props.workflow" :key="step.stepOrder"
-                    :ref="(el: any) => setStepRef(el, step.stepOrder)" :class="[
-                        '!w-[280px] !min-w-[280px] transition-all duration-300',
-                        isCurrentStep(step.stepOrder)
-                            ? '!border-2 !border-orange-400 !shadow-lg'
-                            : '!border !border-gray-200'
-                    ]">
-                    <div class="flex flex-col gap-2">
-                        <p :class="resolveStatus(step).titleClass">{{ step.workflowName }}</p>
 
-                        <div class="flex">
-                            <div :class="['text-xs rounded', resolveStatus(step).class]">
-                                {{ resolveStatus(step).title }}
+                <!-- Skeleton Loading State -->
+                <template v-if="props.isLoading">
+                    <n-card v-for="i in 6" :key="`skeleton-${i}`"
+                        class="!w-[280px] !min-w-[280px] !border !border-gray-200">
+                        <div class="flex flex-col gap-3">
+                            <n-skeleton text style="width: 70%" />
+                            <n-skeleton text style="width: 30%" :sharp="false" />
+                            <div class="flex flex-col gap-2 mt-2">
+                                <n-skeleton text style="width: 50%" />
+                                <n-skeleton text style="width: 40%" />
                             </div>
                         </div>
+                    </n-card>
+                </template>
 
-                        <div class="flex flex-col gap-1 text-gray-500">
-                            <BaseIconWithLabel :icon="CalendarRtl12Regular" :label="step.createdAt ?? '-'" :size="14" />
-                            <BaseIconWithLabel :icon="FolderPerson16Regular" :label="step.createdBy ?? '-'"
-                                :size="16" />
+                <!-- Actual Cards -->
+                <template v-else>
+                    <n-card v-for="step in props.workflow" :key="step.stepOrder"
+                        :ref="(el: any) => setStepRef(el, step.stepOrder)" :class="[
+                            '!w-[280px] !min-w-[280px] transition-all duration-300',
+                            isCurrentStep(step.stepOrder)
+                                ? '!border-2 !border-orange-400 !shadow-lg'
+                                : '!border !border-gray-200'
+                        ]">
+                        <div class="flex flex-col gap-2">
+                            <p :class="resolveStatus(step).titleClass">{{ step.workflowName }}</p>
+
+                            <div class="flex">
+                                <div :class="['text-xs rounded', resolveStatus(step).class]">
+                                    {{ resolveStatus(step).title }}
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-1 text-gray-500">
+                                <BaseIconWithLabel :icon="CalendarRtl12Regular" :label="step.createdAt ?? '-'"
+                                    :size="14" />
+                                <BaseIconWithLabel :icon="FolderPerson16Regular" :label="step.createdBy ?? '-'"
+                                    :size="16" />
+                            </div>
                         </div>
-                    </div>
-                </n-card>
+                    </n-card>
+                </template>
+
             </div>
         </n-scrollbar>
-
 
     </div>
 </template>
