@@ -1,14 +1,17 @@
 <template>
     <div class="flex flex-col gap-5">
         <n-card class="!bg-gray-50 !border !border-gray-200">
+            SWA-REPLACEMENT-20251208141755-65830-01
             <div>
-                <BaseInput v-model="serialNumber" :icon="Search" placeholder="Search Replacement Request" />
+                <BaseInput v-model="serialNumber" :icon="Search" placeholder="Search Replacement Request"
+                    @enter="handleEnter" :loading="isLoading" />
             </div>
         </n-card>
 
         <div>
             <p class="font-semibold text-lg">Replacement Request Workflow</p>
             <p>Track the steps and status for Ticket : {{ serialNumber }}</p>
+            <p>{{ error }}</p>
         </div>
         <div class="flex gap-2 flex-wrap">
             <n-card v-for="i in 10" :key="i" class="!w-[263px] !lg:w-[20%] !md:w-[30%] !sm:w-[55%] !max-w-[350px]">
@@ -35,8 +38,15 @@ import BaseInput from '@/components/BaseInput.vue';
 import { CalendarRtl12Regular, FolderPerson16Regular } from '@vicons/fluent';
 import { Search } from '@vicons/ionicons5';
 import { ref } from 'vue';
+import { useReplacementTracking } from '../composables/replacement.tracking';
 const serialNumber = ref<string | null>(null)
 
+
+const { isLoading, error, fetchTrackingData } = useReplacementTracking();
+
+const handleEnter = () => {
+    fetchTrackingData(serialNumber.value || '',)
+}
 
 
 </script>

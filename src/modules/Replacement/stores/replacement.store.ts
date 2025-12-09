@@ -1,5 +1,5 @@
 import { replacementApi } from '@/modules/Replacement/api/ReplacementApi';
-import { ReplacementHistoriesWorkflowResponseSchema, ReplacementPaginationResponseSchema, type ReplacementItem } from '@/modules/Replacement/schemas/replacement.api.schema';
+import { ReplacementHistoriesWorkflowResponseSchema, ReplacementPaginationResponseSchema, ReplacementTrackingResponseSchema, type ReplacementItem } from '@/modules/Replacement/schemas/replacement.api.schema';
 import { type ReplacementApprovalRequest, type ReplacementPaginationRequest } from '@/modules/Replacement/schemas/replacement.request.schema';
 import { ApiResponseSchema } from '@/types/api.schema';
 import type { Links, Meta } from '@/types/metaPagination';
@@ -105,7 +105,7 @@ export const useReplacementStore = defineStore('replacementStore', {
         async fetchTicketTrackBySerial(serialNumber: string) {
             try {
                 const results = await replacementApi.getTicketTrackBySerial(serialNumber)
-                const validate = ReplacementHistoriesWorkflowResponseSchema.parse(results);
+                const validate = ReplacementTrackingResponseSchema.parse(results);
 
                 return ApiResponseSchema.parse({
                     success: true,
