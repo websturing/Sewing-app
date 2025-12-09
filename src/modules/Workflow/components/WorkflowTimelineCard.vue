@@ -5,7 +5,7 @@
         <n-scrollbar ref="scrollbarRef" x-scrollable style="max-width: 100%">
             <div class="flex gap-3 pb-3" style="min-width: max-content;">
                 <n-card v-for="step in props.workflow" :key="step.stepOrder"
-                    :ref="(el) => setStepRef(el, step.stepOrder)" :class="[
+                    :ref="(el: any) => setStepRef(el, step.stepOrder)" :class="[
                         '!w-[280px] !min-w-[280px] transition-all duration-300',
                         isCurrentStep(step.stepOrder)
                             ? '!border-2 !border-orange-400 !shadow-lg'
