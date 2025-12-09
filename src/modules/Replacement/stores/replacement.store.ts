@@ -102,6 +102,21 @@ export const useReplacementStore = defineStore('replacementStore', {
                 return ApiResponseSchema.parse({ success: false, message });
             }
         },
+        async fetchTicketTrackBySerial(serialNumber: string) {
+            try {
+                const results = await replacementApi.getTicketTrackBySerial(serialNumber)
+                const validate = ReplacementHistoriesWorkflowResponseSchema.parse(results);
+
+                return ApiResponseSchema.parse({
+                    success: true,
+                    message: validate.message ?? "Retrived Histories Replacement Successfully",
+                    data: validate.data
+                });
+            } catch (error: any) {
+                const message = error?.response?.data?.message || "Something went wrong";
+                return ApiResponseSchema.parse({ success: false, message });
+            }
+        },
         clearRemoteSearchResult() {
             this.remoteSearchResult = null
         }

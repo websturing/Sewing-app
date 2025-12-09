@@ -17,4 +17,10 @@ export const replacementRoutes: RouteRecordRaw[] = [
         component: () => import('@/modules/Replacement/pages/ReplacementApprovalPageView.vue'),
     },
 
+    {
+        path: 'replacement/tracking',
+        name: 'replacement-tracking',
+        component: () => import('@/modules/Replacement/pages/ReplacementTrackingPageView.vue'),
+    },
+
 ]

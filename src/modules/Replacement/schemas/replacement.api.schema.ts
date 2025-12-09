@@ -67,8 +67,13 @@ export const ReplacementHistoriesWorkflowSchema =
         updatedAt: z.string().nullable()
     })
 
-export const ReplacementHistoriesWorkflowResponseSchema = apiResponse(z.array(ReplacementHistoriesWorkflowSchema))
 
+export const ReplacementTrackingSchema = ReplacementItemSchema.extend({
+    timeline: z.array(ReplacementHistoriesWorkflowSchema)
+});
+
+export const ReplacementHistoriesWorkflowResponseSchema = apiResponse(z.array(ReplacementHistoriesWorkflowSchema))
+export const ReplacementTrackingResponseSchema = apiResponse(ReplacementHistoriesWorkflowSchema)
 
 export type ReplacementItem = z.infer<typeof ReplacementItemSchema>
 export type ReplacementItemDefectList = z.infer<typeof ReplacementDefectListSchema>

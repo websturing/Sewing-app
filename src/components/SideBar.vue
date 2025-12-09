@@ -6,8 +6,10 @@
                 <div class="p-4 font-bold text-center">
                     {{ isCollapsed ? 'SW' : 'Sewing Application' }}
                 </div>
-                <n-menu :options="menu" :value="activeKey" default-value="home" inverted :collapsed="isCollapsed"
-                    :collapsed-width="84" :collapsed-icon-size="22" />
+                <n-scrollbar style="max-height: calc(100vh - 140px)">
+                    <n-menu :options="menu" :value="activeKey" default-value="home" inverted :collapsed="isCollapsed"
+                        :collapsed-width="84" :collapsed-icon-size="22" />
+                </n-scrollbar>
 
             </div>
             <div class="p-4">
@@ -38,3 +40,21 @@ const {
 
 const { toggleModal } = useLogout();
 </script>
+
+<style scoped>
+:deep(.n-scrollbar-rail__scrollbar) {
+    background-color: #d13440 !important;
+}
+
+:deep(.n-scrollbar-rail) {
+    background-color: transparent !important;
+}
+
+:deep(.n-scrollbar-rail:hover) {
+    background-color: rgba(255, 0, 0, 0.15) !important;
+}
+
+:deep(.n-scrollbar-rail__scrollbar:hover) {
+    background-color: rgba(255, 0, 0, 0.9) !important;
+}
+</style>

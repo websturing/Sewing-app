@@ -26,5 +26,7 @@ export const replacementApi = {
         }).then(r => r.data),
     getHistoriesByReplacementId: (id: number) =>
         api.get(`${apiPrefix}/replacement-request/histories/replacement/${id}`).then(r => r.data),
+    getTicketTrackBySerial: (serialNumber: string) =>
+        api.get(`${apiPrefix}/replacement-request/status/serial-number/${serialNumber}`).then(r => r.data),
 
 }

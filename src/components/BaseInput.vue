@@ -6,7 +6,7 @@ type StatusType = "error" | "warning" | "success" | undefined
 
 
 interface Props {
-    modelValue: string
+    modelValue: string | null
     placeholder?: string
     icon?: Component
     size?: "tiny" | "small" | "medium" | "large"
