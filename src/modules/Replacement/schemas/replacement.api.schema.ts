@@ -78,6 +78,7 @@ export const ReplacementTrackingResponseSchema = apiResponse(ReplacementTracking
 export type ReplacementItem = z.infer<typeof ReplacementItemSchema>
 export type ReplacementItemDefectList = z.infer<typeof ReplacementDefectListSchema>
 export type ReplacementHistoriesWorkflow = z.infer<typeof ReplacementHistoriesWorkflowSchema>
+export type ReplacementTracking = z.infer<typeof ReplacementTrackingSchema>
 
 
 

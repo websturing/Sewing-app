@@ -134,7 +134,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseIconWithLabel from '@/components/BaseIconWithLabel.vue';
 import ProfileHeader from '@/modules/Profile/components/ProfileHeader.vue';
 import { useReplacementPage } from "@/modules/Replacement/composables/replacement.page";
-import type { ReplacementItem } from '@/modules/Replacement/schemas/replacement.api.schema';
+import type { ReplacementItem, ReplacementTracking } from '@/modules/Replacement/schemas/replacement.api.schema';
 import WorkflowTimeline from '@/modules/Workflow/components/WorkflowTimeline.vue';
 import { CalendarRtl48Regular, CheckboxWarning20Regular, FolderPerson16Regular, TableResizeColumn16Regular } from '@vicons/fluent';
 import { IosSync } from '@vicons/ionicons4';
@@ -142,7 +142,7 @@ import { BrandAirtable, History } from '@vicons/tabler';
 import { ref } from "vue";
 
 interface Props {
-    data: ReplacementItem
+    data: ReplacementItem | ReplacementTracking
     isLoading?: boolean
 }
 
